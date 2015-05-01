@@ -4,6 +4,7 @@
 #include <vector>
 #include <allegro.h>
 #include "key_data.h"
+#include "tools.h"
 
 using namespace std;
 
