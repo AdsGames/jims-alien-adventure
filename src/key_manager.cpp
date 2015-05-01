@@ -19,14 +19,19 @@ key_manager::~key_manager(){ }
 
 // Update
 void key_manager::update(){
+  // Pressing them keys
+  if( key[key_queue.at(0).getValue()]){
+    key_queue.erase( key_queue.begin());
 
+    key_data newKey(random(KEY_LEFT, KEY_DOWN));
+    key_queue.push_back(newKey);
+  }
 }
 
 // Draw
 void key_manager::draw( BITMAP *tempImage){
   // Draw keys
   for( unsigned int i = 0; i < key_queue.size(); i++){
-    rectfill( tempImage, i * 40 + x, y, i * 40 + 30, y + 30, makecol( 255,0,0));
-    draw_sprite( tempImage, keys[KEY_UP],i * 40 + x, y);
+    draw_sprite( tempImage, keys[key_queue.at(i).getValue()],i * 80 + x, y);
   }
 }
