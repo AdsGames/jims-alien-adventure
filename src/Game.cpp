@@ -17,6 +17,9 @@ void Game::init(){
   // Init fmod
   FSOUND_Init (44100, 32, 0);
 
+  // Init variables
+  scroll_speed = 1.0;
+
   // Creates a random number generator (based on time)
   srand (time(NULL));
 
@@ -61,9 +64,14 @@ void Game::draw(){
   // Background
   rectfill( buffer, 0, 0, SCREEN_W, SCREEN_H, makecol( 255, 255, 255));
 
-  // Stairs
-  for( int i = 0; i < SCREEN_W; i += (stairs -> w)/2)
-    draw_sprite( buffer, stairs, i, SCREEN_W - location_y(i));
+  // Stairs (offset is 30 px)
+  for( int i = 0; i < SCREEN_W; i += 30){
+    rectfill( buffer, i + 40, location_y(i), SCREEN_W, location_y(i) + stairs -> h - 1, makecol( 115, 40, 0));
+    draw_sprite( buffer, stairs, i, SCREEN_H - (i/30) * 37);
+  }
+
+  // Add scrolling
+  scroll_amount += scroll_speed;
 
   // Buffer
   draw_sprite( screen, buffer, 0, 0);
@@ -71,7 +79,7 @@ void Game::draw(){
 
 // Line y position
 float Game::location_y( int oldX){
-  return oldX;
+  return SCREEN_H - (oldX/30) * 37;
 }
 
 Game::~Game()
