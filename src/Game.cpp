@@ -1,6 +1,4 @@
 #include "Game.h"
-#include "stair.h"
-#include "player.h"
 
 volatile int Game::timer1 = 00;
 
@@ -29,17 +27,15 @@ void Game::init(){
   srand (time(NULL));
 
   // Load images
-  if(!(image_stairs = load_bitmap( "images/stairs.png", NULL))){
+  if(!(stair::image = load_bitmap( "images/stairs.png", NULL))){
     abort_on_error( "Cannot find image images/stairs.png \n Please check your files and try again");
   }
-  if(!(image_player = load_bitmap( "images/player.png", NULL))){
+  if(!(player::image = load_bitmap( "images/player.png", NULL))){
     abort_on_error( "Cannot find image images/player.png \n Please check your files and try again");
   }
 
   // Other Sprites
   buffer = create_bitmap( SCREEN_W, SCREEN_H);
-
-  stair::image = image_stairs;
 
   // Temporary fonts
   FONT *f1, *f2, *f3, *f4, *f5;
@@ -68,6 +64,9 @@ void Game::init(){
     stair newStair( i, stair::location_y(i));
     allStairs.push_back(newStair);
   }
+
+  // Player
+  player1 = new player( 0, 0);
 }
 
 // Update game state
@@ -76,6 +75,13 @@ void Game::update(){
   for( unsigned int i = 0; i < allStairs.size(); i ++ ){
     allStairs.at(i).update( &allStairs);
   }
+
+  for( unsigned int i = 0; i < allStairs.size(); i ++ ){
+    allStairs.at(i).movement();
+  }
+
+  // Character
+  player1 -> update();
 }
 
 // Draw game state
@@ -88,6 +94,9 @@ void Game::draw(){
     // Draw
     allStairs.at(i).draw( buffer);
   }
+
+  // Character
+  player1 -> draw( buffer);
 
   // Buffer
   draw_sprite( screen, buffer, 0, 0);
