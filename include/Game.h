@@ -42,6 +42,7 @@ class Game : public GameState
 
     // Images
     BITMAP* buffer;
+    BITMAP* background_sky;
 
     // Lighting effects
     COLOR_MAP light_table;
