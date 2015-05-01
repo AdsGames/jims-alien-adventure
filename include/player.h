@@ -14,7 +14,8 @@ class player
     void update();
 
     // Images
-    static BITMAP *image;
+    static BITMAP *image[3];
+    static int animation_frame;
   protected:
   private:
     // Variables

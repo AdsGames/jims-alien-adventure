@@ -30,7 +30,13 @@ void Game::init(){
   if(!(stair::image = load_bitmap( "images/stairs.png", NULL))){
     abort_on_error( "Cannot find image images/stairs.png \n Please check your files and try again");
   }
-  if(!(player::image = load_bitmap( "images/player.png", NULL))){
+  if(!(player::image[0] = load_bitmap( "images/player_1.png", NULL))){
+    abort_on_error( "Cannot find image images/player.png \n Please check your files and try again");
+  }
+  if(!(player::image[1] = load_bitmap( "images/player_2.png", NULL))){
+    abort_on_error( "Cannot find image images/player.png \n Please check your files and try again");
+  }
+  if(!(player::image[2] = load_bitmap( "images/player_3.png", NULL))){
     abort_on_error( "Cannot find image images/player.png \n Please check your files and try again");
   }
 
@@ -66,7 +72,7 @@ void Game::init(){
   }
 
   // Player
-  player1 = new player( 0, 0);
+  player1 = new player( (4 * 30) - player::image[0] -> w, (stair::location_y(4 * 30)) - player::image[0] -> h);
 }
 
 // Update game state
