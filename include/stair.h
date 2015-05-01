@@ -14,6 +14,7 @@ class stair
 
     // FUNctions
     void update( vector<stair>* allStairsCopy);
+    void movement();
     void draw( BITMAP *tempImage);
 
     static float location_y( float oldX);

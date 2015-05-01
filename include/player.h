@@ -2,20 +2,21 @@
 #define PLAYER_H
 
 #include <allegro.h>
+#include "stair.h"
 
 class player
 {
   public:
-    player(float newX, float newY, BITMAP *newImage);
+    player(float newX, float newY);
     virtual ~player();
 
     void draw( BITMAP *tempImage);
     void update();
+
+    // Images
+    static BITMAP *image;
   protected:
   private:
-    // Images
-    BITMAP *image;
-
     // Variables
     float x;
     float y;

@@ -23,7 +23,9 @@ void stair::update( vector<stair>* allStairsCopy){
     x = allStairsCopy -> at(find_bottom_stair(stairID)).x + 30;
     y = location_y(x);
   }
+}
 
+void stair::movement(){
   // Move
   x -= scrollSpeed;
   y = location_y(x);

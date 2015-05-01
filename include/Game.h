@@ -14,6 +14,9 @@
 #include "globals.h"
 #include "tools.h"
 
+#include "stair.h"
+#include "player.h"
+
 using namespace std;
 
 // Main game screen
@@ -29,10 +32,11 @@ class Game : public GameState
     bool gameBegin;
     int totalTime[2];
 
+    // Player
+    player *player1;
+
     // Images
     BITMAP* buffer;
-    BITMAP* image_stairs;
-    BITMAP* image_player;
 
     // Lighting effects
     COLOR_MAP light_table;

@@ -1,12 +1,12 @@
 #include "player.h"
 
-player::player(float newX, float newY, BITMAP *newImage)
+BITMAP* player::image;
+
+player::player(float newX, float newY)
 {
   // Assign variables
   x = newX;
   y = newY;
-
-  image = newImage;
 }
 
 player::~player()
@@ -21,5 +21,12 @@ void player::draw( BITMAP *tempImage){
 
 void player::update(){
   // Move
-
+  if(key[KEY_SPACE]){
+    if( stair::scrollSpeed < 3)
+      stair::scrollSpeed += 0.2;
+  }
+  else{
+    if( stair::scrollSpeed > 1)
+      stair::scrollSpeed -= 0.1;
+  }
 }
