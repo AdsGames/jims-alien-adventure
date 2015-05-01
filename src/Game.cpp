@@ -76,6 +76,9 @@ void Game::init(){
     allStairs.push_back(newStair);
   }
 
+  // Keys
+  screen_keys = new key_manager( 0, 0);
+
   // Player
   player1 = new player( (4 * 30) - player::image[0] -> w/2, (stair::location_y(4 * 30)) - player::image[0] -> h/2);
 }
@@ -94,6 +97,9 @@ void Game::update(){
   // Character
   player1 -> update();
   player::animation_frame = int(timer1/(4 - floor(stair::scrollSpeed))) % 3 ;
+
+  // Key manager
+  screen_keys -> update();
 }
 
 // Draw game state
@@ -109,6 +115,9 @@ void Game::draw(){
 
   // Character
   player1 -> draw( buffer);
+
+  // Key manager
+  screen_keys -> draw( buffer);
 
   // Buffer
   draw_sprite( screen, buffer, 0, 0);

@@ -17,6 +17,7 @@
 
 #include "stair.h"
 #include "player.h"
+#include "key_manager.h"
 
 using namespace std;
 
@@ -35,6 +36,9 @@ class Game : public GameState
 
     // Player
     player *player1;
+
+    // Keymanager
+    key_manager *screen_keys;
 
     // Images
     BITMAP* buffer;
