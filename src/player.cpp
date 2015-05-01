@@ -23,11 +23,14 @@ void player::draw( BITMAP *tempImage){
 void player::update(){
   // Move
   if(key[KEY_SPACE]){
-    if( stair::scrollSpeed < 3)
+    if( stair::scrollSpeed < 2.8)
       stair::scrollSpeed += 0.2;
   }
   else{
-    if( stair::scrollSpeed > 1)
+    if( stair::scrollSpeed > 0.1)
       stair::scrollSpeed -= 0.1;
+    else{
+      stair::scrollSpeed = 0;
+    }
   }
 }
