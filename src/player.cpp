@@ -1,6 +1,7 @@
 #include "player.h"
 
-BITMAP* player::image;
+BITMAP* player::image[3];
+int player::animation_frame;
 
 player::player(float newX, float newY)
 {
@@ -16,7 +17,7 @@ player::~player()
 
 void player::draw( BITMAP *tempImage){
   // Draw
-  draw_sprite( tempImage, image, x, y);
+  draw_sprite( tempImage, image[animation_frame], x, y);
 }
 
 void player::update(){
@@ -29,4 +30,9 @@ void player::update(){
     if( stair::scrollSpeed > 1)
       stair::scrollSpeed -= 0.1;
   }
+
+  // Animate stuff
+  animation_frame++;
+  if( animation_frame > 2)
+    animation_frame = 0;
 }
