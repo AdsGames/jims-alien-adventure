@@ -17,6 +17,11 @@ END_OF_FUNCTION(gameTicker)
 vector<stair> allStairs;
 
 void Game::init(){
+  // Setup for FPS system
+  LOCK_VARIABLE(timer1);
+  LOCK_FUNCTION(gameTicker);
+  install_int_ex(gameTicker, BPS_TO_TIMER(20));
+
   // Init fmod
   FSOUND_Init (44100, 32, 0);
 
@@ -72,7 +77,7 @@ void Game::init(){
   }
 
   // Player
-  player1 = new player( (4 * 30) - player::image[0] -> w, (stair::location_y(4 * 30)) - player::image[0] -> h);
+  player1 = new player( (4 * 30) - player::image[0] -> w/2, (stair::location_y(4 * 30)) - player::image[0] -> h/2);
 }
 
 // Update game state
@@ -88,6 +93,7 @@ void Game::update(){
 
   // Character
   player1 -> update();
+  player::animation_frame = int(timer1/(4 - floor(stair::scrollSpeed))) % 3 ;
 }
 
 // Draw game state

@@ -30,9 +30,4 @@ void player::update(){
     if( stair::scrollSpeed > 1)
       stair::scrollSpeed -= 0.1;
   }
-
-  // Animate stuff
-  animation_frame++;
-  if( animation_frame > 2)
-    animation_frame = 0;
 }
