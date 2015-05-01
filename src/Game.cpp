@@ -57,6 +57,9 @@ void Game::init(){
   if(!(key_manager::keys[KEY_RIGHT] = load_bitmap( "images/keys/key_right.png", NULL))){
     abort_on_error( "Cannot find image images/keys/key_right.png \n Please check your files and try again");
   }
+  if(!(background_sky = load_bitmap( "images/background_sky.png", NULL))){
+    abort_on_error( "Cannot find image images/background_sky.png \n Please check your files and try again");
+  }
 
   // Other Sprites
   buffer = create_bitmap( SCREEN_W, SCREEN_H);
@@ -119,6 +122,7 @@ void Game::update(){
 void Game::draw(){
   // Background
   rectfill( buffer, 0, 0, SCREEN_W, SCREEN_H, makecol( 255, 255, 255));
+  stretch_sprite(buffer,background_sky, 0, 0, SCREEN_W, SCREEN_H);
 
   // Stairs!
   for( unsigned int i = 0; i < allStairs.size(); i ++ ){
