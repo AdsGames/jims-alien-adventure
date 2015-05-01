@@ -33,7 +33,7 @@ class Game : public GameState
 
     // Images
     BITMAP* buffer;
-    BITMAP* stairs;
+    BITMAP* image_stairs;
 
     // Lighting effects
     COLOR_MAP light_table;
@@ -44,7 +44,8 @@ class Game : public GameState
     static void gameTicker();
 
     // FUNctions
-    float location_y( int oldX);
+    float location_y( float oldX);
+    int find_bottom_stair( int stairIndex);
 
   public:
     //Main loop functions
