@@ -76,15 +76,15 @@ void Game::init(){
 void Game::update(){
   // Stairs!
   for( int i = 0; i < allStairs.size(); i ++ ){
+    // reset stairs
+    if( allStairs.at(i).y < -(allStairs.at(i).image -> h)){
+      allStairs.at(i).x = allStairs.at(find_bottom_stair(i)).x - 30;
+      allStairs.at(i).y = location_y(allStairs.at(i).x);
+    }
+
     // Move
     allStairs.at(i).x += scroll_speed;
     allStairs.at(i).y = location_y(allStairs.at(i).x);
-
-    // reset stairs
-    if( allStairs.at(i).y < -(allStairs.at(i).image -> h)){
-      allStairs.at(i).x = allStairs.at(find_bottom_stair(i)).x - (allStairs.at(i).image -> w)*2;
-      allStairs.at(i).y = location_y(allStairs.at(i).x);
-    }
   }
 }
 
