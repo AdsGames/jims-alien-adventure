@@ -28,6 +28,8 @@ class Game : public GameState
     static volatile int timer1;
     bool gameBegin;
     int totalTime[2];
+    float scroll_speed;
+    float scroll_amount;
 
     // Images
     BITMAP* buffer;
