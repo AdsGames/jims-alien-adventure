@@ -20,15 +20,18 @@ using namespace std;
 class Game : public GameState
 {
   private:
-    BITMAP* buffer;
-
-    //FSOUND_STREAM* mainMusic;
+    // Music
+    FSOUND_STREAM* mainMusic;
 
     // Variables
     int animationFrame;
     static volatile int timer1;
     bool gameBegin;
     int totalTime[2];
+
+    // Images
+    BITMAP* buffer;
+    BITMAP* stairs;
 
     // Lighting effects
     COLOR_MAP light_table;
@@ -37,6 +40,9 @@ class Game : public GameState
     BITMAP *darkness, *darkness_old, *lightBuffer, *spotlight;
 
     static void gameTicker();
+
+    // FUNctions
+    float location_y( int oldX);
 
   public:
     //Main loop functions
