@@ -1,4 +1,6 @@
 #include "Game.h"
+#include "stair.h"
+#include "player.h"
 
 volatile int Game::timer1 = 00;
 
@@ -13,12 +15,6 @@ void Game::gameTicker(){
 }
 END_OF_FUNCTION(gameTicker)
 
-struct stair{
-  float x;
-  float y;
-  BITMAP* image;
-};
-
 // All stairs
 vector<stair> allStairs;
 
@@ -27,7 +23,7 @@ void Game::init(){
   FSOUND_Init (44100, 32, 0);
 
   // Init variables
-  scroll_speed = 1.0;
+  stair::scrollSpeed = 1.0;
 
   // Creates a random number generator (based on time)
   srand (time(NULL));
@@ -36,9 +32,14 @@ void Game::init(){
   if(!(image_stairs = load_bitmap( "images/stairs.png", NULL))){
     abort_on_error( "Cannot find image images/stairs.png \n Please check your files and try again");
   }
+  if(!(image_player = load_bitmap( "images/player.png", NULL))){
+    abort_on_error( "Cannot find image images/player.png \n Please check your files and try again");
+  }
 
   // Other Sprites
   buffer = create_bitmap( SCREEN_W, SCREEN_H);
+
+  stair::image = image_stairs;
 
   // Temporary fonts
   FONT *f1, *f2, *f3, *f4, *f5;
@@ -64,10 +65,7 @@ void Game::init(){
 
   // Stairs (offset is 30 px)
   for( int i = 0; i < SCREEN_W; i += 30 ){
-    stair newStair;
-    newStair.x = i;
-    newStair.y = location_y(i);
-    newStair.image = image_stairs;
+    stair newStair( i, stair::location_y(i));
     allStairs.push_back(newStair);
   }
 }
@@ -75,16 +73,8 @@ void Game::init(){
 // Update game state
 void Game::update(){
   // Stairs!
-  for( int i = 0; i < allStairs.size(); i ++ ){
-    // reset stairs
-    if( allStairs.at(i).y < -(allStairs.at(i).image -> h)){
-      allStairs.at(i).x = allStairs.at(find_bottom_stair(i)).x - 30;
-      allStairs.at(i).y = location_y(allStairs.at(i).x);
-    }
-
-    // Move
-    allStairs.at(i).x += scroll_speed;
-    allStairs.at(i).y = location_y(allStairs.at(i).x);
+  for( unsigned int i = 0; i < allStairs.size(); i ++ ){
+    allStairs.at(i).update( &allStairs);
   }
 }
 
@@ -94,36 +84,17 @@ void Game::draw(){
   rectfill( buffer, 0, 0, SCREEN_W, SCREEN_H, makecol( 255, 255, 255));
 
   // Stairs!
-  for( int i = 0; i < allStairs.size(); i ++ ){
+  for( unsigned int i = 0; i < allStairs.size(); i ++ ){
     // Draw
-    rectfill( buffer, allStairs.at(i).x + 30, allStairs.at(i).y, SCREEN_W, allStairs.at(i).y + allStairs.at(i).image -> h - 1, makecol( 115, 40, 0));
-    draw_sprite( buffer, allStairs.at(i).image, allStairs.at(i).x, allStairs.at(i).y);
+    allStairs.at(i).draw( buffer);
   }
 
   // Buffer
   draw_sprite( screen, buffer, 0, 0);
 }
 
-// Line y position
-float Game::location_y( float oldX){
-  return SCREEN_H - (oldX/30) * 37;
-}
-
-// Line y position
-int Game::find_bottom_stair( int stairIndex){
-  // New index
-  int bottomIndex = stairIndex + 1;
-
-  // Too High? Wrap around (only happens when number is max)
-  if( bottomIndex >= allStairs.size()){
-    bottomIndex = 0;
-  }
-
-  return bottomIndex;
-}
-
-Game::~Game()
-{
+// Destroy
+Game::~Game(){
   // Destroy images
   destroy_bitmap( buffer);
 
