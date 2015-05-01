@@ -28,12 +28,11 @@ class Game : public GameState
     static volatile int timer1;
     bool gameBegin;
     int totalTime[2];
-    float scroll_speed;
-    float scroll_amount;
 
     // Images
     BITMAP* buffer;
     BITMAP* image_stairs;
+    BITMAP* image_player;
 
     // Lighting effects
     COLOR_MAP light_table;
@@ -42,10 +41,6 @@ class Game : public GameState
     BITMAP *darkness, *darkness_old, *lightBuffer, *spotlight;
 
     static void gameTicker();
-
-    // FUNctions
-    float location_y( float oldX);
-    int find_bottom_stair( int stairIndex);
 
   public:
     //Main loop functions
