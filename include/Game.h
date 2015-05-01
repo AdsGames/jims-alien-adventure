@@ -7,6 +7,7 @@
 #include <alpng.h>
 #include <string>
 #include <vector>
+#include <math.h>
 
 #include "fmod/fmod.h"
 #include "fmod/fmod_errors.h"
