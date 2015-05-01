@@ -44,6 +44,19 @@ void Game::init(){
   if(!(player::image[2] = load_bitmap( "images/player_3.png", NULL))){
     abort_on_error( "Cannot find image images/player.png \n Please check your files and try again");
   }
+  // Keys
+  if(!(key_manager::keys[KEY_UP] = load_bitmap( "images/keys/key_up.png", NULL))){
+    abort_on_error( "Cannot find image images/keys/key_up.png \n Please check your files and try again");
+  }
+  if(!(key_manager::keys[KEY_DOWN] = load_bitmap( "images/keys/key_down.png", NULL))){
+    abort_on_error( "Cannot find image images/keys/key_down.png \n Please check your files and try again");
+  }
+  if(!(key_manager::keys[KEY_LEFT] = load_bitmap( "images/keys/key_left.png", NULL))){
+    abort_on_error( "Cannot find image images/keys/key_left.png \n Please check your files and try again");
+  }
+  if(!(key_manager::keys[KEY_RIGHT] = load_bitmap( "images/keys/key_right.png", NULL))){
+    abort_on_error( "Cannot find image images/keys/key_right.png \n Please check your files and try again");
+  }
 
   // Other Sprites
   buffer = create_bitmap( SCREEN_W, SCREEN_H);
