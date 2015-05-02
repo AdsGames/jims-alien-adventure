@@ -34,6 +34,8 @@ class key_manager
     // Any key?
     bool keyDown();
     bool buttonDown();
+    bool buttonPressedCombo();
+    bool keyPressedCombo();
     bool buttonIsPressed;
     bool keyIsPressed;
 };
