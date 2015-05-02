@@ -164,7 +164,7 @@ void Game::update(){
     allStairs.at(i).movement();
   }
 
-  if( climb_time > 5 && !is_game_done){
+  if( distance_travelled > 100 && !is_game_done){
     is_game_done = true;
   }
 
