@@ -40,7 +40,7 @@ class Game : public GameState
     key_manager *screen_keys;
 
     // Images
-    BITMAP* buffer;
+    BITMAP* buffer, *stair_buffer;
     BITMAP* background_sky, *background_buildings;
     float background_scroll;
 
