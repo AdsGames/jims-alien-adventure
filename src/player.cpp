@@ -10,6 +10,14 @@ player::player(float newX, float newY)
   y = newY;
 }
 
+int player::getX(){
+  return x;
+}
+
+int player::getY(){
+  return y;
+}
+
 player::~player()
 {
   //dtor
@@ -22,6 +30,8 @@ void player::draw( BITMAP *tempImage){
 
 void player::update(){
   // Move
-  if( y <= (stair::locationOfFinal - (image[0] -> h - 60)))
+  if( y <= (stair::locationOfFinal - (image[0] -> h - 60))){
     stair::scrollSpeed = 0;
+
+  }
 }

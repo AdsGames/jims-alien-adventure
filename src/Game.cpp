@@ -15,7 +15,7 @@ void Game::gameTicker(){
 END_OF_FUNCTION(gameTicker)
 
 void Game::gameTimer(){
-  climb_time += 0.1;
+  if(!switch_flicked)climb_time += 0.1;
 }
 END_OF_FUNCTION(gameTimer)
 
@@ -50,6 +50,10 @@ void Game::init(){
   if(!(stair::stage_end_red = load_bitmap( "images/stage_end_red.png", NULL))){
     abort_on_error( "Cannot find image images/stage_end_red.png \n Please check your files and try again");
   }
+  if(!(stair::stage_end_green = load_bitmap( "images/stage_end_green.png", NULL))){
+    abort_on_error( "Cannot find image images/stage_end_green.png \n Please check your files and try again");
+  }
+
   if(!(stair::image_brick = load_bitmap( "images/brick.png", NULL))){
     abort_on_error( "Cannot find image images/brick.png \n Please check your files and try again");
   }
@@ -102,8 +106,8 @@ void Game::init(){
   FONT *f1, *f2, *f3, *f4, *f5;
 
   //Sets Font
-  if(!(f1 = load_font(("fonts/arial_black.pcx"), NULL, NULL))){
-    abort_on_error( "Cannot find font fonts/arial_black.png \n Please check your files and try again");
+  if(!(f1 = load_font(("fonts/dosis.pcx"), NULL, NULL))){
+    abort_on_error( "Cannot find font fonts/dosis.png \n Please check your files and try again");
   }
 
   f2 = extract_font_range(f1, ' ', 'A'-1);
@@ -135,7 +139,17 @@ void Game::init(){
 
 // Update game state
 void Game::update(){
+
   poll_joystick();
+
+  if(!switch_flicked)distance_travelled += stair::scrollSpeed/25;
+  if( player1->getY() <= (stair::locationOfFinal - (player1->image[0] -> h - 60))){
+    for(int i=0; i<allStairs.size();  i++){
+      if(allStairs.at(i).getType()==1)
+        allStairs.at(i).setType(2);
+    }
+  }
+
   // Scroll background
   background_scroll -= stair::scrollSpeed/4;
   if(background_scroll < 0)
@@ -150,8 +164,11 @@ void Game::update(){
     allStairs.at(i).movement();
   }
 
-  if( climb_time > 5 && !is_game_done){
+  if( distance_travelled > 100 && !is_game_done){
     is_game_done = true;
+  }
+  if( distance_travelled > 111){
+    switch_flicked = true;
   }
 
   // Character
@@ -184,10 +201,11 @@ void Game::draw(){
   player1 -> draw( buffer);
 
   // Key manager
-  screen_keys -> draw( buffer);
+  if(!switch_flicked)screen_keys -> draw( buffer);
 
   // Timer
   textprintf_ex( buffer, font, 20, 120, makecol(0,0,0), -1, "Time:%4.1f", climb_time);
+  textprintf_ex( buffer, font, 20, 150, makecol(0,0,0), -1, "Distance:%4.1f", distance_travelled);
 
   // Buffer
   draw_sprite( screen, buffer, 0, 0);

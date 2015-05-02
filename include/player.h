@@ -13,6 +13,9 @@ class player
     void draw( BITMAP *tempImage);
     void update();
 
+    int getX();
+    int getY();
+
     // Images
     static BITMAP *image[7];
     static int animation_frame;

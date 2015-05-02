@@ -18,6 +18,7 @@ class Intro : public GameState
   private:
     //Intro background
     BITMAP *buffer;
+    BITMAP *splash;
 
   public:
     //Main loop functions

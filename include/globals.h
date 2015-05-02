@@ -17,14 +17,16 @@ enum GameStates
     STATE_EDIT,
     STATE_GAME,
     STATE_EXIT,
+    STATE_MAP,
 };
 
 // Endgame Variables
 extern bool is_game_done;
 extern bool input_mode;
-
+extern bool switch_flicked;
 // Frames
 extern int frames_done;
+extern float distance_travelled;
 
 // Resdiv
 extern int resDiv;
