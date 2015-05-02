@@ -44,8 +44,7 @@ Map::Map()
 void Map::update(){
 }
 
-void Map::draw()
-{
+void Map::draw(){
   // Draw background to screen
   rectfill( buffer, 0, 0, SCREEN_W, SCREEN_H, makecol( 255,255,255));
 
@@ -56,8 +55,7 @@ void Map::draw()
   draw_sprite( screen, buffer, 0, 0);
 }
 
-Map::~Map()
-{
+Map::~Map(){
   // Destory Bitmaps
   destroy_bitmap( buffer);
 

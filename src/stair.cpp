@@ -86,7 +86,6 @@ void stair::draw( BITMAP *tempImage){
     blit( transparency_bitmap, tempImage, 0, 0, x + stage_end_green -> w, y, SCREEN_W, SCREEN_H);
     line( tempImage, x + stage_end_green-> w - 1, y + 30, x + stage_end_green -> w - 1, SCREEN_H, makecol( 168, 148, 148));
   }
-
 }
 
 // Line y position
