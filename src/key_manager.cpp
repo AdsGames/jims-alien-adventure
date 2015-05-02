@@ -9,7 +9,7 @@ key_manager::key_manager(int newX, int newY){
   y = newY;
 
   // Add keys
-  for( int i = 0; i < 10; i++){
+  for( int i = 0; i < 4; i++){
     key_data newKey(KEY_UP);
     key_queue.push_back(newKey);
   }
@@ -30,8 +30,12 @@ void key_manager::update(){
 
 // Draw
 void key_manager::draw( BITMAP *tempImage){
+  // Background
+  rectfill( tempImage, x, y, x + key_queue.size() * 120, y + 100, makecol( 155, 155, 155));
+
   // Draw keys
   for( unsigned int i = 0; i < key_queue.size(); i++){
-    draw_sprite( tempImage, keys[key_queue.at(i).getValue()],i * 80 + x, y);
+    set_trans_blender(255, 255, 255, 255 - ((255/4) * i));
+    draw_trans_sprite( tempImage, keys[key_queue.at(i).getValue()], i * 120 + x + 5, y + 5);
   }
 }
