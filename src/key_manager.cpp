@@ -96,6 +96,25 @@ void key_manager::draw( BITMAP *tempImage){
   }
 }
 
+//Arrow keys pressed
+//EPIC WOMBO COMBOS
+bool key_manager::keyPressedCombo(){
+  if( key[KEY_UP] && key[KEY_DOWN] && key[KEY_LEFT]  && key[KEY_RIGHT] )
+      return true;
+
+  return false;
+}
+
+//Button keys pressed
+//EPIC WOMBO COMBOS
+bool key_manager::buttonPressedCombo(){
+  if( joy[0].button[0].b && joy[0].button[1].b && joy[0].button[2].b && joy[0].button[3].b)
+      return true;
+
+  return false;
+}
+
+
 // Key down
 bool key_manager::keyDown(){
   for( int i = 0; i < 127; i++){

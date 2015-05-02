@@ -12,6 +12,9 @@ class stair
     stair(float newX, float newY, int newType);
     virtual ~stair();
 
+    int getType();
+    void setType(int newType);
+
     // FUNctions
     void update( vector<stair>* allStairsCopy);
     void movement();
@@ -26,6 +29,7 @@ class stair
     static float scrollSpeed;
     static bool final_stair_placed;
     static BITMAP* image;
+    static BITMAP* stage_end_green;
     static BITMAP* image_brick;
     static BITMAP* stage_end_red;
 

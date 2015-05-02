@@ -50,6 +50,10 @@ void Game::init(){
   if(!(stair::stage_end_red = load_bitmap( "images/stage_end_red.png", NULL))){
     abort_on_error( "Cannot find image images/stage_end_red.png \n Please check your files and try again");
   }
+  if(!(stair::stage_end_green = load_bitmap( "images/stage_end_green.png", NULL))){
+    abort_on_error( "Cannot find image images/stage_end_green.png \n Please check your files and try again");
+  }
+
   if(!(stair::image_brick = load_bitmap( "images/brick.png", NULL))){
     abort_on_error( "Cannot find image images/brick.png \n Please check your files and try again");
   }
@@ -135,7 +139,16 @@ void Game::init(){
 
 // Update game state
 void Game::update(){
+
   poll_joystick();
+
+  if( player1->getY() <= (stair::locationOfFinal - (player1->image[0] -> h - 60))){
+    for(int i=0; i<allStairs.size();  i++){
+      if(allStairs.at(i).getType()==1)
+        allStairs.at(i).setType(2);
+    }
+  }
+
   // Scroll background
   background_scroll -= stair::scrollSpeed/4;
   if(background_scroll < 0)
