@@ -21,11 +21,8 @@ enum GameStates
 
 // Endgame Variables
 extern bool is_game_done;
-<<<<<<< HEAD
 extern bool input_mode;
-=======
 
->>>>>>> 4d7dbfb873b339bf811dae82cc0aa728d37cca82
 // Frames
 extern int frames_done;
 
