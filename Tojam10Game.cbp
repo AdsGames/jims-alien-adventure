@@ -10,7 +10,7 @@
 				<Option output="build/Tojam10Game" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="build/" />
 				<Option object_output="output/" />
-				<Option type="1" />
+				<Option type="0" />
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
@@ -18,6 +18,9 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
+					<Add option="-lfmod" />
+					<Add option="-lalpng" />
+					<Add option="-lalleg" />
 				</Linker>
 			</Target>
 		</Build>
@@ -35,6 +38,10 @@
 		<Unit filename="include/Intro.h" />
 		<Unit filename="include/Menu.h" />
 		<Unit filename="include/globals.h" />
+		<Unit filename="include/key_data.h" />
+		<Unit filename="include/key_manager.h" />
+		<Unit filename="include/player.h" />
+		<Unit filename="include/stair.h" />
 		<Unit filename="include/tools.h" />
 		<Unit filename="src/Game.cpp" />
 		<Unit filename="src/GameState.cpp" />
@@ -42,7 +49,11 @@
 		<Unit filename="src/Intro.cpp" />
 		<Unit filename="src/Menu.cpp" />
 		<Unit filename="src/globals.cpp" />
+		<Unit filename="src/key_data.cpp" />
+		<Unit filename="src/key_manager.cpp" />
 		<Unit filename="src/main.cpp" />
+		<Unit filename="src/player.cpp" />
+		<Unit filename="src/stair.cpp" />
 		<Unit filename="src/tools.cpp" />
 		<Extensions>
 			<code_completion />
