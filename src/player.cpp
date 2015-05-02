@@ -1,6 +1,6 @@
 #include "player.h"
 
-BITMAP* player::image[7];
+BITMAP* player::image[8];
 int player::animation_frame;
 
 player::player(float newX, float newY)

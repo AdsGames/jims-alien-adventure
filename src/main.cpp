@@ -9,6 +9,7 @@
 #include "Init.h"
 #include "Intro.h"
 #include "Menu.h"
+#include "Map.h"
 #include "Game.h"
 
 // Close button
@@ -64,6 +65,10 @@ void change_state()
 
       case STATE_MENU:
         currentState = new Menu();
+        break;
+
+      case STATE_MAP:
+        currentState = new Map();
         break;
 
       case STATE_GAME:
