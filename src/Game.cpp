@@ -15,7 +15,7 @@ void Game::gameTicker(){
 END_OF_FUNCTION(gameTicker)
 
 void Game::gameTimer(){
-  climb_time += 0.1;
+  if(!switch_flicked)climb_time += 0.1;
 }
 END_OF_FUNCTION(gameTimer)
 
@@ -106,8 +106,8 @@ void Game::init(){
   FONT *f1, *f2, *f3, *f4, *f5;
 
   //Sets Font
-  if(!(f1 = load_font(("fonts/arial_black.pcx"), NULL, NULL))){
-    abort_on_error( "Cannot find font fonts/arial_black.png \n Please check your files and try again");
+  if(!(f1 = load_font(("fonts/dosis.pcx"), NULL, NULL))){
+    abort_on_error( "Cannot find font fonts/dosis.png \n Please check your files and try again");
   }
 
   f2 = extract_font_range(f1, ' ', 'A'-1);
@@ -142,7 +142,7 @@ void Game::update(){
 
   poll_joystick();
 
-  distance_travelled += stair::scrollSpeed/25;
+  if(!switch_flicked)distance_travelled += stair::scrollSpeed/25;
   if( player1->getY() <= (stair::locationOfFinal - (player1->image[0] -> h - 60))){
     for(int i=0; i<allStairs.size();  i++){
       if(allStairs.at(i).getType()==1)
@@ -166,6 +166,9 @@ void Game::update(){
 
   if( distance_travelled > 100 && !is_game_done){
     is_game_done = true;
+  }
+  if( distance_travelled > 111){
+    switch_flicked = true;
   }
 
   // Character
@@ -198,7 +201,7 @@ void Game::draw(){
   player1 -> draw( buffer);
 
   // Key manager
-  screen_keys -> draw( buffer);
+  if(!switch_flicked)screen_keys -> draw( buffer);
 
   // Timer
   textprintf_ex( buffer, font, 20, 120, makecol(0,0,0), -1, "Time:%4.1f", climb_time);
