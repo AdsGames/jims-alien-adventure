@@ -91,7 +91,7 @@ void stair::draw( BITMAP *tempImage){
 
 // Line y position
 float stair::location_y( float oldX){
-  return (SCREEN_H - ((oldX-SCREEN_W/2)/30) * 37);
+  return (SCREEN_H - ((oldX-SCREEN_W/4)/30) * 37);
 }
 
 // Line y position
