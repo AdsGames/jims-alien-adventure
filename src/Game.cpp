@@ -27,7 +27,7 @@ void Game::init(){
   // Setup for FPS system
   LOCK_VARIABLE(timer1);
   LOCK_FUNCTION(gameTicker);
-  install_int_ex(gameTicker, BPS_TO_TIMER(5));
+  install_int_ex(gameTicker, BPS_TO_TIMER(10));
 
   // Timer!
   LOCK_VARIABLE(climb_time);
@@ -125,16 +125,16 @@ void Game::init(){
   destroy_font(f5);
 
   // Stairs (offset is 30 px)
-  for( int i = SCREEN_W/2; i < SCREEN_W; i += 30 ){
+  for( int i = SCREEN_W/4; i < SCREEN_W; i += 30 ){
     stair newStair( i, stair::location_y(i),0);
     allStairs.push_back(newStair);
   }
 
   // Keys
-  screen_keys = new key_manager( 20, 20);
+  screen_keys = new key_manager( 20, 50);
 
   // Player
-  player1 = new player( (20 * 30), (stair::location_y(20 * 30)) - player::image[0] -> h/2);
+  player1 = new player( (10 * 30), (stair::location_y(10 * 30)) - player::image[0] -> h/2);
 }
 
 // Update game state

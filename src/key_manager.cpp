@@ -12,14 +12,13 @@ key_manager::key_manager(int newX, int newY){
   // Add keys
   for( int i = 0; i < 4; i++){
     if(!input_mode){
-        key_data newKey(KEY_UP);
-        key_queue.push_back(newKey);
+      key_data newKey(KEY_UP);
+      key_queue.push_back(newKey);
     }
     if(input_mode){
       key_data newKey(0);
       key_queue.push_back(newKey);
     }
-
   }
 
   // No keys down
@@ -37,7 +36,6 @@ void key_manager::update(){
 
       key_data newKey(random(KEY_LEFT, KEY_DOWN));
       key_queue.push_back(newKey);
-
 
       if( stair::scrollSpeed < stair::maxScrollSpeed)
         stair::scrollSpeed += 0.5;
