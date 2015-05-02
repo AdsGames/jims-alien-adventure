@@ -142,6 +142,7 @@ void Game::update(){
 
   poll_joystick();
 
+  distance_travelled += stair::scrollSpeed/25;
   if( player1->getY() <= (stair::locationOfFinal - (player1->image[0] -> h - 60))){
     for(int i=0; i<allStairs.size();  i++){
       if(allStairs.at(i).getType()==1)
@@ -201,6 +202,7 @@ void Game::draw(){
 
   // Timer
   textprintf_ex( buffer, font, 20, 120, makecol(0,0,0), -1, "Time:%4.1f", climb_time);
+  textprintf_ex( buffer, font, 20, 150, makecol(0,0,0), -1, "Distance:%4.1f", distance_travelled);
 
   // Buffer
   draw_sprite( screen, buffer, 0, 0);
