@@ -26,17 +26,13 @@ void key_manager::update(){
   if( key[key_queue.at(0).getValue()] && keyIsPressed == false){
     key_queue.erase( key_queue.begin());
 
-    key_data newKey(KEY_UP);//random(KEY_LEFT, KEY_DOWN));
+    key_data newKey(random(KEY_LEFT, KEY_DOWN));
     key_queue.push_back(newKey);
 
     if( stair::scrollSpeed < stair::maxScrollSpeed)
       stair::scrollSpeed += 0.5;
   }
-
-  // Slow stairs down
-  if( stair::scrollSpeed > 0.015)
-    stair::scrollSpeed -= 0.015;
-  else{
+  else if( keyDown() && keyIsPressed == false){
     stair::scrollSpeed = 0;
   }
 
@@ -45,6 +41,13 @@ void key_manager::update(){
     keyIsPressed = true;
   else
     keyIsPressed = false;
+
+  // Slow stairs down
+  if( stair::scrollSpeed > 0.01)
+    stair::scrollSpeed -= 0.01;
+  else{
+    stair::scrollSpeed = 0;
+  }
 }
 
 // Draw
