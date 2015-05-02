@@ -26,7 +26,7 @@ void Game::init(){
   FSOUND_Init (44100, 32, 0);
 
   // Init variables
-  stair::scrollSpeed = 1.0;
+  stair::scrollSpeed = 0;
 
   // Creates a random number generator (based on time)
   srand (time(NULL));
@@ -117,7 +117,7 @@ void Game::update(){
 
   // Character
   player1 -> update();
-  player::animation_frame = int(timer1/(4 - floor(stair::scrollSpeed))) % 3 ;
+  player::animation_frame = int(timer1/((stair::maxScrollSpeed + 1) - floor(stair::scrollSpeed))) % 3 ;
 
   // Key manager
   screen_keys -> update();
