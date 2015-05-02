@@ -20,10 +20,16 @@ class Menu : public GameState
   private:
     // Menu/GUI
     BITMAP *buffer;
-    BITMAP *background, *title;
+    BITMAP *background, *title, *sky, *city;
+    BITMAP *cursor;
+    BITMAP *button_images[4][2];
+
+    // Buttons
+    Button *start, *story, *options, *exit;
 
     // Movement
     float title_y;
+    float city_x;
 
     FSOUND_STREAM* music;
   protected:

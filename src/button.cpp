@@ -2,26 +2,31 @@
 
 using namespace std;
 
-Button::Button(){
-  button_height = 120;
-  button_width = 520;
+Button::Button( BITMAP *newImage1, BITMAP *newImage2, int newX, int newY){
+  // Images
+  images[0] = newImage1;
+  images[1] = newImage2;
+
+  // Size
+  button_height = newImage1 -> h;
+  button_width = newImage1 -> w;
+
+  // Position
+  x = newX;
+  y = newY;
 }
 
 Button::~Button(){
-  delete [] images[0][0], images[0][1];
+
 }
 
-void Button::SetImages( char image1[], char image2[]){  
-  images[0][0]= load_bitmap(image1, NULL);
-  images[0][1]= load_bitmap(image2, NULL); 
+void Button::SetImages( char image1[], char image2[]){
+  images[0]= load_bitmap(image1, NULL);
+  images[1]= load_bitmap(image2, NULL);
 }
 
 void Button::SetHover(bool newHover){
   hover = newHover;
-}
-
-void Button::setResDiv(int newResDiv){
-  resDiv = newResDiv;
 }
 
 bool Button::GetHover(){
@@ -29,12 +34,13 @@ bool Button::GetHover(){
 }
 
 bool Button::CheckHover(){
-  if(mouse_x*resDiv>GetX() && mouse_x*resDiv<GetX()+button_width && mouse_y*resDiv>GetY() && mouse_y*resDiv<GetY()+button_height){
-    return true;
+  if( mouse_x > GetX() && mouse_x < GetX() + button_width && mouse_y > GetY() && mouse_y < GetY() + button_height){
+    hover = true;
   }
   else{
-    return false;
+    hover = false;
   }
+  return hover;
 }
 
 void Button::SetPosition(int newX, int newY){
@@ -45,20 +51,14 @@ void Button::SetPosition(int newX, int newY){
 int Button::GetX(){
   return x;
 }
-       
+
 int Button::GetY(){
   return y;
 }
 
-void Button::draw(BITMAP* tempBitmap){  
-  if(CheckHover()){
-    DrawNewSprite( tempBitmap, images[0][1]);
-  }
-  else{
-    DrawNewSprite( tempBitmap, images[0][0]);
-  }                              
-}
-
-void Button::DrawNewSprite( BITMAP* tempBitmap, BITMAP* spriteToDraw){
-  draw_sprite(tempBitmap, spriteToDraw, GetX(), GetY());  
+void Button::draw(BITMAP* tempBitmap){
+  if(CheckHover())
+    draw_sprite( tempBitmap, images[1], x, y);
+  else
+    draw_sprite( tempBitmap, images[0], x, y);
 }
