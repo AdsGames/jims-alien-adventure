@@ -13,12 +13,17 @@
 
 #include "globals.h"
 #include "tools.h"
+#include "button.h"
 
 class Menu : public GameState
 {
   private:
     // Menu/GUI
     BITMAP *buffer;
+    BITMAP *background, *title;
+
+    // Movement
+    float title_y;
 
     FSOUND_STREAM* music;
   protected:
