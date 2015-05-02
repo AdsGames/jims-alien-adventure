@@ -47,6 +47,9 @@ void Game::init(){
   if(!(stair::image = load_bitmap( "images/stairs.png", NULL))){
     abort_on_error( "Cannot find image images/stairs.png \n Please check your files and try again");
   }
+  if(!(stair::stage_end_red = load_bitmap( "images/stage_end_red.png", NULL))){
+    abort_on_error( "Cannot find image images/stage_end_red.png \n Please check your files and try again");
+  }
   if(!(stair::image_brick = load_bitmap( "images/brick.png", NULL))){
     abort_on_error( "Cannot find image images/brick.png \n Please check your files and try again");
   }
@@ -76,6 +79,7 @@ void Game::init(){
     abort_on_error( "Cannot find image images/background_buildings.png \n Please check your files and try again");
   }
 
+
   // Other Sprites
   buffer = create_bitmap( SCREEN_W, SCREEN_H);
 
@@ -103,7 +107,7 @@ void Game::init(){
 
   // Stairs (offset is 30 px)
   for( int i = SCREEN_W/2; i < SCREEN_W; i += 30 ){
-    stair newStair( i, stair::location_y(i));
+    stair newStair( i, stair::location_y(i),0);
     allStairs.push_back(newStair);
   }
 
@@ -130,6 +134,11 @@ void Game::update(){
     allStairs.at(i).movement();
   }
 
+  if( climb_time > 5 && !is_game_done){
+      is_game_done = true;
+      stair newStair( SCREEN_H-100,400,1);
+  }
+
   // Character
   player1 -> update();
 
@@ -147,9 +156,11 @@ void Game::draw(){
   draw_sprite(buffer,background_buildings,0+background_scroll,SCREEN_H-270);
   draw_sprite(buffer,background_buildings,-1024 + background_scroll,SCREEN_H-270);
 
+
   // Stairs!
   for( unsigned int i = 0; i < allStairs.size(); i ++ ){
     // Draw
+
     allStairs.at(i).draw( buffer);
   }
 
@@ -161,6 +172,7 @@ void Game::draw(){
 
   // Timer
   textprintf_ex( buffer, font, 20, 120, makecol(0,0,0), -1, "Time:%4.1f", climb_time);
+
 
   // Buffer
   draw_sprite( screen, buffer, 0, 0);
