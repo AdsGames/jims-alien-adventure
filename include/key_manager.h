@@ -3,8 +3,10 @@
 
 #include <vector>
 #include <allegro.h>
+
 #include "key_data.h"
 #include "tools.h"
+#include "stair.h"
 
 using namespace std;
 
@@ -28,6 +30,10 @@ class key_manager
     // Positioning
     int x;
     int y;
+
+    // Any key?
+    bool keyDown();
+    bool keyIsPressed;
 };
 
 #endif // KEY_MANAGER_H

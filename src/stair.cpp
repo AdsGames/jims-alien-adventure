@@ -1,6 +1,7 @@
 #include "stair.h"
 
 int stair::numberStairs;
+const int stair::maxScrollSpeed = 6;
 float stair::scrollSpeed;
 BITMAP* stair::image;
 
