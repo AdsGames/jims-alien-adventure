@@ -9,6 +9,7 @@ bool single_player = false;
 bool input_mode = false;
 
 bool is_game_done = false;
+bool switch_flicked = false;
 float distance_travelled;
 
 
