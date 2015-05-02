@@ -116,7 +116,7 @@ void Game::init(){
   screen_keys = new key_manager( 20, 20);
 
   // Player
-  player1 = new player( (20 * 30) - player::image[0] -> w/2, (stair::location_y(20 * 30)) - player::image[0] -> h/2);
+  player1 = new player( (20 * 30), (stair::location_y(20 * 30)) - player::image[0] -> h/2);
 }
 
 // Update game state
@@ -173,7 +173,6 @@ void Game::draw(){
 
   // Timer
   textprintf_ex( buffer, font, 20, 120, makecol(0,0,0), -1, "Time:%4.1f", climb_time);
-
 
   // Buffer
   draw_sprite( screen, buffer, 0, 0);
