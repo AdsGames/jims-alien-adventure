@@ -31,7 +31,7 @@ key_manager::~key_manager(){ }
 // Update
 void key_manager::update(){
   // Pressing them keys
-  if(!input_mode){
+  if(!input_mode && !switch_flicked){
     if( key[key_queue.at(0).getValue()] && keyIsPressed == false){
       key_queue.erase( key_queue.begin());
 
@@ -47,7 +47,7 @@ void key_manager::update(){
     }
   }
 
-  if(input_mode){
+  if(input_mode && !switch_flicked){
     if( joy[0].button[key_queue.at(0).getValue()].b && buttonIsPressed == false){
       key_queue.erase( key_queue.begin());
 
@@ -87,14 +87,33 @@ void key_manager::update(){
 // Draw
 void key_manager::draw( BITMAP *tempImage){
   // Background
-  rectfill( tempImage, x, y, x + key_queue.size() * 120, y + 100, makecol( 155, 155, 155));
+  rectfill( tempImage, x+395, y+75, x   +509, y +83+ (key_queue.size() * 90), makecol( 155, 155, 155));
 
   // Draw keys
   for( unsigned int i = 0; i < key_queue.size(); i++){
     set_trans_blender(255, 255, 255, 255 - ((255/4) * i));
-    draw_trans_sprite( tempImage, keys[key_queue.at(i).getValue()], i * 120 + x + 5, y + 5);
+    draw_trans_sprite( tempImage, keys[key_queue.at(i).getValue()], x + 400,  -(i * 90)+y + 350);
   }
 }
+
+//Arrow keys pressed
+//EPIC WOMBO COMBOS
+bool key_manager::keyPressedCombo(){
+  if( key[KEY_UP] && key[KEY_DOWN] && key[KEY_LEFT]  && key[KEY_RIGHT] )
+      return true;
+
+  return false;
+}
+
+//Button keys pressed
+//EPIC WOMBO COMBOS
+bool key_manager::buttonPressedCombo(){
+  if( joy[0].button[0].b && joy[0].button[1].b && joy[0].button[2].b && joy[0].button[3].b)
+      return true;
+
+  return false;
+}
+
 
 // Key down
 bool key_manager::keyDown(){

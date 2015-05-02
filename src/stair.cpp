@@ -8,6 +8,7 @@ float stair::locationOfFinal = 0;
 BITMAP* stair::image;
 BITMAP* stair::image_brick;
 BITMAP* stair::stage_end_red;
+BITMAP* stair::stage_end_green;
 bool stair::final_stair_placed;
 
 stair::stair(float newX, float newY, int newType){
@@ -24,6 +25,13 @@ stair::stair(float newX, float newY, int newType){
 
 stair::~stair(){
   //dtor
+}
+int stair::getType(){
+  return type;
+}
+
+void stair::setType(int newType){
+  type=newType;
 }
 
 // Update those stairs
@@ -47,7 +55,7 @@ void stair::movement(){
   // Move
   x -= scrollSpeed;
 
-  if( type == 1){
+  if( type == 1 || type == 2){
     y = location_y(x);
     locationOfFinal = y;
   }
@@ -73,6 +81,12 @@ void stair::draw( BITMAP *tempImage){
     blit( transparency_bitmap, tempImage, 0, 0, x + stage_end_red -> w, y, SCREEN_W, SCREEN_H);
     line( tempImage, x + stage_end_red -> w - 1, y + 30, x + stage_end_red -> w - 1, SCREEN_H, makecol( 168, 148, 148));
   }
+  else if( type == 2){
+    draw_sprite( tempImage, stage_end_green, x, y);
+    blit( transparency_bitmap, tempImage, 0, 0, x + stage_end_green -> w, y, SCREEN_W, SCREEN_H);
+    line( tempImage, x + stage_end_green-> w - 1, y + 30, x + stage_end_green -> w - 1, SCREEN_H, makecol( 168, 148, 148));
+  }
+
 }
 
 // Line y position
