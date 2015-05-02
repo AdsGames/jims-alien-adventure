@@ -37,7 +37,7 @@ class Game : public GameState
     // Player
     player *player1;
 
-    // Keymanager
+    // Key Manager
     key_manager *screen_keys;
 
     // Images

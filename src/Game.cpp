@@ -35,6 +35,10 @@ void Game::init(){
   if(!(stair::image = load_bitmap( "images/stairs.png", NULL))){
     abort_on_error( "Cannot find image images/stairs.png \n Please check your files and try again");
   }
+  if(!(stair::image_brick = load_bitmap( "images/brick.png", NULL))){
+    abort_on_error( "Cannot find image images/brick.png \n Please check your files and try again");
+  }
+  //Player
   if(!(player::image[0] = load_bitmap( "images/player_1.png", NULL))){
     abort_on_error( "Cannot find image images/player.png \n Please check your files and try again");
   }
@@ -90,7 +94,7 @@ void Game::init(){
   destroy_font(f5);
 
   // Stairs (offset is 30 px)
-  for( int i = 0; i < SCREEN_W; i += 30 ){
+  for( int i = SCREEN_W/2; i < SCREEN_W; i += 30 ){
     stair newStair( i, stair::location_y(i));
     allStairs.push_back(newStair);
   }
@@ -99,13 +103,16 @@ void Game::init(){
   screen_keys = new key_manager( 0, 0);
 
   // Player
-  player1 = new player( (4 * 30) - player::image[0] -> w/2, (stair::location_y(4 * 30)) - player::image[0] -> h/2);
+  player1 = new player( (20 * 30) - player::image[0] -> w/2, (stair::location_y(20 * 30)) - player::image[0] -> h/2);
 }
 
 // Update game state
 void Game::update(){
-  background_scroll-=stair::scrollSpeed/4;
-  if(background_scroll<0)background_scroll=1024;
+  // Scroll background
+  background_scroll -= stair::scrollSpeed/4;
+  if(background_scroll < 0)
+    background_scroll = 1024;
+
   // Stairs!
   for( unsigned int i = 0; i < allStairs.size(); i ++ ){
     allStairs.at(i).update( &allStairs);

@@ -24,6 +24,7 @@ class stair
     static int numberStairs;
     static float scrollSpeed;
     static BITMAP* image;
+    static BITMAP* image_brick;
 
     static const int maxScrollSpeed;
   protected:

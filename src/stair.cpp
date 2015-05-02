@@ -4,6 +4,7 @@ int stair::numberStairs;
 const int stair::maxScrollSpeed = 6;
 float stair::scrollSpeed;
 BITMAP* stair::image;
+BITMAP* stair::image_brick;
 
 stair::stair(float newX, float newY){
   x = newX;
@@ -35,13 +36,14 @@ void stair::movement(){
 // Draw those stairs
 void stair::draw( BITMAP *tempImage){
   // Draw stair and rectangle beside for effect
-  rectfill( tempImage, x + 30, y, SCREEN_W, y + image -> h - 1, makecol( 115, 40, 0));
+  for( int i = x + image -> w - 30; i < SCREEN_W; i+= image_brick -> w)
+    draw_sprite( tempImage, image_brick, i, y + image -> h);
   draw_sprite( tempImage, image, x, y);
 }
 
 // Line y position
 float stair::location_y( float oldX){
-  return SCREEN_H - (oldX/30) * 37;
+  return (SCREEN_H - ((oldX-SCREEN_W/2)/30) * 37);
 }
 
 // Line y position
