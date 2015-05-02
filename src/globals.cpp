@@ -6,7 +6,10 @@ BITMAP* projectileSprites[10][3];
 // Frames
 int frames_done;
 bool single_player = false;
+bool input_mode = true;
+
 bool is_game_done = false;
+
 
 
 // Resdiv
