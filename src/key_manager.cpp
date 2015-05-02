@@ -31,7 +31,7 @@ key_manager::~key_manager(){ }
 // Update
 void key_manager::update(){
   // Pressing them keys
-  if(!input_mode){
+  if(!input_mode && !switch_flicked){
     if( key[key_queue.at(0).getValue()] && keyIsPressed == false){
       key_queue.erase( key_queue.begin());
 
@@ -47,7 +47,7 @@ void key_manager::update(){
     }
   }
 
-  if(input_mode){
+  if(input_mode && !switch_flicked){
     if( joy[0].button[key_queue.at(0).getValue()].b && buttonIsPressed == false){
       key_queue.erase( key_queue.begin());
 
