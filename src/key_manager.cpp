@@ -39,9 +39,10 @@ void key_manager::update(){
 
       if( stair::scrollSpeed < stair::maxScrollSpeed)
         stair::scrollSpeed += 0.5;
-      }
-      else if( keyDown() && keyIsPressed == false){
-        stair::scrollSpeed = 0;
+    }
+    else if( keyDown() && keyIsPressed == false && stair::scrollSpeed > 0){
+      stair::scrollSpeed /= 4;
+      // TODO: SOUND OUCH!
     }
   }
 
@@ -54,9 +55,10 @@ void key_manager::update(){
 
       if( stair::scrollSpeed < stair::maxScrollSpeed)
         stair::scrollSpeed += 0.5;
-      }
-      else if( buttonDown() && buttonIsPressed == false){
-        stair::scrollSpeed = 0;
+    }
+    else if( buttonDown() && buttonIsPressed == false && stair::scrollSpeed > 0){
+      stair::scrollSpeed /= 4;
+      // TODO: SOUND OUCH!
     }
   }
 
