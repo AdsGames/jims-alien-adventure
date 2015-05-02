@@ -24,6 +24,8 @@ END_OF_FUNCTION(gameTimer)
 vector<stair> allStairs;
 
 void Game::init(){
+
+
   // Setup for FPS system
   LOCK_VARIABLE(timer1);
   LOCK_FUNCTION(gameTicker);
@@ -96,6 +98,9 @@ void Game::init(){
    if(!(background_buildings = load_bitmap( "images/background_buildings.png", NULL))){
     abort_on_error( "Cannot find image images/background_buildings.png \n Please check your files and try again");
   }
+  if(!(watch = load_bitmap( "images/watch.png", NULL))){
+    abort_on_error( "Cannot find image images/watch.png \n Please check your files and try again");
+  }
 
 
   // Other Sprites
@@ -107,7 +112,7 @@ void Game::init(){
 
   //Sets Font
   if(!(f1 = load_font(("fonts/dosis.pcx"), NULL, NULL))){
-    abort_on_error( "Cannot find font fonts/dosis.png \n Please check your files and try again");
+    abort_on_error( "Cannot find font fonts/dosis.pcx \n Please check your files and try again");
   }
 
   f2 = extract_font_range(f1, ' ', 'A'-1);
@@ -116,6 +121,19 @@ void Game::init(){
 
   //Merge fonts
   font = merge_fonts(f4, f5 = merge_fonts(f2, f3));
+
+
+  if(!(f1 = load_font(("fonts/dosis_26.pcx"), NULL, NULL))){
+    abort_on_error( "Cannot find font fonts/dosis_26.pcx \n Please check your files and try again");
+  }
+
+  f2 = extract_font_range(f1, ' ', 'A'-1);
+  f3 = extract_font_range(f1, 'A', 'Z');
+  f4 = extract_font_range(f1, 'Z'+1, 'z');
+
+  //Merge fonts
+  dosis_26 = merge_fonts(f4, f5 = merge_fonts(f2, f3));
+
 
   //Destroy temporary fonts
   destroy_font(f1);
@@ -167,7 +185,7 @@ void Game::update(){
   if( distance_travelled > level_distance && !is_game_done){
     is_game_done = true;
   }
-  if( distance_travelled > level_distance+7){
+  if( distance_travelled > level_distance+16){
     switch_flicked = true;
   }
 
@@ -206,12 +224,18 @@ void Game::draw(){
   // Timer
   rectfill(buffer,20,20,620,80,makecol(0,0,0));
   rectfill(buffer,24,24,616,76,makecol(255,255,255));
-  if(switch_flicked)rectfill(buffer,24,24,616,76,makecol(0,255,0));
-  rectfill(buffer,24,24,24+(548*(distance_travelled/level_distance)),76,makecol(0,255,0));
-  textprintf_ex( buffer, font, 20, 120, makecol(0,0,0), -1, "Time:%4.1f", climb_time);
+  if(is_game_done)rectfill(buffer,24,24,616,76,makecol(0,255,0));
+  if(!is_game_done)rectfill(buffer,24,24,24+(600*(distance_travelled/level_distance)),76,makecol(0,255,0));
 
-  if(!switch_flicked)textprintf_ex( buffer, font, 20,32, makecol(0,0,0), -1, "%4.0f/%i", distance_travelled,level_distance+8);
-  if(switch_flicked)textprintf_ex( buffer, font, 40,32, makecol(0,0,0), -1, "%i/%i",level_distance+8,level_distance+8);
+
+  if(!is_game_done)textprintf_ex( buffer, font, 20,32, makecol(0,0,0), -1, "%4.0f/%i", distance_travelled,level_distance);
+  if(is_game_done)textprintf_ex( buffer, font, 40,32, makecol(0,0,0), -1, "%i/%i",level_distance,level_distance);
+
+  set_alpha_blender();
+  draw_trans_sprite(buffer,watch,SCREEN_W-100,SCREEN_H-70);
+  textprintf_ex( buffer, dosis_26, SCREEN_W-75,SCREEN_H-60, makecol(255,255,255), -1, "%4.1f", climb_time);
+
+
 
   // Buffer
   draw_sprite( screen, buffer, 0, 0);
