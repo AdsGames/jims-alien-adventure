@@ -12,7 +12,7 @@ bool is_game_done = false;
 bool switch_flicked = false;
 float distance_travelled;
 
-int level_distance = 92;
+int level_distance = 100;
 
 
 // Resdiv
