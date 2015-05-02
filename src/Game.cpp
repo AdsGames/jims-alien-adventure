@@ -82,6 +82,7 @@ void Game::init(){
 
   // Other Sprites
   buffer = create_bitmap( SCREEN_W, SCREEN_H);
+  stair_buffer = create_bitmap( SCREEN_W, SCREEN_H);
 
   // Temporary fonts
   FONT *f1, *f2, *f3, *f4, *f5;
@@ -135,8 +136,7 @@ void Game::update(){
   }
 
   if( climb_time > 5 && !is_game_done){
-      is_game_done = true;
-      stair newStair( SCREEN_H-100,400,1);
+    is_game_done = true;
   }
 
   // Character
@@ -158,11 +158,12 @@ void Game::draw(){
 
 
   // Stairs!
+  rectfill( stair_buffer, 0, 0, SCREEN_W, SCREEN_H, makecol( 255, 0, 255));
   for( unsigned int i = 0; i < allStairs.size(); i ++ ){
     // Draw
-
-    allStairs.at(i).draw( buffer);
+    allStairs.at(i).draw( stair_buffer);
   }
+  draw_sprite( buffer, stair_buffer, 0, 0);
 
   // Character
   player1 -> draw( buffer);
