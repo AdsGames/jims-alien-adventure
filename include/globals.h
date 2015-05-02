@@ -17,6 +17,7 @@ enum GameStates
     STATE_EDIT,
     STATE_GAME,
     STATE_EXIT,
+    STATE_MAP,
 };
 
 // Endgame Variables
