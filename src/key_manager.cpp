@@ -35,13 +35,9 @@ void key_manager::update(){
     if( key[key_queue.at(0).getValue()] && keyIsPressed == false){
       key_queue.erase( key_queue.begin());
 
-<<<<<<< HEAD
       key_data newKey(random(KEY_LEFT, KEY_DOWN));
       key_queue.push_back(newKey);
-=======
-    key_data newKey(KEY_UP);//random(KEY_LEFT, KEY_DOWN));
-    key_queue.push_back(newKey);
->>>>>>> 4d7dbfb873b339bf811dae82cc0aa728d37cca82
+
 
       if( stair::scrollSpeed < stair::maxScrollSpeed)
         stair::scrollSpeed += 0.5;
