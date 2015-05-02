@@ -10,40 +10,36 @@ using namespace std;
 class Button{
 
 public:
-  Button();
+  Button( BITMAP *newImage1, BITMAP *newImage2, int newX, int newY);
   ~Button();
-  
+
   void SetImages( char image1[], char image2[]);
-  
+
   void SetHover(bool newHover);
   bool GetHover();
-  
-  void setResDiv(int newResDiv);
-  
+
   void draw(BITMAP* tempBitmap);
-  void DrawNewSprite( BITMAP* tempBitmap, BITMAP* spriteToDraw);  
-  
+
   void SetPosition( int newX, int newY);
-  
-  void SetType(int newType); 
-  void SetValue(int newValue);  
-  
+
+  void SetType(int newType);
+  void SetValue(int newValue);
+
   bool CheckHover();
-  
+
   int GetX();
   int GetY();
-              
+
 private:
   int button_height;
   int button_width;
-  int resDiv;
-  
+
   int x;
   int y;
-  
+
   bool hover;
-  
-  BITMAP *images[2][2]; 
+
+  BITMAP *images[2];
 };
 
 #endif
