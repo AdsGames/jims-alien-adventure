@@ -164,10 +164,10 @@ void Game::update(){
     allStairs.at(i).movement();
   }
 
-  if( distance_travelled > 100 && !is_game_done){
+  if( distance_travelled > level_distance && !is_game_done){
     is_game_done = true;
   }
-  if( distance_travelled > 116){
+  if( distance_travelled > level_distance+7){
     switch_flicked = true;
   }
 
@@ -204,8 +204,14 @@ void Game::draw(){
   if(!switch_flicked)screen_keys -> draw( buffer);
 
   // Timer
+  rectfill(buffer,20,20,620,80,makecol(0,0,0));
+  rectfill(buffer,24,24,616,76,makecol(255,255,255));
+  if(switch_flicked)rectfill(buffer,24,24,616,76,makecol(0,255,0));
+  rectfill(buffer,24,24,24+(548*(distance_travelled/level_distance)),76,makecol(0,255,0));
   textprintf_ex( buffer, font, 20, 120, makecol(0,0,0), -1, "Time:%4.1f", climb_time);
-  textprintf_ex( buffer, font, 20, 150, makecol(0,0,0), -1, "Distance:%4.1f", distance_travelled);
+
+  if(!switch_flicked)textprintf_ex( buffer, font, 20,32, makecol(0,0,0), -1, "%4.0f/%i", distance_travelled,level_distance+8);
+  if(switch_flicked)textprintf_ex( buffer, font, 40,32, makecol(0,0,0), -1, "%i/%i",level_distance+8,level_distance+8);
 
   // Buffer
   draw_sprite( screen, buffer, 0, 0);

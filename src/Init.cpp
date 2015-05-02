@@ -9,7 +9,7 @@ Init::Init()
   int height;
   //get_desktop_resolution(&width,&height);
 
-  set_gfx_mode( GFX_AUTODETECT_WINDOWED, 960, 540, 0, 0);
+  set_gfx_mode( GFX_AUTODETECT_WINDOWED, 740, 540, 0, 0);
 
   set_window_title("Tojam 10!");
 

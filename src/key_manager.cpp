@@ -87,12 +87,12 @@ void key_manager::update(){
 // Draw
 void key_manager::draw( BITMAP *tempImage){
   // Background
-  rectfill( tempImage, x+395, y+75, x   +509, y +83+ (key_queue.size() * 90), makecol( 155, 155, 155));
+  rectfill( tempImage, x+15, y+75, x   +209-80, y +83+ (key_queue.size() * 90), makecol( 155, 155, 155));
 
   // Draw keys
   for( unsigned int i = 0; i < key_queue.size(); i++){
     set_trans_blender(255, 255, 255, 255 - ((255/4) * i));
-    draw_trans_sprite( tempImage, keys[key_queue.at(i).getValue()], x + 400,  -(i * 90)+y + 350);
+    draw_trans_sprite( tempImage, keys[key_queue.at(i).getValue()], x + 20,  -(i * 90)+y + 350);
   }
 }
 
