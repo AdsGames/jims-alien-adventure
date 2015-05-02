@@ -33,6 +33,7 @@ class Game : public GameState
     bool gameBegin;
     int totalTime[2];
 
+    FONT* dosis_26;
     // Player
     player *player1;
 
@@ -42,6 +43,8 @@ class Game : public GameState
     // Images
     BITMAP* buffer, *stair_buffer;
     BITMAP* background_sky, *background_buildings;
+    BITMAP* watch;
+
     float background_scroll;
 
     // Lighting effects
