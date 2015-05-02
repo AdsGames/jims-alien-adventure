@@ -17,7 +17,7 @@ class player
     int getY();
 
     // Images
-    static BITMAP *image[7];
+    static BITMAP *image[8];
     static int animation_frame;
   protected:
   private:

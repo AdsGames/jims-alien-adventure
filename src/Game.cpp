@@ -58,9 +58,9 @@ void Game::init(){
     abort_on_error( "Cannot find image images/brick.png \n Please check your files and try again");
   }
   //Player
-  for( int i = 0; i < 7; i++){
-    if(!(player::image[i] = load_bitmap( ("images/player_" + convertIntToString(i+1) + ".png").c_str(), NULL))){
-      abort_on_error( ("Cannot find image images/player_" + convertIntToString(i+1) + ".png \n Please check your files and try again").c_str());
+  for( int i = 0; i < 8; i++){
+    if(!(player::image[i] = load_bitmap( ("images/player/player_" + convertIntToString(i+1) + ".png").c_str(), NULL))){
+      abort_on_error( ("Cannot find image images/player/player_" + convertIntToString(i+1) + ".png \n Please check your files and try again").c_str());
     }
   }
   // Keys
@@ -76,7 +76,7 @@ void Game::init(){
   if(!(key_manager::keys[KEY_RIGHT] = load_bitmap( "images/keys/key_right.png", NULL))){
     abort_on_error( "Cannot find image images/keys/key_right.png \n Please check your files and try again");
   }
-    // Buttons
+  // Buttons
   if(!(key_manager::keys[0] = load_bitmap( "images/keys/joy_a.png", NULL))){
     abort_on_error( "Cannot find image images/keys/joy_a.png \n Please check your files and try again");
   }
@@ -174,7 +174,7 @@ void Game::update(){
   // Character
   player1 -> update();
 
-  player::animation_frame = int(timer1 * ceil(stair::scrollSpeed)) % 7;
+  player::animation_frame = int(timer1 * ceil(stair::scrollSpeed)) % 8;
 
   // Key manager
   screen_keys -> update();
