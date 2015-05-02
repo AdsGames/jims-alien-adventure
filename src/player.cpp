@@ -21,5 +21,7 @@ void player::draw( BITMAP *tempImage){
 }
 
 void player::update(){
-  // Move (JKNO!)
+  // Move
+  if( y <= (stair::locationOfFinal - (image[0] -> h - 60)))
+    stair::scrollSpeed = 0;
 }
