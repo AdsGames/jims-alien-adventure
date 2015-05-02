@@ -22,6 +22,7 @@ class stair
 
     // Static members
     static int numberStairs;
+    static float locationOfFinal;
     static float scrollSpeed;
     static bool final_stair_placed;
     static BITMAP* image;

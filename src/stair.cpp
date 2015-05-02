@@ -4,6 +4,7 @@
 int stair::numberStairs;
 const int stair::maxScrollSpeed = 6;
 float stair::scrollSpeed;
+float stair::locationOfFinal = 0;
 BITMAP* stair::image;
 BITMAP* stair::image_brick;
 BITMAP* stair::stage_end_red;
@@ -46,8 +47,10 @@ void stair::movement(){
   // Move
   x -= scrollSpeed;
 
-  if( type == 1)
+  if( type == 1){
     y = location_y(x);
+    locationOfFinal = y;
+  }
   else{
     y = location_y(x - 30);
   }
@@ -66,9 +69,9 @@ void stair::draw( BITMAP *tempImage){
     draw_sprite( tempImage, image, x, y);
   }
   else if( type == 1){
-    blit( transparency_bitmap, tempImage, 0, 0, x + stage_end_red -> w, y, SCREEN_W, SCREEN_H);
-    line( tempImage, x + stage_end_red -> w, y + 30, x + stage_end_red -> w, SCREEN_H, makecol( 168, 148, 148));
     draw_sprite( tempImage, stage_end_red, x, y);
+    blit( transparency_bitmap, tempImage, 0, 0, x + stage_end_red -> w, y, SCREEN_W, SCREEN_H);
+    line( tempImage, x + stage_end_red -> w - 1, y + 30, x + stage_end_red -> w - 1, SCREEN_H, makecol( 168, 148, 148));
   }
 }
 
