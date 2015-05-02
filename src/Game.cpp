@@ -60,6 +60,9 @@ void Game::init(){
   if(!(background_sky = load_bitmap( "images/background_sky.png", NULL))){
     abort_on_error( "Cannot find image images/background_sky.png \n Please check your files and try again");
   }
+   if(!(background_buildings = load_bitmap( "images/background_buildings.png", NULL))){
+    abort_on_error( "Cannot find image images/background_buildings.png \n Please check your files and try again");
+  }
 
   // Other Sprites
   buffer = create_bitmap( SCREEN_W, SCREEN_H);
@@ -101,6 +104,8 @@ void Game::init(){
 
 // Update game state
 void Game::update(){
+  background_scroll-=stair::scrollSpeed/4;
+  if(background_scroll<0)background_scroll=1024;
   // Stairs!
   for( unsigned int i = 0; i < allStairs.size(); i ++ ){
     allStairs.at(i).update( &allStairs);
@@ -123,6 +128,8 @@ void Game::draw(){
   // Background
   rectfill( buffer, 0, 0, SCREEN_W, SCREEN_H, makecol( 255, 255, 255));
   stretch_sprite(buffer,background_sky, 0, 0, SCREEN_W, SCREEN_H);
+  draw_sprite(buffer,background_buildings,0+background_scroll,SCREEN_H-270);
+  draw_sprite(buffer,background_buildings,-1024+background_scroll,SCREEN_H-270);
 
   // Stairs!
   for( unsigned int i = 0; i < allStairs.size(); i ++ ){
