@@ -18,17 +18,16 @@ class stair
     void draw( BITMAP *tempImage);
 
     static float location_y( float oldX);
-    int find_bottom_stair( int stairIndex);
-
-    int type;
-
-    static BITMAP* stage_end_red;
+    int find_top_stair( int stairIndex);
 
     // Static members
     static int numberStairs;
+    static float locationOfFinal;
     static float scrollSpeed;
+    static bool final_stair_placed;
     static BITMAP* image;
     static BITMAP* image_brick;
+    static BITMAP* stage_end_red;
 
     static const int maxScrollSpeed;
   protected:
@@ -36,7 +35,10 @@ class stair
     float x;
     float y;
 
+    int type;
     int stairID;
+
+    BITMAP* transparency_bitmap;
 };
 
 #endif // STAIR_H
