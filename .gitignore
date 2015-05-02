@@ -7,3 +7,7 @@ build/Tojam10Game.exe
 *.exe
 *.o
 *.depend
+*.depend
+Tojam10Game.layout
+*.o
+output/src/key_manager.o
