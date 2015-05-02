@@ -72,6 +72,20 @@ void Game::init(){
   if(!(key_manager::keys[KEY_RIGHT] = load_bitmap( "images/keys/key_right.png", NULL))){
     abort_on_error( "Cannot find image images/keys/key_right.png \n Please check your files and try again");
   }
+    // Buttons
+  if(!(key_manager::keys[0] = load_bitmap( "images/keys/joy_a.png", NULL))){
+    abort_on_error( "Cannot find image images/keys/joy_a.png \n Please check your files and try again");
+  }
+  if(!(key_manager::keys[3] = load_bitmap( "images/keys/joy_y.png", NULL))){
+    abort_on_error( "Cannot find image images/keys/joy_y.png \n Please check your files and try again");
+  }
+  if(!(key_manager::keys[2] = load_bitmap( "images/keys/joy_x.png", NULL))){
+    abort_on_error( "Cannot find image images/keys/joy_x.png \n Please check your files and try again");
+  }
+  if(!(key_manager::keys[1] = load_bitmap( "images/keys/joy_b.png", NULL))){
+    abort_on_error( "Cannot find image images/keys/joy_b.png \n Please check your files and try again");
+  }
+
   if(!(background_sky = load_bitmap( "images/background_sky.png", NULL))){
     abort_on_error( "Cannot find image images/background_sky.png \n Please check your files and try again");
   }
@@ -120,6 +134,7 @@ void Game::init(){
 
 // Update game state
 void Game::update(){
+  poll_joystick();
   // Scroll background
   background_scroll -= stair::scrollSpeed/4;
   if(background_scroll < 0)
