@@ -33,6 +33,8 @@ class key_manager
 
     // Any key?
     bool keyDown();
+    bool buttonDown();
+    bool buttonIsPressed;
     bool keyIsPressed;
 };
 
