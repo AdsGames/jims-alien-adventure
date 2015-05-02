@@ -30,7 +30,6 @@ class Game : public GameState
 
     // Variables
     int animationFrame;
-    static volatile int timer1;
     bool gameBegin;
     int totalTime[2];
 
@@ -51,7 +50,12 @@ class Game : public GameState
     bool lightingEnabled;
     BITMAP *darkness, *darkness_old, *lightBuffer, *spotlight;
 
+    // Timers
+    static volatile int timer1;
+    static volatile float climb_time;
+
     static void gameTicker();
+    static void gameTimer();
 
   public:
     //Main loop functions

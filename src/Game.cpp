@@ -1,6 +1,7 @@
 #include "Game.h"
 
 volatile int Game::timer1 = 00;
+volatile float Game::climb_time = 00;
 
 Game::Game()
 {
@@ -13,6 +14,12 @@ void Game::gameTicker(){
 }
 END_OF_FUNCTION(gameTicker)
 
+void Game::gameTimer(){
+  climb_time += 0.1;
+}
+END_OF_FUNCTION(gameTimer)
+
+
 // All stairs
 vector<stair> allStairs;
 
@@ -20,7 +27,12 @@ void Game::init(){
   // Setup for FPS system
   LOCK_VARIABLE(timer1);
   LOCK_FUNCTION(gameTicker);
-  install_int_ex(gameTicker, BPS_TO_TIMER(20));
+  install_int_ex(gameTicker, BPS_TO_TIMER(5));
+
+  // Timer!
+  LOCK_VARIABLE(climb_time);
+  LOCK_FUNCTION(gameTimer);
+  install_int_ex(gameTimer, BPS_TO_TIMER(10));
 
   // Init fmod
   FSOUND_Init (44100, 32, 0);
@@ -39,14 +51,10 @@ void Game::init(){
     abort_on_error( "Cannot find image images/brick.png \n Please check your files and try again");
   }
   //Player
-  if(!(player::image[0] = load_bitmap( "images/player_1.png", NULL))){
-    abort_on_error( "Cannot find image images/player.png \n Please check your files and try again");
-  }
-  if(!(player::image[1] = load_bitmap( "images/player_2.png", NULL))){
-    abort_on_error( "Cannot find image images/player.png \n Please check your files and try again");
-  }
-  if(!(player::image[2] = load_bitmap( "images/player_3.png", NULL))){
-    abort_on_error( "Cannot find image images/player.png \n Please check your files and try again");
+  for( int i = 0; i < 7; i++){
+    if(!(player::image[i] = load_bitmap( ("images/player_" + convertIntToString(i+1) + ".png").c_str(), NULL))){
+      abort_on_error( ("Cannot find image images/player_" + convertIntToString(i+1) + ".png \n Please check your files and try again").c_str());
+    }
   }
   // Keys
   if(!(key_manager::keys[KEY_UP] = load_bitmap( "images/keys/key_up.png", NULL))){
@@ -100,7 +108,7 @@ void Game::init(){
   }
 
   // Keys
-  screen_keys = new key_manager( 0, 0);
+  screen_keys = new key_manager( 20, 20);
 
   // Player
   player1 = new player( (20 * 30) - player::image[0] -> w/2, (stair::location_y(20 * 30)) - player::image[0] -> h/2);
@@ -124,7 +132,8 @@ void Game::update(){
 
   // Character
   player1 -> update();
-  player::animation_frame = int(timer1/((stair::maxScrollSpeed + 1) - floor(stair::scrollSpeed))) % 3 ;
+
+  player::animation_frame = int(timer1 * ceil(stair::scrollSpeed)) % 7;
 
   // Key manager
   screen_keys -> update();
@@ -149,6 +158,9 @@ void Game::draw(){
 
   // Key manager
   screen_keys -> draw( buffer);
+
+  // Timer
+  textprintf_ex( buffer, font, 20, 120, makecol(0,0,0), -1, "Time:%4.1f", climb_time);
 
   // Buffer
   draw_sprite( screen, buffer, 0, 0);
