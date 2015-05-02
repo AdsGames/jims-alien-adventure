@@ -20,6 +20,41 @@ Menu::Menu()
   if(!(title = load_bitmap("images/menu/title.png", NULL))){
       abort_on_error( "Cannot find image images/menu/title.png \n Please check your files and try again");
   }
+  if(!(sky = load_bitmap("images/background_sky.png", NULL))){
+      abort_on_error( "Cannot find image images/background_sky.png \n Please check your files and try again");
+  }
+  if(!(city = load_bitmap("images/background_buildings.png", NULL))){
+      abort_on_error( "Cannot find image images/background_buildings.png \n Please check your files and try again");
+  }
+  if(!(cursor = load_bitmap("images/menu/cursor1.png", NULL))){
+      abort_on_error( "Cannot find image images/menu/cursor1.png \n Please check your files and try again");
+  }
+
+  // Buttons
+  if(!(button_images[0][0] = load_bitmap("images/menu/button_play.png", NULL))){
+      abort_on_error( "Cannot find image images/menu/button_play.png \n Please check your files and try again");
+  }
+  if(!(button_images[0][1] = load_bitmap("images/menu/button_pushed_play.png", NULL))){
+      abort_on_error( "Cannot find image images/menu/button_pushed_play.png \n Please check your files and try again");
+  }
+  if(!(button_images[1][0] = load_bitmap("images/menu/button_story.png", NULL))){
+      abort_on_error( "Cannot find image images/menu/button_story.png \n Please check your files and try again");
+  }
+  if(!(button_images[1][1] = load_bitmap("images/menu/button_pushed_story.png", NULL))){
+      abort_on_error( "Cannot find image images/menu/button_pushed_story.png \n Please check your files and try again");
+  }
+  if(!(button_images[2][0] = load_bitmap("images/menu/button_options.png", NULL))){
+      abort_on_error( "Cannot find image images/menu/button_options.png \n Please check your files and try again");
+  }
+  if(!(button_images[2][1] = load_bitmap("images/menu/button_pushed_options.png", NULL))){
+      abort_on_error( "Cannot find image images/menu/button_pushed_options.png \n Please check your files and try again");
+  }
+  if(!(button_images[3][0] = load_bitmap("images/menu/button_exit.png", NULL))){
+      abort_on_error( "Cannot find image images/menu/button_exit.png \n Please check your files and try again");
+  }
+  if(!(button_images[3][1] = load_bitmap("images/menu/button_pushed_exit.png", NULL))){
+      abort_on_error( "Cannot find image images/menu/button_pushed_exit.png \n Please check your files and try again");
+  }
 
   // Temporary fonts
   FONT *f1, *f2, *f3, *f4, *f5;
@@ -47,28 +82,67 @@ Menu::Menu()
   set_alpha_blender();
 
   // Variable set
-  title_y = - title -> h;
+  title_y = -title -> h;
+
+  // Buttons
+  start = new Button( button_images[0][0], button_images[0][1], 30, 190);
+  story = new Button( button_images[1][0], button_images[1][1], 195, 190);
+  options = new Button( button_images[2][0], button_images[2][1], 30, 300);
+  exit = new Button( button_images[3][0], button_images[3][1], 195, 300);
 
   FSOUND_Stream_Play(0,music);
 }
 
 void Menu::update(){
   // Drop title
-  if( title_y < 150)
-    title_y += (150 - title_y)/100;
+  if( title_y < 20)
+    title_y += (20 - title_y)/80;
+  else{
+    title_y = 100;
+  }
+
+  // Move city
+  if( city_x < -city -> w)
+    city_x = city_x + city -> w;
+  else
+    city_x -= 2;
+
+
+  // Buttons
+  if( mouse_b & 1){
+    if( start -> CheckHover())
+      set_next_state( STATE_MAP);
+    if( exit -> CheckHover())
+      set_next_state(STATE_EXIT);
+  }
 
 }
 
 void Menu::draw(){
   // Draw background to screen
   rectfill( buffer, 0, 0, SCREEN_W, SCREEN_H, makecol( 255,255,255));
+
+  // Sky
+  stretch_sprite( buffer, sky, 0, 0, SCREEN_W, SCREEN_H);
+
+  // City scroll
+  draw_sprite( buffer, city, city_x, SCREEN_H - city -> h);
+  draw_sprite( buffer, city, city_x + city -> w, SCREEN_H - city -> h);
+
+  // Stairs
   draw_sprite( buffer, background, 0, 0);
 
   // Title
-  draw_trans_sprite( buffer, title, 100, title_y);
+  draw_trans_sprite( buffer, title, 20, title_y);
 
-  // Intro stuff here
-  textprintf_ex( buffer, font, 0, 100, makecol(255,255,255), makecol(0,0,0), "MENU!");
+  // Buttons
+  start -> draw( buffer);
+  story -> draw( buffer);
+  options -> draw( buffer);
+  exit -> draw( buffer);
+
+  // Cursor
+  draw_sprite( buffer, cursor, mouse_x, mouse_y);
 
   // Draw Buffer
   draw_sprite( screen, buffer, 0, 0);
