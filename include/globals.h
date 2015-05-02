@@ -19,6 +19,8 @@ enum GameStates
     STATE_EXIT,
 };
 
+
+extern bool is_game_done;
 // Frames
 extern int frames_done;
 

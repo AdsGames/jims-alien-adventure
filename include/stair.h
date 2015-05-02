@@ -9,7 +9,7 @@ using namespace std;
 class stair
 {
   public:
-    stair(float newX, float newY);
+    stair(float newX, float newY, int newType);
     virtual ~stair();
 
     // FUNctions
@@ -19,6 +19,10 @@ class stair
 
     static float location_y( float oldX);
     int find_bottom_stair( int stairIndex);
+
+    int type;
+
+    static BITMAP* stage_end_red;
 
     // Static members
     static int numberStairs;
