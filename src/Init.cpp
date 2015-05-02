@@ -12,6 +12,7 @@ Init::Init()
   set_gfx_mode( GFX_AUTODETECT_WINDOWED, width/2,height/2, 0, 0);
 
   set_window_title("Tojam 10!");
+  if(num_joysticks>0)input_mode=true;
 }
 
 void Init::update()
