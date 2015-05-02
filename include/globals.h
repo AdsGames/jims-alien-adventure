@@ -26,6 +26,7 @@ extern bool input_mode;
 extern bool switch_flicked;
 // Frames
 extern int frames_done;
+extern int level_distance;
 extern float distance_travelled;
 
 // Resdiv
