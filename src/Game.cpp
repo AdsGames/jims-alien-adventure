@@ -167,7 +167,7 @@ void Game::update(){
   if( distance_travelled > 100 && !is_game_done){
     is_game_done = true;
   }
-  if( distance_travelled > 111){
+  if( distance_travelled > 116){
     switch_flicked = true;
   }
 
