@@ -107,6 +107,9 @@ void Game::init(){
    if(!(youwin = load_bitmap("images/youwin.png", NULL))){
     abort_on_error( "Cannot find image images/youwin.png \n Please check your files and try again");
   }
+   if(!(youlose = load_bitmap("images/youlose.png", NULL))){
+    abort_on_error( "Cannot find image images/youlose.png \n Please check your files and try again");
+  }
   // Goat
   if(!(goat::goat_image[0] = load_bitmap("images/goat_alien.png", NULL))){
       abort_on_error( "Cannot find image images/goat_alien.png \n Please check your files and try again");
@@ -393,16 +396,17 @@ void Game::draw(){
 
 
   if(switch_flicked)draw_sprite( buffer, youwin, 200, 200);
+  if(time_to_complete-climb_time<=0)draw_sprite( buffer, youlose, 200, 200);
 
   set_alpha_blender();
 
-  draw_trans_sprite(buffer,watch,SCREEN_W-115,SCREEN_H-70);
+  draw_trans_sprite(buffer,watch,SCREEN_W-122,SCREEN_H-70);
 
   if(time_to_complete-climb_time>0)
-    textprintf_ex( buffer, dosis_26, SCREEN_W-90,SCREEN_H-60, makecol(255,255,255), -1, "%4.1f", time_to_complete-climb_time);
+    textprintf_ex( buffer, dosis_26, SCREEN_W-97,SCREEN_H-60, makecol(255,255,255), -1, "%4.1f", time_to_complete-climb_time);
 
   if(time_to_complete-climb_time<=0)
-    textprintf_ex( buffer, dosis_26, SCREEN_W-90,SCREEN_H-60, makecol(255,255,255), -1, "0.0");
+    textprintf_ex( buffer, dosis_26, SCREEN_W-97,SCREEN_H-60, makecol(255,255,255), -1, "0.0");
 
 
   // Buffer
