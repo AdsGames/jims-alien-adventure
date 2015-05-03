@@ -12,7 +12,9 @@ goat::goat(float newX, float newY, float newScale, float newSpeed){
   offScreen = false;
 }
 
-goat::~goat() {}
+goat::~goat() {
+
+}
 
 // Draw
 void goat::draw( BITMAP* tempImage){

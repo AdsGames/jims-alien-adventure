@@ -2,27 +2,33 @@
 
 using namespace std;
 
-Button::Button( BITMAP *newImage1, BITMAP *newImage2, int newX, int newY){
+Button::Button( char image1[], char image2[], int newX, int newY){
   // Images
-  images[0] = newImage1;
-  images[1] = newImage2;
+  if(!(images[0] = load_bitmap(image1, NULL))){
+    abort_on_error( ("Cannot find image " + string(image1) + " \n Please check your files and try again").c_str());
+  }
+  if(!(images[1] = load_bitmap(image2, NULL))){
+    abort_on_error( ("Cannot find image " + string(image2) + " \n Please check your files and try again").c_str());
+  }
 
   // Size
-  button_height = newImage1 -> h;
-  button_width = newImage1 -> w;
+  button_height = images[0] -> h;
+  button_width = images[1] -> w;
 
   // Position
   x = newX;
   y = newY;
+  hover = false;
 }
 
 Button::~Button(){
-
+  destroy_bitmap( images[0]);
+  destroy_bitmap( images[1]);
 }
 
 void Button::SetImages( char image1[], char image2[]){
-  images[0]= load_bitmap(image1, NULL);
-  images[1]= load_bitmap(image2, NULL);
+  images[0] = load_bitmap(image1, NULL);
+  images[1] = load_bitmap(image2, NULL);
 }
 
 void Button::SetHover(bool newHover){

@@ -5,9 +5,6 @@
 
 #include <allegro.h>
 #include <alpng.h>
-#include <string>
-#include <vector>
-#include <string>
 
 #include "globals.h"
 #include "tools.h"

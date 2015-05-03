@@ -37,9 +37,6 @@ void Game::init(){
   LOCK_FUNCTION(gameTimer);
   install_int_ex(gameTimer, BPS_TO_TIMER(10));
 
-  // Init fmod
-  FSOUND_Init (44100, 32, 0);
-
   // Init variables
   stair::scrollSpeed = 0;
 
@@ -101,7 +98,13 @@ void Game::init(){
   if(!(watch = load_bitmap( "images/watch.png", NULL))){
     abort_on_error( "Cannot find image images/watch.png \n Please check your files and try again");
   }
-
+  // Goat
+  if(!(goat::goat_image[0] = load_bitmap("images/goat_alien.png", NULL))){
+      abort_on_error( "Cannot find image images/goat_alien.png \n Please check your files and try again");
+  }
+  if(!(goat::goat_image[1] = load_bitmap("images/goat_alien_2.png", NULL))){
+      abort_on_error( "Cannot find image images/goat_alien_2.png \n Please check your files and try again");
+  }
   // Sounds
   if(!(key_manager::sounds[0] = load_sample("sounds/trip.wav"))){
     abort_on_error( "Cannot find sound sounds/trip.wav \n Please check your files and try again");
@@ -171,7 +174,7 @@ void Game::update(){
 
   if(!switch_flicked)distance_travelled += stair::scrollSpeed/25;
   if( player1->getY() <= (stair::locationOfFinal - (player1->image[0] -> h - 60))){
-    for(int i=0; i<allStairs.size();  i++){
+    for(unsigned int i=0; i<allStairs.size();  i++){
       if(allStairs.at(i).getType()==1)
         allStairs.at(i).setType(2);
     }
@@ -204,7 +207,7 @@ void Game::update(){
   player::animation_frame = int(timer1 * ceil(stair::scrollSpeed)) % 8;
 
   // Update goats
-  for( int i = 0; i < goats.size(); i++)
+  for( unsigned int i = 0; i < goats.size(); i++)
     goats.at(i).update();
 
    // Motherfing goats!
@@ -213,6 +216,10 @@ void Game::update(){
     goat newGoat(SCREEN_W, random( 0, SCREEN_H), randomDistance, randomDistance*3);
     goats.push_back( newGoat);
   }
+
+  // Back to menu
+  if( key[KEY_M])
+    set_next_state( STATE_MENU);
 
 
   // Key manager
@@ -226,8 +233,9 @@ void Game::draw(){
   stretch_sprite(buffer,background_sky, 0, 0, SCREEN_W, SCREEN_H);
   draw_sprite(buffer,background_buildings,0+background_scroll,SCREEN_H-270);
   draw_sprite(buffer,background_buildings,-1024 + background_scroll,SCREEN_H-270);
+
    // Draw goats
-  for( int i = 0; i < goats.size(); i++)
+  for( unsigned int i = 0; i < goats.size(); i++)
     goats.at(i).draw( buffer);
 
   // Stairs!
@@ -267,11 +275,17 @@ void Game::draw(){
 // Destroy
 Game::~Game(){
   // Destroy images
-  destroy_bitmap( buffer);
+  destroy_bitmap(buffer);
+  destroy_bitmap(stair_buffer);
+  destroy_bitmap(background_sky);
+  destroy_bitmap(background_buildings);
+  destroy_bitmap(watch);
+
+  destroy_font(dosis_26);
+
+  delete screen_keys;
+  delete player1;
 
   // Fade out
   highcolor_fade_out(16);
-
-  // Clean up fmod
-  FSOUND_Close();
 }

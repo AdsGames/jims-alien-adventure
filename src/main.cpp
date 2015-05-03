@@ -1,6 +1,9 @@
 #include <allegro.h>
 #include <alpng.h>
 
+#include "fmod/fmod.h"
+#include "fmod/fmod_errors.h"
+
 #include "globals.h"
 #include "tools.h"
 
@@ -50,12 +53,12 @@ void change_state()
   if( nextState != STATE_NULL ){
     //Delete the current state
     if( nextState != STATE_EXIT ){
-        delete currentState;
+      delete currentState;
+      currentState = NULL;
     }
 
     //Change the state
-    switch( nextState )
-    {
+    switch( nextState ){
       case STATE_INIT:
         currentState = new Init();
         break;
@@ -102,6 +105,9 @@ void setup(){
   install_sound(DIGI_AUTODETECT,MIDI_AUTODETECT,".");
   set_color_depth(32);
 
+  // Init fmod
+  FSOUND_Init (44100, 32, 0);
+
   // Setup for FPS system
   LOCK_VARIABLE(ticks);
   LOCK_FUNCTION(ticker);
@@ -116,8 +122,8 @@ void setup(){
   set_close_button_callback(close_button_handler);
 
   // Game state
-  int stateID = STATE_NULL;
-  int nextState = STATE_NULL;
+  stateID = STATE_NULL;
+  nextState = STATE_NULL;
 
   // Variables
   closeGame = false;
@@ -127,6 +133,9 @@ void clean_up()
 {
     //Delete game state and free state resources
     delete currentState;
+
+    // Clean up fmod
+    FSOUND_Close();
 }
 
 

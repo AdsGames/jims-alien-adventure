@@ -22,9 +22,8 @@ class Map : public GameState
     BITMAP *buffer;
     BITMAP *map_image;
     BITMAP *cursor;
-    BITMAP *locationImages[6];
 
-    FSOUND_STREAM* music;
+    FSOUND_STREAM *music;
 
     vector<location> mapLocations;
   protected:

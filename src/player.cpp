@@ -20,7 +20,6 @@ int player::getY(){
 
 player::~player()
 {
-  //dtor
 }
 
 void player::draw( BITMAP *tempImage){
