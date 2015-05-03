@@ -52,6 +52,7 @@ class Game : public GameState
     BITMAP* background_sky, *background_buildings;
     BITMAP* watch;
     BITMAP* youwin;
+    BITMAP* youlose;
 
     float background_scroll;
     float time_to_complete;
