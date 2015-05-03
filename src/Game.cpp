@@ -27,9 +27,6 @@ void Game::endTimer(){
 END_OF_FUNCTION(endTimer)
 
 
-// All stairs
-vector<stair> allStairs;
-
 void Game::init(){
   // Setup for FPS system
   LOCK_VARIABLE(timer1);
@@ -211,6 +208,7 @@ void Game::init(){
   distance_is_reached = false;
   stair::final_stair_placed = false;
   stair::locationOfFinal = 0;
+  stair::numberStairs=0;
   sound_played=false;
 
   timer1 = 0;
@@ -315,7 +313,35 @@ void Game::update(){
       FSOUND_Stream_Stop(mainMusic);
     }
   }
+   if(switch_flicked){
+       // LEVEL DIFFICULTY!
+    if(levelOn == "cn_tower"){
+      beaten_levels[0]=true;
 
+    }
+    else if(levelOn == "pyramids"){
+      beaten_levels[1]=true;
+    }
+    else if(levelOn == "statue_of_liberty"){
+    beaten_levels[2]=true;
+    }
+    else if(levelOn == "stone_henge"){
+      beaten_levels[3]=true;
+    }
+    if(levelOn == "taj_mahal"){
+      beaten_levels[4]=true;
+    }
+    else if(levelOn == "wall_of_china"){
+      beaten_levels[5]=true;
+    }
+
+    if(!sound_played){
+      play_sample(win,255,125,1000,0);
+      sound_played=true;
+      // Stop music
+      FSOUND_Stream_Stop(mainMusic);
+    }
+   }
 //set_next_state(STATE_MENU);
 
 
@@ -365,15 +391,9 @@ void Game::draw(){
     textprintf_ex( buffer, font, 40,32, makecol(0,0,0), -1, "%i/%i",level_distance,level_distance);
 
 
-  if(switch_flicked){
-    if(!sound_played){
-      play_sample(win,255,125,1000,0);
-      sound_played=true;
-      // Stop music
-      FSOUND_Stream_Stop(mainMusic);
-    }
-    draw_sprite( buffer, youwin, 200, 200);
-  }
+
+  if(switch_flicked)draw_sprite( buffer, youwin, 200, 200);
+
   set_alpha_blender();
   draw_trans_sprite(buffer,watch,SCREEN_W-100,SCREEN_H-70);
   if(time_to_complete-climb_time>0)textprintf_ex( buffer, dosis_26, SCREEN_W-75,SCREEN_H-60, makecol(255,255,255), -1, "%4.1f", time_to_complete-climb_time);

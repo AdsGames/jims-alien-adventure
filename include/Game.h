@@ -39,6 +39,8 @@ class Game : public GameState
     SAMPLE* win;
     SAMPLE *lose;
 
+    // All stairs
+    vector<stair> allStairs;
     vector<goat> goats;
 
     // Key Manager
