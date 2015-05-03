@@ -1,9 +1,8 @@
 #include "goat.h"
 
-BITMAP *goat::goat_image;
+BITMAP *goat::goat_image[2];
 
-goat::goat(float newX, float newY, float newScale, float newSpeed)
-{
+goat::goat(float newX, float newY, float newScale, float newSpeed){
   // Setup
   x = newX;
   y = newY;
@@ -15,7 +14,7 @@ goat::~goat() {}
 
 // Draw
 void goat::draw( BITMAP* tempImage){
-  stretch_sprite( tempImage, goat_image, x, y, goat_image -> w * scale, goat_image -> h * scale);
+  stretch_sprite( tempImage, goat_image[random( 0, 1)], x, y, goat_image[0] -> w * scale, goat_image[1] -> h * scale);
 }
 
 // Update
