@@ -3,6 +3,9 @@
 
 //All libaries
 #include <allegro.h>
+#include <string>
+
+using namespace std;
 
 // Set next state
 void set_next_state( int newState );
@@ -36,6 +39,6 @@ extern bool single_player;
 //State variables
 extern int stateID;
 extern int nextState;
-extern int levelOn;
+extern string levelOn;
 
 #endif

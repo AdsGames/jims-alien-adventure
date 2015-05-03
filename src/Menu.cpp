@@ -147,8 +147,10 @@ void Menu::update(){
   }
 
   // Flip switch
-  if( mouse_b & 1 && collisionAny( 579, 610, mouse_x, mouse_x, 235, 270, mouse_y, mouse_y)){
-    switchFlipped = !switchFlipped;
+  if( mouse_b & 1){
+     if( (!switchFlipped && collisionAny( 595, 607, mouse_x, mouse_x, 236, 248, mouse_y, mouse_y)) || (switchFlipped && collisionAny( 579, 591, mouse_x, mouse_x, 235, 247, mouse_y, mouse_y))){
+        switchFlipped = !switchFlipped;
+      }
   }
 }
 

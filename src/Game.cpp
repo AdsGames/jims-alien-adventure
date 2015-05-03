@@ -47,18 +47,18 @@ void Game::init(){
   srand (time(NULL));
 
   // Load images
-  if(!(stair::image = load_bitmap( "images/stairs.png", NULL))){
-    abort_on_error( "Cannot find image images/stairs.png \n Please check your files and try again");
+  if(!(stair::image = load_bitmap( ("images/stairs/" + levelOn + "/stairs.png").c_str(), NULL))){
+    abort_on_error( ("Cannot find image images/stairs/" + levelOn + "/stairs.png \n Please check your files and try again").c_str());
   }
-  if(!(stair::stage_end_red = load_bitmap( "images/stage_end_red.png", NULL))){
-    abort_on_error( "Cannot find image images/stage_end_red.png \n Please check your files and try again");
+  if(!(stair::stage_end_red = load_bitmap( ("images/stairs/" + levelOn + "/stage_end_red.png").c_str(), NULL))){
+    abort_on_error( ("Cannot find image images/stairs/" + levelOn + "/stage_end_red.png \n Please check your files and try again").c_str());
   }
-  if(!(stair::stage_end_green = load_bitmap( "images/stage_end_green.png", NULL))){
-    abort_on_error( "Cannot find image images/stage_end_green.png \n Please check your files and try again");
+  if(!(stair::stage_end_green = load_bitmap( ("images/stairs/" + levelOn + "/stage_end_green.png").c_str(), NULL))){
+    abort_on_error( ("Cannot find image images/stairs/" + levelOn + "/stage_end_green.png \n Please check your files and try again").c_str());
   }
 
-  if(!(stair::image_brick = load_bitmap( "images/brick.png", NULL))){
-    abort_on_error( "Cannot find image images/brick.png \n Please check your files and try again");
+  if(!(stair::image_brick = load_bitmap( ("images/stairs/" + levelOn + "/brick.png").c_str(), NULL))){
+    abort_on_error( ("Cannot find image images/stairs/" + levelOn + "/brick.png \n Please check your files and try again").c_str());
   }
   //Player
   for( int i = 0; i < 8; i++){
@@ -92,15 +92,6 @@ void Game::init(){
   if(!(key_manager::keys[1] = load_bitmap( "images/keys/joy_b.png", NULL))){
     abort_on_error( "Cannot find image images/keys/joy_b.png \n Please check your files and try again");
   }
-
-  if(!(key_manager::sounds[0] = load_sample("sounds/trip.wav"))){
-    abort_on_error( "Cannot find sound sounds/trip.wav \n Please check your files and try again");
-  }
-
-  if(!(key_manager::sounds[1] = load_sample("sounds/ping.wav"))){
-    abort_on_error( "Cannot find sound sounds/ping.wav \n Please check your files and try again");
-  }
-
   if(!(background_sky = load_bitmap( "images/background_sky.png", NULL))){
     abort_on_error( "Cannot find image images/background_sky.png \n Please check your files and try again");
   }
@@ -109,6 +100,15 @@ void Game::init(){
   }
   if(!(watch = load_bitmap( "images/watch.png", NULL))){
     abort_on_error( "Cannot find image images/watch.png \n Please check your files and try again");
+  }
+
+  // Sounds
+  if(!(key_manager::sounds[0] = load_sample("sounds/trip.wav"))){
+    abort_on_error( "Cannot find sound sounds/trip.wav \n Please check your files and try again");
+  }
+
+  if(!(key_manager::sounds[1] = load_sample("sounds/ping.wav"))){
+    abort_on_error( "Cannot find sound sounds/ping.wav \n Please check your files and try again");
   }
 
 

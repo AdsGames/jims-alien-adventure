@@ -72,22 +72,22 @@ Map::Map()
   FSOUND_Stream_Play( 0, music);
 
   // Add locations
-  location cn_tower( 224, 210, locationImages[0]);
+  location cn_tower( 224, 210, locationImages[0], "cn_tower");
   mapLocations.push_back( cn_tower);
 
-  location pyramids( 418, 243, locationImages[1]);
+  location pyramids( 418, 243, locationImages[1], "pyramids");
   mapLocations.push_back( pyramids);
 
-  location statue_of_liberty( 236, 216, locationImages[2]);
+  location statue_of_liberty( 236, 216, locationImages[2], "statue_of_liberty");
   mapLocations.push_back( statue_of_liberty);
 
-  location stone_henge( 356, 193, locationImages[3]);
+  location stone_henge( 356, 193, locationImages[3], "stone_henge");
   mapLocations.push_back( stone_henge);
 
-  location taj_mahal( 503, 250, locationImages[4]);
+  location taj_mahal( 503, 250, locationImages[4], "taj_mahal");
   mapLocations.push_back( taj_mahal);
 
-  location wall_of_china( 570, 217, locationImages[5]);
+  location wall_of_china( 570, 217, locationImages[5], "wall_of_china");
   mapLocations.push_back( wall_of_china);
 }
 
@@ -96,6 +96,7 @@ void Map::update(){
   if( mouse_b & 1){
     for( unsigned int i = 0; i < mapLocations.size(); i++){
       if( mapLocations.at(i).CheckHover()){
+        levelOn = mapLocations.at(i).getName();
         set_next_state( STATE_GAME);
       }
     }
