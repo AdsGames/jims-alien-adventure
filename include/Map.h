@@ -13,14 +13,20 @@
 
 #include "globals.h"
 #include "tools.h"
+#include "location.h"
 
 class Map : public GameState
 {
   private:
     // Map/GUI
     BITMAP *buffer;
+    BITMAP *map_image;
+    BITMAP *cursor;
+    BITMAP *locationImages[6];
 
     FSOUND_STREAM* music;
+
+    vector<location> mapLocations;
   protected:
   public:
     //Main loop functions
