@@ -21,9 +21,10 @@ class Menu : public GameState
   private:
     // Menu/GUI
     BITMAP *buffer;
-    BITMAP *background, *title, *sky, *city;
+    BITMAP *title, *sky, *city;
     BITMAP *cursor;
     BITMAP *button_images[4][2];
+    BITMAP *background[2];
 
     // Buttons
     Button *start, *story, *options, *exit;
@@ -31,6 +32,9 @@ class Menu : public GameState
     // Movement
     float title_y;
     float city_x;
+
+    // Flippy switch
+    bool switchFlipped;
 
     // Goats
     vector<goat> goats;
