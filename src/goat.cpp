@@ -1,5 +1,6 @@
 #include "goat.h"
 
+
 BITMAP *goat::goat_image[2];
 
 goat::goat(float newX, float newY, float newScale, float newSpeed){
@@ -20,4 +21,8 @@ void goat::draw( BITMAP* tempImage){
 // Update
 void goat::update(){
   x -= speed;
+}
+
+void goat::fall(float newSpeed){
+  y+=newSpeed;
 }
