@@ -25,6 +25,8 @@ END_OF_FUNCTION(gameTimer)
 vector<stair> allStairs;
 
 void Game::init(){
+
+  climb_time=0;
   // Setup for FPS system
   LOCK_VARIABLE(timer1);
   LOCK_FUNCTION(gameTicker);
