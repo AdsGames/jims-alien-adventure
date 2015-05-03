@@ -40,12 +40,10 @@ bool Button::GetHover(){
 }
 
 bool Button::CheckHover(){
-  if( mouse_x > GetX() && mouse_x < GetX() + button_width && mouse_y > GetY() && mouse_y < GetY() + button_height){
+  if( mouse_x > GetX() && mouse_x < GetX() + button_width && mouse_y > GetY() && mouse_y < GetY() + button_height)
     hover = true;
-  }
-  else{
+  else
     hover = false;
-  }
   return hover;
 }
 

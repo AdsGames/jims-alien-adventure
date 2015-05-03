@@ -30,12 +30,10 @@ void location::draw( BITMAP *tempImage){
 
 // Mouse is hovering
 bool location::CheckHover(){
-  if( collisionAny( x, x + pin_image -> w, mouse_x, mouse_x, y, y + pin_image -> h, mouse_y, mouse_y)){
+  if( collisionAny( x, x + pin_image -> w, mouse_x, mouse_x, y, y + pin_image -> h, mouse_y, mouse_y))
     hover = true;
-  }
-  else{
+  else
     hover = false;
-  }
   return hover;
 }
 
