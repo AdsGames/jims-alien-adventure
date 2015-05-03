@@ -9,8 +9,8 @@ Init::Init()
 
   set_window_title("Jim: Alien Adventures");
 
-  if(num_joysticks>0)
-    input_mode=true;
+  if( num_joysticks > 0)
+    joystick_enabled = true;
 }
 
 void Init::update(){

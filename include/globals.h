@@ -24,17 +24,15 @@ enum GameStates
 };
 
 // Endgame Variables
-extern bool is_game_done;
-extern bool input_mode;
+extern bool distance_is_reached;
 extern bool switch_flicked;
-// Frames
-extern int frames_done;
+
 extern int level_distance;
 extern float distance_travelled;
+extern bool joystick_enabled;
 
-// Resdiv
-extern int resDiv;
-extern bool single_player;
+// Frames
+extern int frames_done;
 
 //State variables
 extern int stateID;

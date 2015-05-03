@@ -194,8 +194,8 @@ void Game::update(){
     allStairs.at(i).movement();
   }
 
-  if( distance_travelled > level_distance && !is_game_done){
-    is_game_done = true;
+  if( distance_travelled > level_distance && !distance_is_reached){
+    distance_is_reached = true;
   }
   if( distance_travelled > level_distance+16){
     switch_flicked = true;
@@ -255,12 +255,12 @@ void Game::draw(){
   // Timer
   rectfill(buffer,20,20,620,80,makecol(0,0,0));
   rectfill(buffer,24,24,616,76,makecol(255,255,255));
-  if(is_game_done)rectfill(buffer,24,24,616,76,makecol(0,255,0));
-  if(!is_game_done)rectfill(buffer,24,24,24+(600*(distance_travelled/level_distance)),76,makecol(0,255,0));
+  if(distance_is_reached)rectfill(buffer,24,24,616,76,makecol(0,255,0));
+  if(!distance_is_reached)rectfill(buffer,24,24,24+(600*(distance_travelled/level_distance)),76,makecol(0,255,0));
 
 
-  if(!is_game_done)textprintf_ex( buffer, font, 20,32, makecol(0,0,0), -1, "%4.0f/%i", distance_travelled,level_distance);
-  if(is_game_done)textprintf_ex( buffer, font, 40,32, makecol(0,0,0), -1, "%i/%i",level_distance,level_distance);
+  if(!distance_is_reached)textprintf_ex( buffer, font, 20,32, makecol(0,0,0), -1, "%4.0f/%i", distance_travelled,level_distance);
+  if(distance_is_reached)textprintf_ex( buffer, font, 40,32, makecol(0,0,0), -1, "%i/%i",level_distance,level_distance);
 
   set_alpha_blender();
   draw_trans_sprite(buffer,watch,SCREEN_W-100,SCREEN_H-70);

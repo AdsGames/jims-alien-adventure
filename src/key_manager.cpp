@@ -12,11 +12,11 @@ key_manager::key_manager(int newX, int newY){
 
   // Add keys
   for( int i = 0; i < 4; i++){
-    if(!input_mode){
+    if(!joystick_enabled){
       key_data newKey(random(KEY_LEFT, KEY_DOWN));
       key_queue.push_back(newKey);
     }
-    if(input_mode){
+    if(joystick_enabled){
       key_data newKey(random(0,3));
       key_queue.push_back(newKey);
     }
@@ -31,47 +31,43 @@ key_manager::~key_manager(){ }
 // Update
 void key_manager::update(){
   // Pressing them keys
-  if(!input_mode && !switch_flicked){
-    if( key[key_queue.at(0).getValue()] && keyIsPressed == false){
+  // You haven't won
+  if(!switch_flicked){
+    // Got a correct letter
+    if((!joystick_enabled && key[key_queue.at(0).getValue()] && keyIsPressed == false) || (joystick_enabled && joy[0].button[key_queue.at(0).getValue()].b && buttonIsPressed == false)){
+      // Nice sound
+      play_sample( sounds[1],255,125,1000,0);
       key_queue.erase( key_queue.begin());
 
-      key_data newKey(random(KEY_LEFT, KEY_DOWN));
-      key_queue.push_back(newKey);
+      // Add key to queue
+      if( joystick_enabled){
+        key_data newKey(random(0,3));
+        key_queue.push_back(newKey);
+      }
+      else{
+        key_data newKey(random(KEY_LEFT, KEY_DOWN));
+        key_queue.push_back(newKey);
+      }
 
+      // Increase speed
       if( stair::scrollSpeed < stair::maxScrollSpeed)
         stair::scrollSpeed += 0.5;
     }
-    else if( keyDown() && keyIsPressed == false && stair::scrollSpeed > 0){
-      stair::scrollSpeed /= 4;
-      // TODO: SOUND OUCH!
-    }
-  }
-
-  if(input_mode && !switch_flicked){
-    if( joy[0].button[key_queue.at(0).getValue()].b && buttonIsPressed == false){
-      play_sample(key_manager::sounds[1],255,125,1000,0);
-      key_queue.erase( key_queue.begin());
-
-      key_data newKey(random(0,3));
-      key_queue.push_back(newKey);
-
-      if( stair::scrollSpeed < stair::maxScrollSpeed)
-        stair::scrollSpeed += 0.5;
-    }
-    else if( buttonDown() && buttonIsPressed == false){
-      if(stair::scrollSpeed > 0)stair::scrollSpeed /= 4;
+    else if( (keyDown() && keyIsPressed == false) || (buttonDown() && buttonIsPressed == false)){
+      if(stair::scrollSpeed > 0)
+        stair::scrollSpeed /= 4;
       play_sample(key_manager::sounds[0],255,125,1000,0);
     }
   }
 
   // Prevents held keys
-  if(!input_mode){
+  if(!joystick_enabled){
     if( keyDown())
     keyIsPressed = true;
   else
     keyIsPressed = false;
   }
-  if(input_mode){
+  if(joystick_enabled){
     if( buttonDown())
     buttonIsPressed = true;
   else
