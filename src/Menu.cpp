@@ -29,8 +29,11 @@ Menu::Menu()
   if(!(cursor = load_bitmap("images/menu/cursor1.png", NULL))){
       abort_on_error( "Cannot find image images/menu/cursor1.png \n Please check your files and try again");
   }
-  if(!(goat::goat_image = load_bitmap("images/goat_alien.png", NULL))){
+  if(!(goat::goat_image[0] = load_bitmap("images/goat_alien.png", NULL))){
       abort_on_error( "Cannot find image images/goat_alien.png \n Please check your files and try again");
+  }
+  if(!(goat::goat_image[1] = load_bitmap("images/goat_alien_2.png", NULL))){
+      abort_on_error( "Cannot find image images/goat_alien_2.png \n Please check your files and try again");
   }
 
   // Buttons
@@ -120,8 +123,9 @@ void Menu::update(){
   }
 
   // Motherfing goats!
-  if( random( 0, 1000)){
-    goat newGoat( random( 0, SCREEN_W), random( 0, SCREEN_H), float(random( 5, 15))/10, random( 0.2, 1.2));
+  if( random( 0, 100) == 0){
+    float randomDistance = float(random( 2, 6))/10;
+    goat newGoat(SCREEN_W, random( 0, SCREEN_H), randomDistance, randomDistance*3);
     goats.push_back( newGoat);
   }
 

@@ -2,6 +2,7 @@
 #define GOAT_H
 
 #include <allegro.h>
+#include "tools.h"
 
 class goat
 {
@@ -14,7 +15,7 @@ class goat
     void update();
 
     // Image
-    static BITMAP *goat_image;
+    static BITMAP *goat_image[2];
   protected:
   private:
     // Variables
