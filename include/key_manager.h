@@ -23,6 +23,9 @@ class key_manager
     // Functions
     void draw( BITMAP *tempImage);
     void update();
+
+    bool keyDown();
+    bool buttonDown();
   protected:
   private:
     // All keys for queue
@@ -33,8 +36,6 @@ class key_manager
     int y;
 
     // Any key?
-    bool keyDown();
-    bool buttonDown();
     bool buttonPressedCombo();
     bool keyPressedCombo();
     bool buttonIsPressed;

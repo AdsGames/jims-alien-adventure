@@ -31,8 +31,6 @@ class Game : public GameState
 
     // Variables
     int animationFrame;
-    bool gameBegin;
-    int totalTime[2];
 
     FONT* dosis_26;
     // Player
@@ -54,9 +52,11 @@ class Game : public GameState
     // Timers
     static volatile int timer1;
     static volatile float climb_time;
+    static volatile float time_since_win;
 
     static void gameTicker();
     static void gameTimer();
+    static void endTimer();
 
   public:
     //Main loop functions
