@@ -72,10 +72,9 @@ void Map::update(){
 
   // Move cursor
   if( joystick_enabled){
-    position_mouse( mouse_x + joy[0].stick[0].axis[0].d1 * 2, mouse_y);
-    position_mouse( mouse_x - joy[0].stick[0].axis[0].d2 * 2, mouse_y);
-    position_mouse( mouse_x, mouse_y + joy[0].stick[0].axis[1].d1 * 2);
-    position_mouse( mouse_x, mouse_y - joy[0].stick[0].axis[1].d2 * 2);
+    position_mouse(mouse_x+(joy[0].stick[0].axis[0].pos/20),mouse_y+(joy[0].stick[0].axis[1].pos/20));
+
+
   }
 
   // Back to menu
