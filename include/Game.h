@@ -36,11 +36,14 @@ class Game : public GameState
     // Player
     player *player1;
 
+    SAMPLE* win;
+
     vector<goat> goats;
 
     // Key Manager
     key_manager *screen_keys;
 
+    bool sound_played;
     // Images
     BITMAP* buffer, *stair_buffer;
     BITMAP* background_sky, *background_buildings;
