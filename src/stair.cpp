@@ -38,11 +38,11 @@ void stair::setType(int newType){
 void stair::update( vector<stair>* allStairsCopy){
   // reset stairs
   if( y > SCREEN_H + image -> h){
-    if( !is_game_done){
+    if( !distance_is_reached){
       x = allStairsCopy -> at(find_top_stair(stairID)).x + 30;
       y = location_y(x);
     }
-    else if( is_game_done && !final_stair_placed){
+    else if( distance_is_reached && !final_stair_placed){
       type = 1;
       final_stair_placed = true;
       x = allStairsCopy -> at(find_top_stair(stairID)).x + 30;
