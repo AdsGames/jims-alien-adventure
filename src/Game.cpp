@@ -170,8 +170,10 @@ void Game::init(){
   player1 = new player( (10 * 30), (stair::location_y(10 * 30)) - player::image[0] -> h/2);
 
   // LEVEL DIFFICULTY!
-  if(levelOn=="cn_tower")
+  if(levelOn=="cn_tower"){
     level_distance=200;
+    time_to_complete=20;
+  }
 
   if(levelOn=="statue_of_liberty")
     level_distance=300;
@@ -191,7 +193,9 @@ void Game::init(){
 
 // Update game state
 void Game::update(){
+
   // Joystick input
+
   poll_joystick();
 
   // Add to distance until switch is flicked
@@ -249,6 +253,9 @@ void Game::update(){
   if( key[KEY_M])
     set_next_state( STATE_MENU);
 
+  if(time_to_complete-climb_time<=0){
+    set_next_state(STATE_MENU);
+  }
 
   // Key manager
   screen_keys -> update();
@@ -294,7 +301,7 @@ void Game::draw(){
 
   set_alpha_blender();
   draw_trans_sprite(buffer,watch,SCREEN_W-100,SCREEN_H-70);
-  textprintf_ex( buffer, dosis_26, SCREEN_W-75,SCREEN_H-60, makecol(255,255,255), -1, "%4.1f", climb_time);
+  textprintf_ex( buffer, dosis_26, SCREEN_W-75,SCREEN_H-60, makecol(255,255,255), -1, "%4.1f", time_to_complete-climb_time);
 
 
 
