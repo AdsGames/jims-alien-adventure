@@ -174,26 +174,26 @@ void Game::init(){
   // LEVEL DIFFICULTY!
   if(levelOn=="cn_tower"){
     level_distance=200;
-    time_to_complete=20;
+    time_to_complete=40;
   }
 
   if(levelOn=="statue_of_liberty"){
     level_distance=300;
-    time_to_complete=30;
+    time_to_complete=50;
   }
   if(levelOn=="stone_henge"){
     level_distance=400;
-    time_to_complete=40;
+    time_to_complete=60;
   }
 
   if(levelOn=="taj_mahal"){
     level_distance=500;
-    time_to_complete=50;
+    time_to_complete=70;
   }
 
   if(levelOn=="wall_of_china"){
     level_distance=600;
-    time_to_complete=60;
+    time_to_complete=80;
   }
 
   // Start music
