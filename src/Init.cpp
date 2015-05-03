@@ -7,7 +7,7 @@ Init::Init()
 
   set_gfx_mode( GFX_AUTODETECT_WINDOWED, 740, 540, 0, 0);
 
-  set_window_title("Jim: Alien Adventures");
+  set_window_title("Jim's Alien Adventure");
 
   if( num_joysticks > 0)
     joystick_enabled = true;
