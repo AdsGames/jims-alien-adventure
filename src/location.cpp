@@ -1,19 +1,22 @@
 #include "location.h"
-#include "tools.h"
 
 BITMAP* location::pin_image;
 
 // Construct
-location::location(int newX, int newY, BITMAP *newImage, string newName){
-  image = newImage;
+location::location(int newX, int newY, char newImage[], string newName){
   x = newX;
   y = newY;
-  hover = false;
+  if(!(image = load_bitmap( newImage, NULL))){
+    abort_on_error( ("Cannot find image " + (string)newImage + " \n Please check your files and try again").c_str());
+  }
   name = newName;
+  hover = false;
 }
 
 // De-construct
-location::~location(){ }
+location::~location(){
+  //?? WHY DONT YOUU WORK!K! destroy_bitmap( image);
+}
 
 // Draw image
 void location::draw( BITMAP *tempImage){

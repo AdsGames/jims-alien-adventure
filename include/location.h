@@ -3,13 +3,14 @@
 
 #include <allegro.h>
 #include <string>
+#include "tools.h"
 
 using namespace std;
 
 // Location for map
 class location{
   public:
-    location(int newX, int newY, BITMAP *newImage, string newName);
+    location(int newX, int newY, char newImage[], string newName);
     virtual ~location();
 
     void draw( BITMAP *tempImage);

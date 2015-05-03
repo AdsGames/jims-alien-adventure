@@ -30,15 +30,16 @@ void Intro::draw(){
   // Wait
   rest( 2000);
 
-  // Fade out
-  highcolor_fade_out( 16);
-
   // Wait 2 seconds then go to the menu
-  set_next_state(STATE_GAME);
+  set_next_state(STATE_MENU);
 }
 
 Intro::~Intro()
 {
   // Clear memory
-  destroy_bitmap( buffer);
+  destroy_bitmap(buffer);
+  destroy_bitmap(splash);
+
+  // Fade out
+  highcolor_fade_out( 16);
 }
