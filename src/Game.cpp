@@ -27,9 +27,6 @@ void Game::endTimer(){
 END_OF_FUNCTION(endTimer)
 
 
-// All stairs
-vector<stair> allStairs;
-
 void Game::init(){
   // Setup for FPS system
   LOCK_VARIABLE(timer1);
@@ -125,6 +122,13 @@ void Game::init(){
     abort_on_error( "Cannot find sound sounds/ping.wav \n Please check your files and try again");
   }
 
+   if(!(win = load_sample("sounds/win.wav"))){
+    abort_on_error( "Cannot find sound sounds/win.wav \n Please check your files and try again");
+  }
+   if(!(lose = load_sample("sounds/lose.wav"))){
+    abort_on_error( "Cannot find sound sounds/lose.wav \n Please check your files and try again");
+  }
+
   // Other Sprites
   buffer = create_bitmap( SCREEN_W, SCREEN_H);
   stair_buffer = create_bitmap( SCREEN_W, SCREEN_H);
@@ -204,6 +208,8 @@ void Game::init(){
   distance_is_reached = false;
   stair::final_stair_placed = false;
   stair::locationOfFinal = 0;
+  stair::numberStairs=0;
+  sound_played=false;
 
   timer1 = 0;
   climb_time = 0;
@@ -278,7 +284,7 @@ void Game::update(){
   }
 
   // End game
-  if( switch_flicked && time_since_win >= 3.0){
+  if(time_since_win >= 3.0){
     set_next_state( STATE_MENU);
   }
   else if( switch_flicked && time_since_win <= 0){
@@ -298,8 +304,46 @@ void Game::update(){
     set_next_state( STATE_MENU);
 
   if(time_to_complete-climb_time <= 0){
-    set_next_state(STATE_MENU);
+    install_int_ex(endTimer, BPS_TO_TIMER(10));
+    climb_time=time_to_complete;
+    if(!sound_played){
+      play_sample(lose,255,125,1000,0);
+      sound_played=true;
+      // Stop music
+      FSOUND_Stream_Stop(mainMusic);
+    }
   }
+   if(switch_flicked){
+       // LEVEL DIFFICULTY!
+    if(levelOn == "cn_tower"){
+      beaten_levels[0]=true;
+
+    }
+    else if(levelOn == "pyramids"){
+      beaten_levels[1]=true;
+    }
+    else if(levelOn == "statue_of_liberty"){
+    beaten_levels[2]=true;
+    }
+    else if(levelOn == "stone_henge"){
+      beaten_levels[3]=true;
+    }
+    if(levelOn == "taj_mahal"){
+      beaten_levels[4]=true;
+    }
+    else if(levelOn == "wall_of_china"){
+      beaten_levels[5]=true;
+    }
+
+    if(!sound_played){
+      play_sample(win,255,125,1000,0);
+      sound_played=true;
+      // Stop music
+      FSOUND_Stream_Stop(mainMusic);
+    }
+   }
+//set_next_state(STATE_MENU);
+
 
   // Key manager
   screen_keys -> update();
@@ -347,11 +391,14 @@ void Game::draw(){
     textprintf_ex( buffer, font, 40,32, makecol(0,0,0), -1, "%i/%i",level_distance,level_distance);
 
 
-  if(switch_flicked)
-    draw_sprite( buffer, youwin, 200, 200);
+
+  if(switch_flicked)draw_sprite( buffer, youwin, 200, 200);
+
   set_alpha_blender();
   draw_trans_sprite(buffer,watch,SCREEN_W-100,SCREEN_H-70);
-  textprintf_ex( buffer, dosis_26, SCREEN_W-75,SCREEN_H-60, makecol(255,255,255), -1, "%4.1f", time_to_complete-climb_time);
+  if(time_to_complete-climb_time>0)textprintf_ex( buffer, dosis_26, SCREEN_W-75,SCREEN_H-60, makecol(255,255,255), -1, "%4.1f", time_to_complete-climb_time);
+  if(time_to_complete-climb_time<=0)textprintf_ex( buffer, dosis_26, SCREEN_W-75,SCREEN_H-60, makecol(255,255,255), -1, "0.0");
+
 
   // Buffer
   draw_sprite( screen, buffer, 0, 0);

@@ -24,6 +24,11 @@ Map::Map()
     abort_on_error( "Cannot find image images/map/pin.png \n Please check your files and try again");
   }
 
+   // Locations
+  if(!(location::pin_grey_image = load_bitmap("images/map/pin_grey.png", NULL))){
+    abort_on_error( "Cannot find image images/map/pin_grey.png \n Please check your files and try again");
+  }
+
   // Allow transparency
   set_alpha_blender();
 
@@ -73,7 +78,7 @@ void Map::update(){
 
   // Move cursor
   if( joystick_enabled){
-    position_mouse(mouse_x+(joy[0].stick[0].axis[0].pos/30),mouse_y+(joy[0].stick[0].axis[1].pos/30));
+    position_mouse(mouse_x+(joy[0].stick[0].axis[0].pos/30),mouse_y+(joy[0].stick[0].axis[1].pos/20));
 
   }
 
@@ -90,8 +95,9 @@ void Map::draw(){
   draw_sprite( buffer, map_image, 0, 0);
 
   // Locations
-  for( unsigned int i = 0; i < mapLocations.size(); i++)
-    mapLocations.at(i).draw( buffer);
+  for( unsigned int i = 0; i < mapLocations.size(); i++){
+     mapLocations.at(i).draw( buffer);
+  }
 
   // Cursor
   draw_sprite( buffer, cursor, mouse_x - cursor -> w / 2, mouse_y - cursor -> h / 2);
