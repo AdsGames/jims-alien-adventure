@@ -17,14 +17,12 @@ Init::Init()
     input_mode=true;
 }
 
-void Init::update()
-{
+void Init::update(){
   // Change to splash screen
   set_next_state(STATE_MENU);
 }
 
-void Init::draw()
-{
+void Init::draw(){
 
 }
 
