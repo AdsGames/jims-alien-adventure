@@ -19,6 +19,7 @@ class key_manager
     // All keys
     static BITMAP* keys[255];
     static SAMPLE* sounds[5];
+
     // Functions
     void draw( BITMAP *tempImage);
     void update();
