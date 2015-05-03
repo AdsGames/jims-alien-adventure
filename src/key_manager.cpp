@@ -26,7 +26,9 @@ key_manager::key_manager(int newX, int newY){
   keyIsPressed = false;
 }
 
-key_manager::~key_manager(){ }
+key_manager::~key_manager(){
+  key_queue.clear();
+}
 
 // Update
 void key_manager::update(){
@@ -34,7 +36,7 @@ void key_manager::update(){
   // You haven't won
   if(!switch_flicked){
     // Got a correct letter
-    if((!joystick_enabled && key[key_queue.at(0).getValue()] && keyIsPressed == false) || (joystick_enabled && joy[0].button[key_queue.at(0).getValue()].b && buttonIsPressed == false)){
+    if((key_queue.size() > 0) && (!joystick_enabled && key[key_queue.at(0).getValue()] && keyIsPressed == false) || (joystick_enabled && joy[0].button[key_queue.at(0).getValue()].b && buttonIsPressed == false)){
       // Nice sound
       play_sample( sounds[1],255,125,1000,0);
       key_queue.erase( key_queue.begin());
@@ -51,7 +53,7 @@ void key_manager::update(){
 
       // Increase speed
       if( stair::scrollSpeed < stair::maxScrollSpeed)
-        stair::scrollSpeed += 0.5;
+        stair::scrollSpeed += 0.8;
     }
     else if( (keyDown() && keyIsPressed == false) || (buttonDown() && buttonIsPressed == false)){
       if(stair::scrollSpeed > 0)
@@ -74,7 +76,7 @@ void key_manager::update(){
 
   // Slow stairs down
   if( stair::scrollSpeed > 0.01)
-    stair::scrollSpeed -= 0.01;
+    stair::scrollSpeed -= 0.02;
   else{
     stair::scrollSpeed = 0;
   }
