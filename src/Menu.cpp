@@ -34,6 +34,9 @@ Menu::Menu(){
   if(!(goat::goat_image[1] = load_bitmap("images/goat_alien_2.png", NULL))){
       abort_on_error( "Cannot find image images/goat_alien_2.png \n Please check your files and try again");
   }
+  if(!(little_xbox_buttons = load_bitmap("images/menu/angle_buttons.png", NULL))){
+    abort_on_error( "Cannot find image images/menu/angle_buttons.png \n Please check your files and try again");
+  }
 
   // Temporary fonts
   FONT *f1, *f2, *f3, *f4, *f5;
@@ -75,6 +78,9 @@ Menu::Menu(){
 }
 
 void Menu::update(){
+  // Poll joystick
+  poll_joystick();
+
   // Drop title
   if( title_y < 20)
     title_y += (20 - title_y)/80;
@@ -90,14 +96,12 @@ void Menu::update(){
 
 
   // Buttons
-  if( mouse_b & 1){
-    if( start -> CheckHover())
-      set_next_state( STATE_MAP);
-    if( story -> CheckHover())
-      set_next_state(STATE_STORY);
-    if( exit -> CheckHover())
-      set_next_state(STATE_EXIT);
-  }
+  if( (start -> CheckHover() && mouse_b & 1) || (joystick_enabled && joy[0].button[0].b))
+    set_next_state( STATE_MAP);
+  if( (story -> CheckHover() && mouse_b & 1) || (joystick_enabled && joy[0].button[2].b))
+    set_next_state(STATE_STORY);
+  if( (exit -> CheckHover() && mouse_b & 1) || (joystick_enabled && joy[0].button[1].b))
+    set_next_state(STATE_EXIT);
 
   // Motherfing goats!
   if( random( 0, 100) == 0){
@@ -152,6 +156,14 @@ void Menu::draw(){
   story -> draw( buffer);
   options -> draw( buffer);
   exit -> draw( buffer);
+
+  // Joystick helpers
+  if( joystick_enabled){
+    masked_blit( little_xbox_buttons, buffer, 60, 0, start   -> GetX() + 25 - 4 * start   -> CheckHover(), start   -> GetY() + 114 - start   -> CheckHover(), 20, 20);
+    masked_blit( little_xbox_buttons, buffer, 40, 0, story   -> GetX() + 25 - 4 * story   -> CheckHover(), story   -> GetY() + 114 - story   -> CheckHover(), 20, 20);
+    masked_blit( little_xbox_buttons, buffer, 0 , 0, options -> GetX() + 25 - 4 * options -> CheckHover(), options -> GetY() + 114 - options -> CheckHover(), 20, 20);
+    masked_blit( little_xbox_buttons, buffer, 20, 0, exit    -> GetX() + 25 - 4 * exit    -> CheckHover(), exit    -> GetY() + 114 - exit    -> CheckHover(), 20, 20);
+  }
 
   // Cursor
   draw_sprite( buffer, cursor, mouse_x, mouse_y);

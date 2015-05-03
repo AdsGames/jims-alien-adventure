@@ -25,6 +25,10 @@ class Map : public GameState
 
     FSOUND_STREAM *music;
 
+    int cursor_x, cursor_y;
+    int mickeyx;
+    int mickeyy;
+
     vector<location> mapLocations;
   protected:
   public:
