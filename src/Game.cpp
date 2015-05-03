@@ -125,6 +125,10 @@ void Game::init(){
     abort_on_error( "Cannot find sound sounds/ping.wav \n Please check your files and try again");
   }
 
+   if(!(win = load_sample("sounds/win.wav"))){
+    abort_on_error( "Cannot find sound sounds/win.wav \n Please check your files and try again");
+  }
+
   // Other Sprites
   buffer = create_bitmap( SCREEN_W, SCREEN_H);
   stair_buffer = create_bitmap( SCREEN_W, SCREEN_H);
@@ -204,6 +208,7 @@ void Game::init(){
   distance_is_reached = false;
   stair::final_stair_placed = false;
   stair::locationOfFinal = 0;
+  sound_played=false;
 
   timer1 = 0;
   climb_time = 0;
@@ -347,8 +352,15 @@ void Game::draw(){
     textprintf_ex( buffer, font, 40,32, makecol(0,0,0), -1, "%i/%i",level_distance,level_distance);
 
 
-  if(switch_flicked)
+  if(switch_flicked){
+    if(!sound_played){
+      play_sample(win,255,125,1000,0);
+      sound_played=true;
+      // Stop music
+      FSOUND_Stream_Stop(mainMusic);
+    }
     draw_sprite( buffer, youwin, 200, 200);
+  }
   set_alpha_blender();
   draw_trans_sprite(buffer,watch,SCREEN_W-100,SCREEN_H-70);
   textprintf_ex( buffer, dosis_26, SCREEN_W-75,SCREEN_H-60, makecol(255,255,255), -1, "%4.1f", time_to_complete-climb_time);
