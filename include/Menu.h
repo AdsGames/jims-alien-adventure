@@ -23,6 +23,7 @@ class Menu : public GameState
     BITMAP *buffer;
     BITMAP *title, *sky, *city;
     BITMAP *cursor;
+    BITMAP *little_xbox_buttons;
     BITMAP *background[2];
 
     // Buttons
