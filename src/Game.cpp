@@ -103,6 +103,9 @@ void Game::init(){
   if(!(watch = load_bitmap( "images/watch.png", NULL))){
     abort_on_error( "Cannot find image images/watch.png \n Please check your files and try again");
   }
+   if(!(youwin = load_bitmap("images/youwin.png", NULL))){
+    abort_on_error( "Cannot find image images/youwin.png \n Please check your files and try again");
+  }
   // Goat
   if(!(goat::goat_image[0] = load_bitmap("images/goat_alien.png", NULL))){
       abort_on_error( "Cannot find image images/goat_alien.png \n Please check your files and try again");
@@ -173,7 +176,7 @@ void Game::init(){
 
   // LEVEL DIFFICULTY!
   if(levelOn=="cn_tower"){
-    level_distance=200;
+    level_distance=20;
     time_to_complete=40;
   }
 
@@ -308,6 +311,8 @@ void Game::draw(){
   if(distance_is_reached)
     textprintf_ex( buffer, font, 40,32, makecol(0,0,0), -1, "%i/%i",level_distance,level_distance);
 
+
+  if(switch_flicked)draw_sprite( buffer, youwin, 200, 200);
   set_alpha_blender();
   draw_trans_sprite(buffer,watch,SCREEN_W-100,SCREEN_H-70);
   textprintf_ex( buffer, dosis_26, SCREEN_W-75,SCREEN_H-60, makecol(255,255,255), -1, "%4.1f", time_to_complete-climb_time);
