@@ -56,10 +56,16 @@ void Game::init(){
   if(!(stair::stage_end_green = load_bitmap( ("images/stairs/" + levelOn + "/stage_end_green.png").c_str(), NULL))){
     abort_on_error( ("Cannot find image images/stairs/" + levelOn + "/stage_end_green.png \n Please check your files and try again").c_str());
   }
-
   if(!(stair::image_brick = load_bitmap( ("images/stairs/" + levelOn + "/brick.png").c_str(), NULL))){
     abort_on_error( ("Cannot find image images/stairs/" + levelOn + "/brick.png \n Please check your files and try again").c_str());
   }
+  if(!(background_sky = load_bitmap( ("images/stairs/" + levelOn + "/sky.png").c_str(), NULL))){
+    abort_on_error( ("Cannot find image images/stairs/" + levelOn + "/sky.png \n Please check your files and try again").c_str());
+  }
+   if(!(background_buildings = load_bitmap( ("images/stairs/" + levelOn + "/parallax.png").c_str(), NULL))){
+    abort_on_error( ("Cannot find image images/stairs/" + levelOn + "/parallax.png \n Please check your files and try again").c_str());
+  }
+
   //Player
   for( int i = 0; i < 8; i++){
     if(!(player::image[i] = load_bitmap( ("images/player/player_" + convertIntToString(i+1) + ".png").c_str(), NULL))){
@@ -91,12 +97,6 @@ void Game::init(){
   }
   if(!(key_manager::keys[1] = load_bitmap( "images/keys/joy_b.png", NULL))){
     abort_on_error( "Cannot find image images/keys/joy_b.png \n Please check your files and try again");
-  }
-  if(!(background_sky = load_bitmap( "images/background_sky.png", NULL))){
-    abort_on_error( "Cannot find image images/background_sky.png \n Please check your files and try again");
-  }
-   if(!(background_buildings = load_bitmap( "images/background_buildings.png", NULL))){
-    abort_on_error( "Cannot find image images/background_buildings.png \n Please check your files and try again");
   }
   if(!(watch = load_bitmap( "images/watch.png", NULL))){
     abort_on_error( "Cannot find image images/watch.png \n Please check your files and try again");

@@ -49,8 +49,7 @@ Map::Map()
   mapLocations.push_back( wall_of_china);
 
   // Cursor position
-  cursor_x = SCREEN_W / 2;
-  cursor_y = SCREEN_H / 2;
+  position_mouse( SCREEN_W / 2, SCREEN_H / 2);
 
   // Start music
   FSOUND_Stream_Play( 0, music);
@@ -61,7 +60,7 @@ void Map::update(){
   poll_joystick();
 
   // Change level
-  if( mouse_b & 1){
+  if( mouse_b & 1 || (joystick_enabled && joy[0].button[0].b)){
     for( unsigned int i = 0; i < mapLocations.size(); i++){
       if( mapLocations.at(i).CheckHover()){
         levelOn = mapLocations.at(i).getName();
@@ -70,21 +69,13 @@ void Map::update(){
     }
   }
 
+
   // Move cursor
   if( joystick_enabled){
-    cursor_x += joy[0].stick[0].axis[0].d1 * 2;
-    cursor_x -= joy[0].stick[0].axis[0].d2 * 2;
-    cursor_y += joy[0].stick[0].axis[1].d1 * 2;
-    cursor_y -= joy[0].stick[0].axis[1].d2 * 2;
-  }
-
-  // Mouse moved
-  poll_mouse();
-  get_mouse_mickeys( &mickeyx, &mickeyy);
-
-  if( mickeyx != 0 || mickeyy != 0){
-    cursor_y = mouse_y;
-    cursor_x = mouse_x;
+    position_mouse( mouse_x + joy[0].stick[0].axis[0].d1 * 2, mouse_y);
+    position_mouse( mouse_x - joy[0].stick[0].axis[0].d2 * 2, mouse_y);
+    position_mouse( mouse_x, mouse_y + joy[0].stick[0].axis[1].d1 * 2);
+    position_mouse( mouse_x, mouse_y - joy[0].stick[0].axis[1].d2 * 2);
   }
 
   // Back to menu
@@ -104,7 +95,7 @@ void Map::draw(){
     mapLocations.at(i).draw( buffer);
 
   // Cursor
-  draw_sprite( buffer, cursor, cursor_x - cursor -> w / 2, cursor_y - cursor -> h / 2);
+  draw_sprite( buffer, cursor, mouse_x - cursor -> w / 2, mouse_y - cursor -> h / 2);
 
   // Draw Buffer
   draw_sprite( screen, buffer, 0, 0);
