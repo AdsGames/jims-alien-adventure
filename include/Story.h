@@ -19,6 +19,7 @@ class Story : public GameState
   private:
     // Map/GUI
     BITMAP *buffer;
+    BITMAP *story_splash;
   protected:
   public:
     //Main loop functions
