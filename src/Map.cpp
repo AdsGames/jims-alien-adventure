@@ -14,8 +14,8 @@ Map::Map()
   if(!(map_image = load_bitmap("images/map/map.png", NULL))){
     abort_on_error( "Cannot find image images/map/map.png \n Please check your files and try again");
   }
-  if(!(cursor = load_bitmap("images/menu/cursor1.png", NULL))){
-    abort_on_error( "Cannot find image images/menu/cursor1.png \n Please check your files and try again");
+  if(!(cursor = load_bitmap("images/map/cursor.png", NULL))){
+    abort_on_error( "Cannot find image images/map/cursor.png \n Please check your files and try again");
   }
 
   // Locations
@@ -48,11 +48,18 @@ Map::Map()
   location wall_of_china( 570, 217, "images/map/icon_wallofchina.png", "wall_of_china");
   mapLocations.push_back( wall_of_china);
 
+  // Cursor position
+  cursor_x = SCREEN_W / 2;
+  cursor_y = SCREEN_H / 2;
+
   // Start music
   FSOUND_Stream_Play( 0, music);
 }
 
 void Map::update(){
+  // Update joystick
+  poll_joystick();
+
   // Change level
   if( mouse_b & 1){
     for( unsigned int i = 0; i < mapLocations.size(); i++){
@@ -61,6 +68,23 @@ void Map::update(){
         set_next_state( STATE_GAME);
       }
     }
+  }
+
+  // Move cursor
+  if( joystick_enabled){
+    cursor_x += joy[0].stick[0].axis[0].d1 * 2;
+    cursor_x -= joy[0].stick[0].axis[0].d2 * 2;
+    cursor_y += joy[0].stick[0].axis[1].d1 * 2;
+    cursor_y -= joy[0].stick[0].axis[1].d2 * 2;
+  }
+
+  // Mouse moved
+  poll_mouse();
+  get_mouse_mickeys( &mickeyx, &mickeyy);
+
+  if( mickeyx != 0 || mickeyy != 0){
+    cursor_y = mouse_y;
+    cursor_x = mouse_x;
   }
 
   // Back to menu
@@ -80,7 +104,7 @@ void Map::draw(){
     mapLocations.at(i).draw( buffer);
 
   // Cursor
-  draw_sprite( buffer, cursor, mouse_x, mouse_y);
+  draw_sprite( buffer, cursor, cursor_x - cursor -> w / 2, cursor_y - cursor -> h / 2);
 
   // Draw Buffer
   draw_sprite( screen, buffer, 0, 0);
