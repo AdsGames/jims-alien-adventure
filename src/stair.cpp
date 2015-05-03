@@ -55,9 +55,10 @@ void stair::movement(){
   // Move
   x -= scrollSpeed;
 
+  // Top of map
   if( type == 1 || type == 2){
     y = location_y(x);
-    locationOfFinal = y;
+    locationOfFinal = y + 60;
   }
   else{
     y = location_y(x - 30);
@@ -68,7 +69,7 @@ void stair::movement(){
 // YES WE CAN
 void stair::draw( BITMAP *tempImage){
   // Draw stair and rectangle beside for effect
-  for( int i = x + image -> w - 30; i < SCREEN_W; i+= image_brick -> w){
+  for( int i = x + image -> w - 30; i < SCREEN_W; i += image_brick -> w){
     draw_sprite( tempImage, image_brick, i, y + image -> h);
   }
 
@@ -93,7 +94,7 @@ float stair::location_y( float oldX){
   return (SCREEN_H - ((oldX-SCREEN_W/4)/30) * 37);
 }
 
-// Line y position
+// Find the top
 int stair::find_top_stair( int stairIndex){
   // New index
   int bottomIndex = stairIndex - 1;
