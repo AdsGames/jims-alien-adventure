@@ -207,10 +207,13 @@ void Game::update(){
   for( int i = 0; i < goats.size(); i++)
     goats.at(i).update();
 
-   if( random( 0, 1000)){
-    goat newGoat( random( 0, SCREEN_W), random( 0, SCREEN_H), float(random( 5, 15))/10, random( 0.2, 1.2));
+   // Motherfing goats!
+  if( random( 0, 100) == 0){
+    float randomDistance = float(random( 2, 6))/10;
+    goat newGoat(SCREEN_W, random( 0, SCREEN_H), randomDistance, randomDistance*3);
     goats.push_back( newGoat);
   }
+
 
   // Key manager
   screen_keys -> update();
