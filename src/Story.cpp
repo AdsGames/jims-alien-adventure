@@ -9,8 +9,8 @@ Story::Story()
   FONT *f1, *f2, *f3, *f4, *f5;
 
   //Sets Font
-  if(!(f1 = load_font(("fonts/arial_black.pcx"), NULL, NULL))){
-    abort_on_error( "Cannot find font fonts/arial_black.png \n Please check your files and try again");
+  if(!(f1 = load_font(("fonts/dosis.pcx"), NULL, NULL))){
+    abort_on_error( "Cannot find font fonts/dosis.png \n Please check your files and try again");
   }
 
   f2 = extract_font_range(f1, ' ', 'A'-1);
