@@ -4,6 +4,9 @@ Story::Story()
 {
   // Create buffer image
   buffer = create_bitmap( SCREEN_W, SCREEN_H);
+  if(!(story_splash = load_bitmap( "images/story_splash.png", NULL))){
+    abort_on_error( "Cannot find image images/story_splash.png \n Please check your files and try again");
+  }
 
   // Temporary fonts
   FONT *f1, *f2, *f3, *f4, *f5;
@@ -29,14 +32,22 @@ Story::Story()
 
   // Allow transparency
   set_alpha_blender();
+
+  highcolor_fade_in( story_splash, 16);
 }
 
 void Story::update(){
-
+  for( int i = 0; i < 127; i++){
+    if( key[i]){
+      set_next_state(STATE_MENU);
+      break;
+    }
+  }
 }
 
 void Story::draw(){
-
+  draw_sprite(buffer,story_splash,0,0);
+  draw_sprite(screen,buffer,0,0);
 }
 
 Story::~Story(){

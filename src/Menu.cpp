@@ -192,6 +192,9 @@ Menu::~Menu(){
   // Destory Bitmaps
   destroy_bitmap( buffer);
 
+  // Kill pointers
+  delete start, story, options, exit;
+
   // Fade out
   highcolor_fade_out(16);
 
