@@ -25,8 +25,6 @@ END_OF_FUNCTION(gameTimer)
 vector<stair> allStairs;
 
 void Game::init(){
-
-
   // Setup for FPS system
   LOCK_VARIABLE(timer1);
   LOCK_FUNCTION(gameTicker);
@@ -42,6 +40,11 @@ void Game::init(){
 
   // Creates a random number generator (based on time)
   srand (time(NULL));
+
+  // Load music
+  if(!(mainMusic = FSOUND_Stream_Open("music/JAA-Ingame.mp3",2, 0, 0))){
+    abort_on_error( "Cannot find music music/JAA-Ingame.mp3 \n Please check your files and try again");
+  }
 
   // Load images
   if(!(stair::image = load_bitmap( ("images/stairs/" + levelOn + "/stairs.png").c_str(), NULL))){
@@ -165,6 +168,9 @@ void Game::init(){
 
   // Player
   player1 = new player( (10 * 30), (stair::location_y(10 * 30)) - player::image[0] -> h/2);
+
+  // Start music
+  FSOUND_Stream_Play( 0, mainMusic);
 }
 
 // Update game state
@@ -265,8 +271,10 @@ void Game::draw(){
   if(!distance_is_reached)rectfill(buffer,24,24,24+(600*(distance_travelled/level_distance)),76,makecol(0,255,0));
 
 
-  if(!distance_is_reached)textprintf_ex( buffer, font, 20,32, makecol(0,0,0), -1, "%4.0f/%i", distance_travelled,level_distance);
-  if(distance_is_reached)textprintf_ex( buffer, font, 40,32, makecol(0,0,0), -1, "%i/%i",level_distance,level_distance);
+  if(!distance_is_reached)
+    textprintf_ex( buffer, font, 20,32, makecol(0,0,0), -1, "%4.0f/%i", distance_travelled,level_distance);
+  if(distance_is_reached)
+    textprintf_ex( buffer, font, 40,32, makecol(0,0,0), -1, "%i/%i",level_distance,level_distance);
 
   set_alpha_blender();
   draw_trans_sprite(buffer,watch,SCREEN_W-100,SCREEN_H-70);
@@ -291,6 +299,9 @@ Game::~Game(){
 
   delete screen_keys;
   delete player1;
+
+  // Stop music
+  FSOUND_Stream_Stop(mainMusic);
 
   // Fade out
   highcolor_fade_out(16);
