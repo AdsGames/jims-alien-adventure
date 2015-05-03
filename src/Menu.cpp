@@ -29,6 +29,9 @@ Menu::Menu()
   if(!(cursor = load_bitmap("images/menu/cursor1.png", NULL))){
       abort_on_error( "Cannot find image images/menu/cursor1.png \n Please check your files and try again");
   }
+  if(!(goat::goat_image = load_bitmap("images/goat_alien.png", NULL))){
+      abort_on_error( "Cannot find image images/goat_alien.png \n Please check your files and try again");
+  }
 
   // Buttons
   if(!(button_images[0][0] = load_bitmap("images/menu/button_play.png", NULL))){
@@ -116,6 +119,15 @@ void Menu::update(){
       set_next_state(STATE_EXIT);
   }
 
+  // Motherfing goats!
+  if( random( 0, 1000)){
+    goat newGoat( random( 0, SCREEN_W), random( 0, SCREEN_H), float(random( 5, 15))/10, random( 0.2, 1.2));
+    goats.push_back( newGoat);
+  }
+
+  // Update goats
+  for( int i = 0; i < goats.size(); i++)
+    goats.at(i).update();
 }
 
 void Menu::draw(){
@@ -128,6 +140,10 @@ void Menu::draw(){
   // City scroll
   draw_sprite( buffer, city, city_x, SCREEN_H - city -> h);
   draw_sprite( buffer, city, city_x + city -> w, SCREEN_H - city -> h);
+
+  // Draw goats
+  for( int i = 0; i < goats.size(); i++)
+    goats.at(i).draw( buffer);
 
   // Stairs
   draw_sprite( buffer, background, 0, 0);
