@@ -12,6 +12,7 @@ class Story : public GameState
 {
   private:
     // Map/GUI
+    bool is_showing_text;
     BITMAP *buffer;
     BITMAP *story_splash;
   protected:
