@@ -4,6 +4,7 @@
 #include <allegro.h>
 #include <string>
 #include "tools.h"
+#include "globals.h"
 
 using namespace std;
 
@@ -16,6 +17,7 @@ class location{
     void draw( BITMAP *tempImage);
 
     static BITMAP *pin_image;
+    static BITMAP *pin_grey_image;
 
     bool CheckHover();
 
