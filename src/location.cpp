@@ -4,11 +4,12 @@
 BITMAP* location::pin_image;
 
 // Construct
-location::location(int newX, int newY, BITMAP *newImage){
+location::location(int newX, int newY, BITMAP *newImage, string newName){
   image = newImage;
   x = newX;
   y = newY;
   hover = false;
+  name = newName;
 }
 
 // De-construct
@@ -33,4 +34,9 @@ bool location::CheckHover(){
     hover = false;
   }
   return hover;
+}
+
+// Mouse is hovering
+string location::getName(){
+  return name;
 }

@@ -14,11 +14,10 @@ float distance_travelled;
 
 int level_distance = 100;
 
-
 // Resdiv
 int resDiv;
 
 //State variables
 int stateID;
 int nextState;
-int levelOn;
+string levelOn = "cn_tower";
