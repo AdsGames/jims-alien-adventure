@@ -1,6 +1,4 @@
 *.db
 *.depend
 *.o
-*.exe
-*.o
 *.layout
