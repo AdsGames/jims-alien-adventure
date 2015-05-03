@@ -49,6 +49,7 @@ class Game : public GameState
     BITMAP* watch;
 
     float background_scroll;
+    float time_to_complete;
 
     // Timers
     static volatile int timer1;
