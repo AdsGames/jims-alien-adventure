@@ -5,14 +5,8 @@
 
 #include <allegro.h>
 #include <alpng.h>
-#include <string>
-#include <vector>
-
-#include "fmod/fmod.h"
-#include "fmod/fmod_errors.h"
-
-#include "globals.h"
 #include "tools.h"
+#include "globals.h"
 
 class Story : public GameState
 {

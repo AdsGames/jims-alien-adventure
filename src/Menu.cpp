@@ -1,10 +1,6 @@
 #include "Menu.h"
 
-Menu::Menu()
-{
-  // Init fmod
-  FSOUND_Init (44100, 32, 0);
-
+Menu::Menu(){
   // Create buffer image
   buffer = create_bitmap( SCREEN_W, SCREEN_H);
 
@@ -39,32 +35,6 @@ Menu::Menu()
       abort_on_error( "Cannot find image images/goat_alien_2.png \n Please check your files and try again");
   }
 
-  // Buttons
-  if(!(button_images[0][0] = load_bitmap("images/menu/button_play.png", NULL))){
-      abort_on_error( "Cannot find image images/menu/button_play.png \n Please check your files and try again");
-  }
-  if(!(button_images[0][1] = load_bitmap("images/menu/button_pushed_play.png", NULL))){
-      abort_on_error( "Cannot find image images/menu/button_pushed_play.png \n Please check your files and try again");
-  }
-  if(!(button_images[1][0] = load_bitmap("images/menu/button_story.png", NULL))){
-      abort_on_error( "Cannot find image images/menu/button_story.png \n Please check your files and try again");
-  }
-  if(!(button_images[1][1] = load_bitmap("images/menu/button_pushed_story.png", NULL))){
-      abort_on_error( "Cannot find image images/menu/button_pushed_story.png \n Please check your files and try again");
-  }
-  if(!(button_images[2][0] = load_bitmap("images/menu/button_options.png", NULL))){
-      abort_on_error( "Cannot find image images/menu/button_options.png \n Please check your files and try again");
-  }
-  if(!(button_images[2][1] = load_bitmap("images/menu/button_pushed_options.png", NULL))){
-      abort_on_error( "Cannot find image images/menu/button_pushed_options.png \n Please check your files and try again");
-  }
-  if(!(button_images[3][0] = load_bitmap("images/menu/button_exit.png", NULL))){
-      abort_on_error( "Cannot find image images/menu/button_exit.png \n Please check your files and try again");
-  }
-  if(!(button_images[3][1] = load_bitmap("images/menu/button_pushed_exit.png", NULL))){
-      abort_on_error( "Cannot find image images/menu/button_pushed_exit.png \n Please check your files and try again");
-  }
-
   // Temporary fonts
   FONT *f1, *f2, *f3, *f4, *f5;
 
@@ -92,12 +62,14 @@ Menu::Menu()
 
   // Variable set
   title_y = -title -> h;
+  city_x = 0;
+  switchFlipped = false;
 
   // Buttons
-  start = new Button( button_images[0][0], button_images[0][1], 30, 190);
-  story = new Button( button_images[1][0], button_images[1][1], 195, 190);
-  options = new Button( button_images[2][0], button_images[2][1], 30, 300);
-  exit = new Button( button_images[3][0], button_images[3][1], 195, 300);
+  start = new Button( "images/menu/button_play.png", "images/menu/button_pushed_play.png", 30, 190);
+  story = new Button( "images/menu/button_story.png", "images/menu/button_pushed_story.png", 195, 190);
+  options = new Button( "images/menu/button_options.png", "images/menu/button_pushed_options.png", 30, 300);
+  exit = new Button( "images/menu/button_exit.png", "images/menu/button_pushed_exit.png", 195, 300);
 
   FSOUND_Stream_Play(0,music);
 }
@@ -135,7 +107,7 @@ void Menu::update(){
   }
 
   // Update goats
-  for( int i = 0; i < goats.size(); i++){
+  for( unsigned int i = 0; i < goats.size(); i++){
     // Update
     goats.at(i).update();
     // Make them fall
@@ -148,9 +120,9 @@ void Menu::update(){
 
   // Flip switch
   if( mouse_b & 1){
-     if( (!switchFlipped && collisionAny( 595, 607, mouse_x, mouse_x, 236, 248, mouse_y, mouse_y)) || (switchFlipped && collisionAny( 579, 591, mouse_x, mouse_x, 235, 247, mouse_y, mouse_y))){
-        switchFlipped = !switchFlipped;
-      }
+    if( (!switchFlipped && collisionAny( 595, 607, mouse_x, mouse_x, 236, 248, mouse_y, mouse_y)) || (switchFlipped && collisionAny( 579, 591, mouse_x, mouse_x, 235, 247, mouse_y, mouse_y))){
+      switchFlipped = !switchFlipped;
+    }
   }
 }
 
@@ -166,7 +138,7 @@ void Menu::draw(){
   draw_sprite( buffer, city, city_x + city -> w, SCREEN_H - city -> h);
 
   // Draw goats
-  for( int i = 0; i < goats.size(); i++)
+  for( unsigned int i = 0; i < goats.size(); i++)
     goats.at(i).draw( buffer);
 
   // Stairs
@@ -190,17 +162,31 @@ void Menu::draw(){
 
 Menu::~Menu(){
   // Destory Bitmaps
-  destroy_bitmap( buffer);
+  destroy_bitmap(buffer);
+  destroy_bitmap(title);
+  destroy_bitmap(sky);
+  destroy_bitmap(city);
+  destroy_bitmap(cursor);
+  destroy_bitmap(background[0]);
+  destroy_bitmap(background[1]);
+  destroy_bitmap( goat::goat_image[0]);
+  destroy_bitmap( goat::goat_image[1]);
 
   // Kill pointers
-  delete start, story, options, exit;
+  delete start;
+  delete story;
+  delete options;
+  delete exit;
 
-  // Fade out
-  highcolor_fade_out(16);
+  // Clear away goats
+  goats.clear();
 
   // Stop music
   FSOUND_Stream_Stop(music);
 
-  // Clean up fmod
-  FSOUND_Close();
+  // Clear keybuff
+  clear_keybuf();
+
+  // Fade out
+  highcolor_fade_out(32);
 }

@@ -50,12 +50,6 @@ class Game : public GameState
 
     float background_scroll;
 
-    // Lighting effects
-    COLOR_MAP light_table;
-    PALLETE pal;
-    bool lightingEnabled;
-    BITMAP *darkness, *darkness_old, *lightBuffer, *spotlight;
-
     // Timers
     static volatile int timer1;
     static volatile float climb_time;
