@@ -169,16 +169,27 @@ void Game::init(){
 
 // Update game state
 void Game::update(){
-
+  // Joystick input
   poll_joystick();
 
-  if(!switch_flicked)distance_travelled += stair::scrollSpeed/25;
-  if( player1->getY() <= (stair::locationOfFinal - (player1->image[0] -> h - 60))){
-    for(unsigned int i=0; i<allStairs.size();  i++){
-      if(allStairs.at(i).getType()==1)
+  // Add to distance until switch is flicked
+  if(!switch_flicked)
+    distance_travelled += stair::scrollSpeed/25;
+
+  // When you reach destination
+  if( player1 -> getY() <= (stair::locationOfFinal - (player1 -> image[0] -> h))){
+    switch_flicked = true;
+    for(unsigned int i = 0; i < allStairs.size(); i++){
+      if(allStairs.at(i).getType() == 1)
         allStairs.at(i).setType(2);
     }
   }
+
+  // You reached distance for spawning top!
+  if( distance_travelled > level_distance && !distance_is_reached){
+    distance_is_reached = true;
+  }
+
 
   // Scroll background
   background_scroll -= stair::scrollSpeed/4;
@@ -189,26 +200,21 @@ void Game::update(){
   for( unsigned int i = 0; i < allStairs.size(); i ++ ){
     allStairs.at(i).update( &allStairs);
   }
-
   for( unsigned int i = 0; i < allStairs.size(); i ++ ){
     allStairs.at(i).movement();
   }
 
-  if( distance_travelled > level_distance && !distance_is_reached){
-    distance_is_reached = true;
-  }
-  if( distance_travelled > level_distance+16){
-    switch_flicked = true;
-  }
-
   // Character
   player1 -> update();
-
   player::animation_frame = int(timer1 * ceil(stair::scrollSpeed)) % 8;
 
   // Update goats
-  for( unsigned int i = 0; i < goats.size(); i++)
+  for( unsigned int i = 0; i < goats.size(); i++){
     goats.at(i).update();
+    if( switch_flicked)
+      goats.at(i).fall(6);
+  }
+
 
    // Motherfing goats!
   if( random( 0, 100) == 0){

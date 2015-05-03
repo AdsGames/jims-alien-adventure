@@ -56,22 +56,20 @@ void key_manager::update(){
     else if( (keyDown() && keyIsPressed == false) || (buttonDown() && buttonIsPressed == false)){
       if(stair::scrollSpeed > 0)
         stair::scrollSpeed /= 4;
-      play_sample(key_manager::sounds[0],255,125,1000,0);
+      play_sample(sounds[0],255,125,1000,0);
     }
+  }
+  // Stop
+  else{
+    stair::scrollSpeed = 0;
   }
 
   // Prevents held keys
   if(!joystick_enabled){
-    if( keyDown())
-    keyIsPressed = true;
-  else
-    keyIsPressed = false;
+    keyIsPressed = keyDown();
   }
   if(joystick_enabled){
-    if( buttonDown())
-    buttonIsPressed = true;
-  else
-    buttonIsPressed = false;
+    buttonIsPressed = buttonDown();
   }
 
   // Slow stairs down
@@ -84,22 +82,23 @@ void key_manager::update(){
 
 // Draw
 void key_manager::draw( BITMAP *tempImage){
-  // Background
-  rectfill( tempImage, x+15, y+75, x   +209-80, y +83+ (key_queue.size() * 90), makecol( 155, 155, 155));
+  if( !switch_flicked){
+    // Background
+    rectfill( tempImage, x+15, y+75, x   +209-80, y +83+ (key_queue.size() * 90), makecol( 155, 155, 155));
 
-  // Draw keys
-  for( unsigned int i = 0; i < key_queue.size(); i++){
-    set_trans_blender(255, 255, 255, 255 - ((255/4) * i));
-    draw_trans_sprite( tempImage, keys[key_queue.at(i).getValue()], x + 20,  -(i * 90)+y + 350);
+    // Draw keys
+    for( unsigned int i = 0; i < key_queue.size(); i++){
+      set_trans_blender(255, 255, 255, 255 - ((255/4) * i));
+      draw_trans_sprite( tempImage, keys[key_queue.at(i).getValue()], x + 20,  -(i * 90)+y + 350);
+    }
   }
 }
 
 //Arrow keys pressed
 //EPIC WOMBO COMBOS
 bool key_manager::keyPressedCombo(){
-  if( key[KEY_UP] && key[KEY_DOWN] && key[KEY_LEFT]  && key[KEY_RIGHT] )
-      return true;
-
+  if( key[KEY_UP] && key[KEY_DOWN] && key[KEY_LEFT] && key[KEY_RIGHT])
+    return true;
   return false;
 }
 
@@ -107,8 +106,7 @@ bool key_manager::keyPressedCombo(){
 //EPIC WOMBO COMBOS
 bool key_manager::buttonPressedCombo(){
   if( joy[0].button[0].b && joy[0].button[1].b && joy[0].button[2].b && joy[0].button[3].b)
-      return true;
-
+    return true;
   return false;
 }
 
