@@ -14,7 +14,7 @@ enum GameStates
     STATE_INIT,
     STATE_INTRO,
     STATE_MENU,
-    STATE_EDIT,
+    STATE_STORY,
     STATE_GAME,
     STATE_EXIT,
     STATE_MAP,

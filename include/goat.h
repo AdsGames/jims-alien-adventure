@@ -15,6 +15,7 @@ class goat
     void draw( BITMAP* tempImage);
     void update();
     void fall(float newSpeed);
+    bool kill();
 
     // Image
     static BITMAP *goat_image[2];
@@ -24,6 +25,7 @@ class goat
     float x, y;
     float speed;
     float scale;
+    bool offScreen;
 
 };
 
