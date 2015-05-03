@@ -13,7 +13,6 @@
 
 #include "globals.h"
 #include "tools.h"
-#include "location.h"
 
 class Story : public GameState
 {
