@@ -18,6 +18,7 @@ class location{
     static BITMAP *pin_image;
 
     bool CheckHover();
+
     string getName();
   protected:
     BITMAP *image;

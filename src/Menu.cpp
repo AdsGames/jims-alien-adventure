@@ -19,11 +19,11 @@ Menu::Menu(){
   if(!(title = load_bitmap("images/menu/title.png", NULL))){
       abort_on_error( "Cannot find image images/menu/title.png \n Please check your files and try again");
   }
-  if(!(sky = load_bitmap("images/background_sky.png", NULL))){
-      abort_on_error( "Cannot find image images/background_sky.png \n Please check your files and try again");
+  if(!(sky = load_bitmap("images/stairs/cn_tower/sky.png", NULL))){
+      abort_on_error( "Cannot find image images/stairs/cn_tower/sky.png \n Please check your files and try again");
   }
-  if(!(city = load_bitmap("images/background_buildings.png", NULL))){
-      abort_on_error( "Cannot find image images/background_buildings.png \n Please check your files and try again");
+  if(!(city = load_bitmap("images/stairs/cn_tower/parallax.png", NULL))){
+      abort_on_error( "Cannot find image images/stairs/cn_tower/parallax.png \n Please check your files and try again");
   }
   if(!(cursor = load_bitmap("images/menu/cursor1.png", NULL))){
       abort_on_error( "Cannot find image images/menu/cursor1.png \n Please check your files and try again");
