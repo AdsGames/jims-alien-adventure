@@ -2,6 +2,7 @@
 #include "globals.h"
 
 BITMAP* key_manager::keys[255];
+SAMPLE* key_manager::sounds[5];
 
 // Init
 key_manager::key_manager(int newX, int newY){
@@ -12,11 +13,11 @@ key_manager::key_manager(int newX, int newY){
   // Add keys
   for( int i = 0; i < 4; i++){
     if(!input_mode){
-      key_data newKey(KEY_UP);
+      key_data newKey(random(KEY_LEFT, KEY_DOWN));
       key_queue.push_back(newKey);
     }
     if(input_mode){
-      key_data newKey(0);
+      key_data newKey(random(0,3));
       key_queue.push_back(newKey);
     }
   }
@@ -48,6 +49,7 @@ void key_manager::update(){
 
   if(input_mode && !switch_flicked){
     if( joy[0].button[key_queue.at(0).getValue()].b && buttonIsPressed == false){
+      play_sample(key_manager::sounds[1],255,125,1000,0);
       key_queue.erase( key_queue.begin());
 
       key_data newKey(random(0,3));
@@ -56,9 +58,9 @@ void key_manager::update(){
       if( stair::scrollSpeed < stair::maxScrollSpeed)
         stair::scrollSpeed += 0.5;
     }
-    else if( buttonDown() && buttonIsPressed == false && stair::scrollSpeed > 0){
-      stair::scrollSpeed /= 4;
-      // TODO: SOUND OUCH!
+    else if( buttonDown() && buttonIsPressed == false){
+      if(stair::scrollSpeed > 0)stair::scrollSpeed /= 4;
+      play_sample(key_manager::sounds[0],255,125,1000,0);
     }
   }
 
