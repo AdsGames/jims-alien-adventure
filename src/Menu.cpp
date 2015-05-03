@@ -9,6 +9,11 @@ Menu::Menu(){
       abort_on_error( "Cannot find music music/JAA-Theme.mp3 \n Please check your files and try again");
   }
 
+  // Load sound
+  if(!(NOTALLOWED = load_sample("sounds/goat.wav"))){
+      abort_on_error( "Cannot find music sounds/goat.wav \n Please check your files and try again");
+  }
+
   // Load images
   if(!(background[0] = load_bitmap("images/menu/menu.png", NULL))){
       abort_on_error( "Cannot find image images/menu/menu.png \n Please check your files and try again");
@@ -100,6 +105,12 @@ void Menu::update(){
     set_next_state( STATE_MAP);
   if( (story -> CheckHover() && mouse_b & 1) || (joystick_enabled && joy[0].button[2].b))
     set_next_state(STATE_STORY);
+  if( (options -> CheckHover() && mouse_b & 1) || (joystick_enabled && joy[0].button[3].b)){
+    play_sample( NOTALLOWED, 255, 125, 1000, 0);
+    float randomDistance = float(random( 2, 6))/10;
+    goat newGoat(SCREEN_W, random( 0, SCREEN_H), randomDistance, randomDistance*3);
+    goats.push_back( newGoat);
+  }
   if( (exit -> CheckHover() && mouse_b & 1) || (joystick_enabled && joy[0].button[1].b))
     set_next_state(STATE_EXIT);
 
