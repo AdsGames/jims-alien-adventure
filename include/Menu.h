@@ -26,6 +26,9 @@ class Menu : public GameState
     BITMAP *little_xbox_buttons;
     BITMAP *background[2];
 
+    // Sound
+    SAMPLE *NOTALLOWED;
+
     // Buttons
     Button *start, *story, *options, *exit;
 
