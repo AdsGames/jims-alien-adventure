@@ -9,6 +9,7 @@ goat::goat(float newX, float newY, float newScale, float newSpeed){
   y = newY;
   scale = newScale;
   speed = newSpeed;
+  offScreen = false;
 }
 
 goat::~goat() {}
@@ -21,8 +22,17 @@ void goat::draw( BITMAP* tempImage){
 // Update
 void goat::update(){
   x -= speed;
+
+  if( x + goat_image[0] -> w - speed < 0 || x - speed > SCREEN_W || y > SCREEN_H || y + goat_image[0] -> h < 0)
+    offScreen = true;
 }
 
+// Kill
+bool goat::kill(){
+  return offScreen;
+}
+
+// Fall!
 void goat::fall(float newSpeed){
   y+=newSpeed;
 }
