@@ -176,28 +176,28 @@ void Game::init(){
 
   // LEVEL DIFFICULTY!
   if(levelOn == "cn_tower"){
-    level_distance = 0;
-    time_to_complete = 40;
+    level_distance = 200;
+    time_to_complete = 50;
   }
   else if(levelOn == "statue_of_liberty"){
-    level_distance = 0;
+    level_distance = 300;
     time_to_complete = 60;
   }
   else if(levelOn == "stone_henge"){
     level_distance = 400;
     time_to_complete = 80;
   }
-  else if(levelOn == "taj_mahal"){
+  else if(levelOn == "pyramids"){
     level_distance = 500;
     time_to_complete = 100;
   }
-  if(levelOn == "pyramids"){
+  if(levelOn == "taj_mahal"){
     level_distance = 600;
     time_to_complete = 120;
   }
   else if(levelOn == "wall_of_china"){
     level_distance = 700;
-    time_to_complete = 140;
+    time_to_complete = 100;
   }
 
   // Reset variables
@@ -395,9 +395,14 @@ void Game::draw(){
   if(switch_flicked)draw_sprite( buffer, youwin, 200, 200);
 
   set_alpha_blender();
-  draw_trans_sprite(buffer,watch,SCREEN_W-100,SCREEN_H-70);
-  if(time_to_complete-climb_time>0)textprintf_ex( buffer, dosis_26, SCREEN_W-75,SCREEN_H-60, makecol(255,255,255), -1, "%4.1f", time_to_complete-climb_time);
-  if(time_to_complete-climb_time<=0)textprintf_ex( buffer, dosis_26, SCREEN_W-75,SCREEN_H-60, makecol(255,255,255), -1, "0.0");
+
+  draw_trans_sprite(buffer,watch,SCREEN_W-115,SCREEN_H-70);
+
+  if(time_to_complete-climb_time>0)
+    textprintf_ex( buffer, dosis_26, SCREEN_W-90,SCREEN_H-60, makecol(255,255,255), -1, "%4.1f", time_to_complete-climb_time);
+
+  if(time_to_complete-climb_time<=0)
+    textprintf_ex( buffer, dosis_26, SCREEN_W-90,SCREEN_H-60, makecol(255,255,255), -1, "0.0");
 
 
   // Buffer
