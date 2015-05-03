@@ -92,6 +92,14 @@ void Game::init(){
     abort_on_error( "Cannot find image images/keys/joy_b.png \n Please check your files and try again");
   }
 
+  if(!(key_manager::sounds[0] = load_sample("sounds/trip.wav"))){
+    abort_on_error( "Cannot find sound sounds/trip.wav \n Please check your files and try again");
+  }
+
+  if(!(key_manager::sounds[1] = load_sample("sounds/ping.wav"))){
+    abort_on_error( "Cannot find sound sounds/ping.wav \n Please check your files and try again");
+  }
+
   if(!(background_sky = load_bitmap( "images/background_sky.png", NULL))){
     abort_on_error( "Cannot find image images/background_sky.png \n Please check your files and try again");
   }
