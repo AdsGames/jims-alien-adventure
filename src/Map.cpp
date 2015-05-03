@@ -18,6 +18,7 @@ Map::Map()
     abort_on_error( "Cannot find image images/map/cursor.png \n Please check your files and try again");
   }
 
+
   // Locations
   if(!(location::pin_image = load_bitmap("images/map/pin.png", NULL))){
     abort_on_error( "Cannot find image images/map/pin.png \n Please check your files and try again");
@@ -72,10 +73,8 @@ void Map::update(){
 
   // Move cursor
   if( joystick_enabled){
-    position_mouse( mouse_x + joy[0].stick[0].axis[0].d1 * 2, mouse_y);
-    position_mouse( mouse_x - joy[0].stick[0].axis[0].d2 * 2, mouse_y);
-    position_mouse( mouse_x, mouse_y + joy[0].stick[0].axis[1].d1 * 2);
-    position_mouse( mouse_x, mouse_y - joy[0].stick[0].axis[1].d2 * 2);
+    position_mouse(mouse_x+(joy[0].stick[0].axis[0].pos/30),mouse_y+(joy[0].stick[0].axis[1].pos/30));
+
   }
 
   // Back to menu
