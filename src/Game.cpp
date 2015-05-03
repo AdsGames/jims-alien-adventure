@@ -128,6 +128,9 @@ void Game::init(){
    if(!(win = load_sample("sounds/win.wav"))){
     abort_on_error( "Cannot find sound sounds/win.wav \n Please check your files and try again");
   }
+   if(!(lose = load_sample("sounds/lose.wav"))){
+    abort_on_error( "Cannot find sound sounds/lose.wav \n Please check your files and try again");
+  }
 
   // Other Sprites
   buffer = create_bitmap( SCREEN_W, SCREEN_H);
@@ -283,7 +286,7 @@ void Game::update(){
   }
 
   // End game
-  if( switch_flicked && time_since_win >= 3.0){
+  if(time_since_win >= 3.0){
     set_next_state( STATE_MENU);
   }
   else if( switch_flicked && time_since_win <= 0){
@@ -303,8 +306,18 @@ void Game::update(){
     set_next_state( STATE_MENU);
 
   if(time_to_complete-climb_time <= 0){
-    set_next_state(STATE_MENU);
+    install_int_ex(endTimer, BPS_TO_TIMER(10));
+    climb_time=time_to_complete;
+    if(!sound_played){
+      play_sample(lose,255,125,1000,0);
+      sound_played=true;
+      // Stop music
+      FSOUND_Stream_Stop(mainMusic);
+    }
   }
+
+//set_next_state(STATE_MENU);
+
 
   // Key manager
   screen_keys -> update();
@@ -363,7 +376,9 @@ void Game::draw(){
   }
   set_alpha_blender();
   draw_trans_sprite(buffer,watch,SCREEN_W-100,SCREEN_H-70);
-  textprintf_ex( buffer, dosis_26, SCREEN_W-75,SCREEN_H-60, makecol(255,255,255), -1, "%4.1f", time_to_complete-climb_time);
+  if(time_to_complete-climb_time>0)textprintf_ex( buffer, dosis_26, SCREEN_W-75,SCREEN_H-60, makecol(255,255,255), -1, "%4.1f", time_to_complete-climb_time);
+  if(time_to_complete-climb_time<=0)textprintf_ex( buffer, dosis_26, SCREEN_W-75,SCREEN_H-60, makecol(255,255,255), -1, "0.0");
+
 
   // Buffer
   draw_sprite( screen, buffer, 0, 0);
