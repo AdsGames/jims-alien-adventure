@@ -11,6 +11,7 @@
 #include "Menu.h"
 #include "Map.h"
 #include "Game.h"
+#include "Story.h"
 
 // Close button
 volatile int close_button_pressed = FALSE;
@@ -65,6 +66,10 @@ void change_state()
 
       case STATE_MENU:
         currentState = new Menu();
+        break;
+
+      case STATE_STORY:
+        currentState = new Story();
         break;
 
       case STATE_MAP:

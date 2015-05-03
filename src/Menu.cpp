@@ -121,6 +121,8 @@ void Menu::update(){
   if( mouse_b & 1){
     if( start -> CheckHover())
       set_next_state( STATE_MAP);
+    if( story -> CheckHover())
+      set_next_state(STATE_STORY);
     if( exit -> CheckHover())
       set_next_state(STATE_EXIT);
   }
@@ -133,8 +135,16 @@ void Menu::update(){
   }
 
   // Update goats
-  for( int i = 0; i < goats.size(); i++)
+  for( int i = 0; i < goats.size(); i++){
+    // Update
     goats.at(i).update();
+    // Make them fall
+    if( switchFlipped)
+      goats.at(i).fall(5);
+    // Destroy goat
+    if( goats.at(i).kill())
+      goats.erase( goats.begin() + i);
+  }
 
   // Flip switch
   if( mouse_b & 1 && collisionAny( 579, 610, mouse_x, mouse_x, 235, 270, mouse_y, mouse_y)){
