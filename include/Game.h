@@ -18,6 +18,7 @@
 #include "stair.h"
 #include "player.h"
 #include "key_manager.h"
+#include "goat.h"
 
 using namespace std;
 
@@ -36,6 +37,8 @@ class Game : public GameState
     FONT* dosis_26;
     // Player
     player *player1;
+
+    vector<goat> goats;
 
     // Key Manager
     key_manager *screen_keys;

@@ -1,5 +1,6 @@
 #include "Game.h"
 
+
 volatile int Game::timer1 = 00;
 volatile float Game::climb_time = 00;
 
@@ -202,6 +203,15 @@ void Game::update(){
 
   player::animation_frame = int(timer1 * ceil(stair::scrollSpeed)) % 8;
 
+  // Update goats
+  for( int i = 0; i < goats.size(); i++)
+    goats.at(i).update();
+
+   if( random( 0, 1000)){
+    goat newGoat( random( 0, SCREEN_W), random( 0, SCREEN_H), float(random( 5, 15))/10, random( 0.2, 1.2));
+    goats.push_back( newGoat);
+  }
+
   // Key manager
   screen_keys -> update();
 }
@@ -213,7 +223,9 @@ void Game::draw(){
   stretch_sprite(buffer,background_sky, 0, 0, SCREEN_W, SCREEN_H);
   draw_sprite(buffer,background_buildings,0+background_scroll,SCREEN_H-270);
   draw_sprite(buffer,background_buildings,-1024 + background_scroll,SCREEN_H-270);
-
+   // Draw goats
+  for( int i = 0; i < goats.size(); i++)
+    goats.at(i).draw( buffer);
 
   // Stairs!
   rectfill( stair_buffer, 0, 0, SCREEN_W, SCREEN_H, makecol( 255, 0, 255));
