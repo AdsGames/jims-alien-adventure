@@ -169,6 +169,22 @@ void Game::init(){
   // Player
   player1 = new player( (10 * 30), (stair::location_y(10 * 30)) - player::image[0] -> h/2);
 
+  // LEVEL DIFFICULTY!
+  if(levelOn=="cn_tower")
+    level_distance=200;
+
+  if(levelOn=="statue_of_liberty")
+    level_distance=300;
+
+  if(levelOn=="stone_henge")
+    level_distance=400;
+
+  if(levelOn=="taj_mahal")
+    level_distance=500;
+
+  if(levelOn=="wall_of_china")
+    level_distance=600;
+
   // Start music
   FSOUND_Stream_Play( 0, mainMusic);
 }
