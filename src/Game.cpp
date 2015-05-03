@@ -1,8 +1,8 @@
 #include "Game.h"
 
-
-volatile int Game::timer1 = 00;
-volatile float Game::climb_time = 00;
+volatile int Game::timer1 = 0;
+volatile float Game::climb_time = 0;
+volatile float Game::time_since_win = 0;
 
 Game::Game()
 {
@@ -16,17 +16,21 @@ void Game::gameTicker(){
 END_OF_FUNCTION(gameTicker)
 
 void Game::gameTimer(){
-  if(!switch_flicked)climb_time += 0.1;
+  if(!switch_flicked)
+    climb_time += 0.1;
 }
 END_OF_FUNCTION(gameTimer)
+
+void Game::endTimer(){
+  time_since_win += 0.1;
+}
+END_OF_FUNCTION(endTimer)
 
 
 // All stairs
 vector<stair> allStairs;
 
 void Game::init(){
-
-  climb_time=0;
   // Setup for FPS system
   LOCK_VARIABLE(timer1);
   LOCK_FUNCTION(gameTicker);
@@ -35,10 +39,10 @@ void Game::init(){
   // Timer!
   LOCK_VARIABLE(climb_time);
   LOCK_FUNCTION(gameTimer);
-  install_int_ex(gameTimer, BPS_TO_TIMER(10));
 
-  // Init variables
-  stair::scrollSpeed = 0;
+  // Timer!
+  LOCK_VARIABLE(time_since_win);
+  LOCK_FUNCTION(endTimer);
 
   // Creates a random number generator (based on time)
   srand (time(NULL));
@@ -114,11 +118,9 @@ void Game::init(){
   if(!(key_manager::sounds[0] = load_sample("sounds/trip.wav"))){
     abort_on_error( "Cannot find sound sounds/trip.wav \n Please check your files and try again");
   }
-
   if(!(key_manager::sounds[1] = load_sample("sounds/ping.wav"))){
     abort_on_error( "Cannot find sound sounds/ping.wav \n Please check your files and try again");
   }
-
 
   // Other Sprites
   buffer = create_bitmap( SCREEN_W, SCREEN_H);
@@ -159,12 +161,6 @@ void Game::init(){
   destroy_font(f4);
   destroy_font(f5);
 
-  // Stairs (offset is 30 px)
-  for( int i = SCREEN_W/4; i < SCREEN_W; i += 30 ){
-    stair newStair( i, stair::location_y(i),0);
-    allStairs.push_back(newStair);
-  }
-
   // Keys
   screen_keys = new key_manager( 20, 50);
 
@@ -172,29 +168,53 @@ void Game::init(){
   player1 = new player( (10 * 30), (stair::location_y(10 * 30)) - player::image[0] -> h/2);
 
   // LEVEL DIFFICULTY!
-  if(levelOn=="cn_tower"){
-    level_distance=200;
-    time_to_complete=40;
+  if(levelOn == "cn_tower"){
+    level_distance = 0;
+    time_to_complete = 40;
+  }
+  else if(levelOn == "statue_of_liberty"){
+    level_distance = 0;
+    time_to_complete = 60;
+  }
+  else if(levelOn == "stone_henge"){
+    level_distance = 400;
+    time_to_complete = 80;
+  }
+  else if(levelOn == "taj_mahal"){
+    level_distance = 500;
+    time_to_complete = 100;
+  }
+  if(levelOn == "pyramids"){
+    level_distance = 600;
+    time_to_complete = 120;
+  }
+  else if(levelOn == "wall_of_china"){
+    level_distance = 700;
+    time_to_complete = 140;
   }
 
-  if(levelOn=="statue_of_liberty"){
-    level_distance=300;
-    time_to_complete=50;
-  }
-  if(levelOn=="stone_henge"){
-    level_distance=400;
-    time_to_complete=60;
+  // Reset variables
+  animationFrame = 0;
+  background_scroll = 0.0;
+  distance_travelled = 0.0;
+  switch_flicked = false;
+  distance_is_reached = false;
+  stair::final_stair_placed = false;
+  stair::locationOfFinal = 0;
+
+  timer1 = 0;
+  climb_time = 0;
+  time_since_win = 0;
+
+  // Stairs (offset is 30 px)
+  for( int i = SCREEN_W/4; i < SCREEN_W; i += 30 ){
+    stair newStair( i, stair::location_y(i),0);
+    allStairs.push_back(newStair);
   }
 
-  if(levelOn=="taj_mahal"){
-    level_distance=500;
-    time_to_complete=70;
-  }
 
-  if(levelOn=="wall_of_china"){
-    level_distance=600;
-    time_to_complete=80;
-  }
+  // Init variables
+  stair::scrollSpeed = 0;
 
   // Start music
   FSOUND_Stream_Play( 0, mainMusic);
@@ -204,15 +224,19 @@ void Game::init(){
 void Game::update(){
 
   // Joystick input
-
   poll_joystick();
+
+  // Start timer
+  if( (screen_keys -> buttonDown() || screen_keys -> keyDown()) && climb_time <= 0){
+    install_int_ex(gameTimer, BPS_TO_TIMER(10));
+  }
 
   // Add to distance until switch is flicked
   if(!switch_flicked)
     distance_travelled += stair::scrollSpeed/25;
 
   // When you reach destination
-  if( player1 -> getY() <= (stair::locationOfFinal - (player1 -> image[0] -> h))){
+  if( (player1 -> getY() <= (stair::locationOfFinal - (player1 -> image[0] -> h))) && stair::final_stair_placed){
     switch_flicked = true;
     for(unsigned int i = 0; i < allStairs.size(); i++){
       if(allStairs.at(i).getType() == 1)
@@ -250,6 +274,14 @@ void Game::update(){
       goats.at(i).fall(6);
   }
 
+  // End game
+  if( switch_flicked && time_since_win >= 3.0){
+    set_next_state( STATE_MENU);
+  }
+  else if( switch_flicked && time_since_win <= 0){
+    install_int_ex(endTimer, BPS_TO_TIMER(10));
+  }
+
 
    // Motherfing goats!
   if( random( 0, 100) == 0){
@@ -262,7 +294,7 @@ void Game::update(){
   if( key[KEY_M])
     set_next_state( STATE_MENU);
 
-  if(time_to_complete-climb_time<=0){
+  if(time_to_complete-climb_time <= 0){
     set_next_state(STATE_MENU);
   }
 
@@ -278,7 +310,7 @@ void Game::draw(){
   draw_sprite(buffer,background_buildings,0+background_scroll,SCREEN_H-270);
   draw_sprite(buffer,background_buildings,-1024 + background_scroll,SCREEN_H-270);
 
-   // Draw goats
+  // Draw goats
   for( unsigned int i = 0; i < goats.size(); i++)
     goats.at(i).draw( buffer);
 
@@ -294,13 +326,16 @@ void Game::draw(){
   player1 -> draw( buffer);
 
   // Key manager
-  if(!switch_flicked)screen_keys -> draw( buffer);
+  if(!switch_flicked)
+    screen_keys -> draw( buffer);
 
   // Timer
   rectfill(buffer,20,20,620,80,makecol(0,0,0));
   rectfill(buffer,24,24,616,76,makecol(255,255,255));
-  if(distance_is_reached)rectfill(buffer,24,24,616,76,makecol(0,255,0));
-  if(!distance_is_reached)rectfill(buffer,24,24,24+(600*(distance_travelled/level_distance)),76,makecol(0,255,0));
+  if(distance_is_reached)
+    rectfill(buffer,24,24,616,76,makecol(0,255,0));
+  if(!distance_is_reached)
+    rectfill(buffer,24,24,24+(600*(distance_travelled/level_distance)),76,makecol(0,255,0));
 
 
   if(!distance_is_reached)
@@ -311,8 +346,6 @@ void Game::draw(){
   set_alpha_blender();
   draw_trans_sprite(buffer,watch,SCREEN_W-100,SCREEN_H-70);
   textprintf_ex( buffer, dosis_26, SCREEN_W-75,SCREEN_H-60, makecol(255,255,255), -1, "%4.1f", time_to_complete-climb_time);
-
-
 
   // Buffer
   draw_sprite( screen, buffer, 0, 0);
@@ -327,10 +360,29 @@ Game::~Game(){
   destroy_bitmap(background_buildings);
   destroy_bitmap(watch);
 
+  // Stair images
+  destroy_bitmap( stair::image);
+  destroy_bitmap( stair::stage_end_green);
+  destroy_bitmap( stair::image_brick);
+  destroy_bitmap( stair::stage_end_red);
+
+  // Goats
+  destroy_bitmap( goat::goat_image[0]);
+  destroy_bitmap( goat::goat_image[1]);
+
+  // Fonts
   destroy_font(dosis_26);
+
+  // Timers
+  remove_int( gameTimer);
+  remove_int( gameTicker);
+  remove_int( endTimer);
 
   delete screen_keys;
   delete player1;
+
+  goats.clear();
+  allStairs.clear();
 
   // Stop music
   FSOUND_Stream_Stop(mainMusic);

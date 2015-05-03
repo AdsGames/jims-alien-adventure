@@ -24,14 +24,14 @@ stair::stair(float newX, float newY, int newType){
 }
 
 stair::~stair(){
-  //dtor
+  //destroy_bitmap( transparency_bitmap);
 }
 int stair::getType(){
   return type;
 }
 
 void stair::setType(int newType){
-  type=newType;
+  type = newType;
 }
 
 // Update those stairs
