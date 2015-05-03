@@ -10,7 +10,38 @@ Map::Map()
 
   // Load music
   if(!(music = FSOUND_Stream_Open("music/the-experiment.mp3",2, 0, 0))){
-      abort_on_error( "Cannot find music music/the-experiment.mp3 \n Please check your files and try again");
+    abort_on_error( "Cannot find music music/the-experiment.mp3 \n Please check your files and try again");
+  }
+
+  // Load images
+  if(!(map_image = load_bitmap("images/map/map.png", NULL))){
+    abort_on_error( "Cannot find image images/map/map.png \n Please check your files and try again");
+  }
+  if(!(cursor = load_bitmap("images/menu/cursor1.png", NULL))){
+    abort_on_error( "Cannot find image images/menu/cursor1.png \n Please check your files and try again");
+  }
+
+  // Locations
+  if(!(location::pin_image = load_bitmap("images/map/pin.png", NULL))){
+    abort_on_error( "Cannot find image images/map/pin.png \n Please check your files and try again");
+  }
+  if(!(locationImages[0] = load_bitmap("images/map/icon_cntower.png", NULL))){
+    abort_on_error( "Cannot find image images/map/icon_cntower.png \n Please check your files and try again");
+  }
+  if(!(locationImages[1] = load_bitmap("images/map/icon_pyramids.png", NULL))){
+    abort_on_error( "Cannot find image images/map/icon_pyramids.png \n Please check your files and try again");
+  }
+  if(!(locationImages[2] = load_bitmap("images/map/icon_statueofliberty.png", NULL))){
+    abort_on_error( "Cannot find image images/map/icon_statueofliberty.png \n Please check your files and try again");
+  }
+  if(!(locationImages[3] = load_bitmap("images/map/icon_stonehenge.png", NULL))){
+    abort_on_error( "Cannot find image images/map/icon_stonehenge.png \n Please check your files and try again");
+  }
+  if(!(locationImages[4] = load_bitmap("images/map/icon_tajmahal.png", NULL))){
+    abort_on_error( "Cannot find image images/map/icon_tajmahal.png \n Please check your files and try again");
+  }
+  if(!(locationImages[5] = load_bitmap("images/map/icon_wallofchina.png", NULL))){
+    abort_on_error( "Cannot find image images/map/icon_cntower.png \n Please check your files and try again");
   }
 
   // Temporary fonts
@@ -38,18 +69,52 @@ Map::Map()
   // Allow transparency
   set_alpha_blender();
 
-  FSOUND_Stream_Play(0,music);
+  FSOUND_Stream_Play( 0, music);
+
+  // Add locations
+  location cn_tower( 224, 210, locationImages[0]);
+  mapLocations.push_back( cn_tower);
+
+  location pyramids( 418, 243, locationImages[1]);
+  mapLocations.push_back( pyramids);
+
+  location statue_of_liberty( 236, 216, locationImages[2]);
+  mapLocations.push_back( statue_of_liberty);
+
+  location stone_henge( 356, 193, locationImages[3]);
+  mapLocations.push_back( stone_henge);
+
+  location taj_mahal( 503, 250, locationImages[4]);
+  mapLocations.push_back( taj_mahal);
+
+  location wall_of_china( 570, 217, locationImages[5]);
+  mapLocations.push_back( wall_of_china);
 }
 
 void Map::update(){
+  // Change level
+  if( mouse_b & 1){
+    for( unsigned int i = 0; i < mapLocations.size(); i++){
+      if( mapLocations.at(i).CheckHover()){
+        set_next_state( STATE_GAME);
+      }
+    }
+  }
 }
 
 void Map::draw(){
   // Draw background to screen
   rectfill( buffer, 0, 0, SCREEN_W, SCREEN_H, makecol( 255,255,255));
 
-  // Intro stuff here
-  textprintf_ex( buffer, font, 0, 130, makecol(255,255,255), makecol(0,0,0), "MENU!");
+  // Map image
+  draw_sprite( buffer, map_image, 0, 0);
+
+  // Locations
+  for( int i = 0; i < mapLocations.size(); i++)
+    mapLocations.at(i).draw( buffer);
+
+  // Cursor
+  draw_sprite( buffer, cursor, mouse_x, mouse_y);
 
   // Draw Buffer
   draw_sprite( screen, buffer, 0, 0);

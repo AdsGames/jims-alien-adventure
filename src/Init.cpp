@@ -11,7 +11,7 @@ Init::Init()
 
   set_gfx_mode( GFX_AUTODETECT_WINDOWED, 740, 540, 0, 0);
 
-  set_window_title("Tojam 10!");
+  set_window_title("Jim: Alien Adventures");
 
   if(num_joysticks>0)
     input_mode=true;
@@ -20,7 +20,7 @@ Init::Init()
 void Init::update()
 {
   // Change to splash screen
-  set_next_state(STATE_GAME);
+  set_next_state(STATE_MENU);
 }
 
 void Init::draw()

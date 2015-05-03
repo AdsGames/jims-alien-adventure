@@ -14,6 +14,7 @@
 #include "globals.h"
 #include "tools.h"
 #include "button.h"
+#include "goat.h"
 
 class Menu : public GameState
 {
@@ -30,6 +31,9 @@ class Menu : public GameState
     // Movement
     float title_y;
     float city_x;
+
+    // Goats
+    vector<goat> goats;
 
     FSOUND_STREAM* music;
   protected:
