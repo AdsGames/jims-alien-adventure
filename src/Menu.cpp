@@ -14,8 +14,11 @@ Menu::Menu()
   }
 
   // Load images
-  if(!(background = load_bitmap("images/menu/menu.png", NULL))){
+  if(!(background[0] = load_bitmap("images/menu/menu.png", NULL))){
       abort_on_error( "Cannot find image images/menu/menu.png \n Please check your files and try again");
+  }
+  if(!(background[1] = load_bitmap("images/menu/menu_2.png", NULL))){
+      abort_on_error( "Cannot find image images/menu/menu_2.png \n Please check your files and try again");
   }
   if(!(title = load_bitmap("images/menu/title.png", NULL))){
       abort_on_error( "Cannot find image images/menu/title.png \n Please check your files and try again");
@@ -132,6 +135,11 @@ void Menu::update(){
   // Update goats
   for( int i = 0; i < goats.size(); i++)
     goats.at(i).update();
+
+  // Flip switch
+  if( mouse_b & 1 && collisionAny( 579, 610, mouse_x, mouse_x, 235, 270, mouse_y, mouse_y)){
+    switchFlipped = !switchFlipped;
+  }
 }
 
 void Menu::draw(){
@@ -150,7 +158,7 @@ void Menu::draw(){
     goats.at(i).draw( buffer);
 
   // Stairs
-  draw_sprite( buffer, background, 0, 0);
+  draw_sprite( buffer, background[switchFlipped], 0, 0);
 
   // Title
   draw_trans_sprite( buffer, title, 20, title_y);
