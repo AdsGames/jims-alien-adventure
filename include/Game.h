@@ -37,6 +37,7 @@ class Game : public GameState
     player *player1;
 
     SAMPLE* win;
+    SAMPLE *lose;
 
     vector<goat> goats;
 
