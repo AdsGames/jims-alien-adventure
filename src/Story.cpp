@@ -8,6 +8,7 @@ Story::Story()
     abort_on_error( "Cannot find image images/story_splash.png \n Please check your files and try again");
   }
 
+
   // Quick splash
   highcolor_fade_in( story_splash, 32);
 }
@@ -26,6 +27,15 @@ void Story::update(){
 void Story::draw(){
   // Yay draw
   draw_sprite(buffer,story_splash,0,0);
+
+
+  if(frames_done % 40==0)
+    is_showing_text =!is_showing_text;
+
+  if(is_showing_text)
+    textprintf_ex( buffer, font, 25,SCREEN_H-50, makecol(0,0,0), -1, "PRESS ANY KEY TO CONTINUE");
+
+
   draw_sprite(screen,buffer,0,0);
 }
 
