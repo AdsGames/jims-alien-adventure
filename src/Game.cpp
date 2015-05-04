@@ -202,6 +202,10 @@ void Game::init(){
     level_distance = 700;
     time_to_complete = 100;
   }
+  else if(levelOn == "lucas"){
+    level_distance = 4000;
+    time_to_complete = 720;
+  }
 
   // Reset variables
   animationFrame = 0;
