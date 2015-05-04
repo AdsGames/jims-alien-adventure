@@ -35,6 +35,9 @@ void location::draw( BITMAP *tempImage){
     draw_trans_sprite( tempImage, pin_image, x, y);
   else if(name=="wall_of_china" && !beaten_levels[6])
     draw_trans_sprite( tempImage, pin_image, x, y);
+ else if(name=="lucas" && !beaten_levels[7])
+    draw_trans_sprite( tempImage, pin_image, x, y);
+
 
   if(name=="cn_tower" && beaten_levels[0])
     draw_trans_sprite( tempImage, pin_grey_image, x, y);
@@ -47,6 +50,8 @@ void location::draw( BITMAP *tempImage){
   else if(name=="taj_mahal" && beaten_levels[4])
     draw_trans_sprite( tempImage, pin_grey_image, x, y);
   else if(name=="wall_of_china" && beaten_levels[6])
+    draw_trans_sprite( tempImage, pin_grey_image, x, y);
+    else if(name=="lucas" && beaten_levels[7])
     draw_trans_sprite( tempImage, pin_grey_image, x, y);
 
   // Image
