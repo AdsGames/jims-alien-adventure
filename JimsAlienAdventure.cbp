@@ -2,16 +2,17 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="Tojam10Game" />
+		<Option title="Jim&apos;s Alien Adventure" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="build">
-				<Option output="build/Tojam10Game" prefix_auto="1" extension_auto="1" />
+				<Option output="build/Jim&apos;s Alien Adventure" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="build/" />
 				<Option object_output="output/" />
-				<Option type="0" />
+				<Option type="1" />
 				<Option compiler="gcc" />
+				<Option use_console_runner="0" />
 				<Compiler>
 					<Add option="-O2" />
 					<Add directory="include" />
@@ -36,21 +37,34 @@
 		<Unit filename="include/GameState.h" />
 		<Unit filename="include/Init.h" />
 		<Unit filename="include/Intro.h" />
+		<Unit filename="include/Map.h" />
 		<Unit filename="include/Menu.h" />
+		<Unit filename="include/Story.h" />
+		<Unit filename="include/button.h" />
 		<Unit filename="include/globals.h" />
+		<Unit filename="include/goat.h" />
 		<Unit filename="include/key_data.h" />
 		<Unit filename="include/key_manager.h" />
+		<Unit filename="include/location.h" />
 		<Unit filename="include/player.h" />
 		<Unit filename="include/stair.h" />
 		<Unit filename="include/tools.h" />
+		<Unit filename="res/resources.rc">
+			<Option compilerVar="WINDRES" />
+		</Unit>
 		<Unit filename="src/Game.cpp" />
 		<Unit filename="src/GameState.cpp" />
 		<Unit filename="src/Init.cpp" />
 		<Unit filename="src/Intro.cpp" />
+		<Unit filename="src/Map.cpp" />
 		<Unit filename="src/Menu.cpp" />
+		<Unit filename="src/Story.cpp" />
+		<Unit filename="src/button.cpp" />
 		<Unit filename="src/globals.cpp" />
+		<Unit filename="src/goat.cpp" />
 		<Unit filename="src/key_data.cpp" />
 		<Unit filename="src/key_manager.cpp" />
+		<Unit filename="src/location.cpp" />
 		<Unit filename="src/main.cpp" />
 		<Unit filename="src/player.cpp" />
 		<Unit filename="src/stair.cpp" />
