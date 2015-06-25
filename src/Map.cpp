@@ -54,9 +54,6 @@ Map::Map()
   location wall_of_china( 570, 217, "images/map/icon_wallofchina.png", "wall_of_china");
   mapLocations.push_back( wall_of_china);
 
-  location lucas( 300, 400, "images/map/icon_lucas.png", "lucas");
-  mapLocations.push_back( lucas);
-
   // Cursor position
   position_mouse( SCREEN_W / 2, SCREEN_H / 2);
 
