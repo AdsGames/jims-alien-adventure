@@ -1,0 +1,7 @@
+Sound Credits
+--------------
+"goat.wav" - http://freesound.org - esperar
+"lose.wav" - http://www.drpetter.se/project_sfxr.html - sfxr by DrPetter
+"ping.wav" - http://www.drpetter.se/project_sfxr.html - sfxr by DrPetter
+"trip.wav" - http://freesound.org
+"win.wav" - http://freesound.org - stewdio2003

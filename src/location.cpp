@@ -17,7 +17,7 @@ location::location(int newX, int newY, char newImage[], string newName){
 
 // De-construct
 location::~location(){
-  //?? WHY DONT YOUU WORK!K! destroy_bitmap( image);
+  //?? WHY DONT YOUU WORK!K!destroy_bitmap( image);
 }
 
 // Draw image
