@@ -4,13 +4,12 @@
 #include <allegro.h>
 #include "stair.h"
 
-class player
-{
+class player {
   public:
-    player(float newX, float newY);
+    player (float newX, float newY);
     virtual ~player();
 
-    void draw( BITMAP *tempImage);
+    void draw (BITMAP *tempImage);
     void update();
 
     int getX();

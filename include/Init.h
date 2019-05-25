@@ -4,15 +4,14 @@
 #include "GameState.h"
 
 #include <allegro.h>
-#include <alpng.h>
+#include <loadpng.h>
 #include <string>
 #include <vector>
 
 #include "globals.h"
 #include "tools.h"
 
-class Init : public GameState
-{
+class Init : public GameState {
   private:
   protected:
   public:

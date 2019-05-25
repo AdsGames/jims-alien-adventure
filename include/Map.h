@@ -4,26 +4,24 @@
 #include "GameState.h"
 
 #include <allegro.h>
-#include <alpng.h>
+#include <loadpng.h>
 #include <string>
 #include <vector>
 
-#include "fmod/fmod.h"
-#include "fmod/fmod_errors.h"
+#include <logg.h>
 
 #include "globals.h"
 #include "tools.h"
 #include "location.h"
 
-class Map : public GameState
-{
+class Map : public GameState {
   private:
     // Map/GUI
     BITMAP *buffer;
     BITMAP *map_image;
     BITMAP *cursor;
 
-    FSOUND_STREAM *music;
+    SAMPLE *music;
 
     int mickeyx;
     int mickeyy;

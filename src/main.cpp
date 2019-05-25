@@ -1,8 +1,7 @@
 #include <allegro.h>
-#include <alpng.h>
+#include <loadpng.h>
 
-#include "fmod/fmod.h"
-#include "fmod/fmod_errors.h"
+#include <logg.h>
 
 #include "globals.h"
 #include "tools.h"
@@ -28,37 +27,36 @@ volatile int game_time = 0;
 int fps;
 int old_time;
 
-void ticker(){
+void ticker() {
   ticks++;
 }
-END_OF_FUNCTION(ticker)
+END_OF_FUNCTION (ticker)
 
-void game_time_ticker(){
+void game_time_ticker() {
   game_time++;
 }
-END_OF_FUNCTION(ticker)
+END_OF_FUNCTION (ticker)
 
-void close_button_handler(void){
+void close_button_handler (void) {
   close_button_pressed = TRUE;
 }
-END_OF_FUNCTION(close_button_handler)
+END_OF_FUNCTION (close_button_handler)
 
 //Game state object
 GameState *currentState = NULL;
 
 // Change game screen
-void change_state()
-{
+void change_state() {
   //If the state needs to be changed
-  if( nextState != STATE_NULL ){
+  if (nextState != STATE_NULL) {
     //Delete the current state
-    if( nextState != STATE_EXIT ){
+    if (nextState != STATE_EXIT) {
       delete currentState;
       currentState = NULL;
     }
 
     //Change the state
-    switch( nextState ){
+    switch (nextState) {
       case STATE_INIT:
         currentState = new Init();
         break;
@@ -94,32 +92,29 @@ void change_state()
 }
 
 // Setup game
-void setup(){
+void setup() {
   // Load allegro library
   allegro_init();
-  alpng_init();
   install_timer();
   install_keyboard();
   install_mouse();
-  install_joystick(JOY_TYPE_AUTODETECT);
-  install_sound(DIGI_AUTODETECT,MIDI_AUTODETECT,".");
-  set_color_depth(32);
+  install_joystick (JOY_TYPE_AUTODETECT);
+  install_sound (DIGI_AUTODETECT, MIDI_AUTODETECT, ".");
+  set_color_depth (32);
 
-  // Init fmod
-  FSOUND_Init (44100, 32, 0);
 
   // Setup for FPS system
-  LOCK_VARIABLE(ticks);
-  LOCK_FUNCTION(ticker);
-  install_int_ex(ticker, BPS_TO_TIMER(updates_per_second));
+  LOCK_VARIABLE (ticks);
+  LOCK_FUNCTION (ticker);
+  install_int_ex (ticker, BPS_TO_TIMER (updates_per_second));
 
-  LOCK_VARIABLE(game_time);
-  LOCK_FUNCTION(game_time_ticker);
-  install_int_ex(game_time_ticker, BPS_TO_TIMER(10));
+  LOCK_VARIABLE (game_time);
+  LOCK_FUNCTION (game_time_ticker);
+  install_int_ex (game_time_ticker, BPS_TO_TIMER (10));
 
   // Close button
-  LOCK_FUNCTION(close_button_handler);
-  set_close_button_callback(close_button_handler);
+  LOCK_FUNCTION (close_button_handler);
+  set_close_button_callback (close_button_handler);
 
   // Game state
   stateID = STATE_NULL;
@@ -129,18 +124,14 @@ void setup(){
   closeGame = false;
 }
 
-void clean_up()
-{
-    //Delete game state and free state resources
-    delete currentState;
-
-    // Clean up fmod
-    FSOUND_Close();
+void clean_up() {
+  //Delete game state and free state resources
+  delete currentState;
 }
 
 
 //Main function*/
-int main(){
+int main() {
   // Setup basic functionality
   setup();
 
@@ -150,11 +141,12 @@ int main(){
   //Set the current game state object
   currentState = new Init();
 
-  while( !key[KEY_ESC] && !close_button_pressed && stateID != STATE_EXIT){
-    while(ticks == 0){
-      rest(1);
+  while (!key[KEY_ESC] && !close_button_pressed && stateID != STATE_EXIT) {
+    while (ticks == 0) {
+      rest (1);
     }
-    while(ticks > 0){
+
+    while (ticks > 0) {
       int old_ticks = ticks;
 
       //Do state logic
@@ -167,15 +159,18 @@ int main(){
       frames_done++;
 
       ticks--;
-      if(old_ticks <= ticks){
+
+      if (old_ticks <= ticks) {
         break;
       }
     }
-    if(game_time - old_time >= 10){
+
+    if (game_time - old_time >= 10) {
       fps = frames_done;
       frames_done = 0;
       old_time = game_time;
     }
+
     //Do state rendering
     currentState -> draw();
   }
