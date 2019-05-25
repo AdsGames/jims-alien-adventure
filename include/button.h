@@ -6,22 +6,22 @@
 
 using namespace std;
 
-class Button{
+class Button {
   public:
-    Button( char image1[], char image2[], int newX, int newY);
+    Button (char image1[], char image2[], int newX, int newY);
     ~Button();
 
-    void SetImages( char image1[], char image2[]);
+    void SetImages (char image1[], char image2[]);
 
-    void SetHover(bool newHover);
+    void SetHover (bool newHover);
     bool GetHover();
 
-    void draw(BITMAP* tempBitmap);
+    void draw (BITMAP *tempBitmap);
 
-    void SetPosition( int newX, int newY);
+    void SetPosition (int newX, int newY);
 
-    void SetType(int newType);
-    void SetValue(int newValue);
+    void SetType (int newType);
+    void SetValue (int newValue);
 
     bool CheckHover();
 

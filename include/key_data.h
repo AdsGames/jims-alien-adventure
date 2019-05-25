@@ -2,10 +2,9 @@
 #define KEY_DATA_H
 
 // Key for key manager
-class key_data
-{
+class key_data {
   public:
-    key_data(int newValue);
+    key_data (int newValue);
     virtual ~key_data();
 
     // Get key value

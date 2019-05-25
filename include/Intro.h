@@ -4,14 +4,13 @@
 #include "GameState.h"
 
 #include <allegro.h>
-#include <alpng.h>
+#include <loadpng.h>
 
 #include "globals.h"
 #include "tools.h"
 
 // Intro screen of game
-class Intro : public GameState
-{
+class Intro : public GameState {
   private:
     //Intro background
     BITMAP *buffer;

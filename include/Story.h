@@ -4,12 +4,11 @@
 #include "GameState.h"
 
 #include <allegro.h>
-#include <alpng.h>
+#include <loadpng.h>
 #include "tools.h"
 #include "globals.h"
 
-class Story : public GameState
-{
+class Story : public GameState {
   private:
     // Map/GUI
     bool is_showing_text;

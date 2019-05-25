@@ -3,14 +3,13 @@
 
 #include "GameState.h"
 
+#include <logg.h>
+
 #include <allegro.h>
-#include <alpng.h>
+#include <loadpng.h>
 #include <string>
 #include <vector>
 #include <math.h>
-
-#include "fmod/fmod.h"
-#include "fmod/fmod_errors.h"
 
 #include "globals.h"
 #include "tools.h"
@@ -23,20 +22,19 @@
 using namespace std;
 
 // Main game screen
-class Game : public GameState
-{
+class Game : public GameState {
   private:
     // Music
-    FSOUND_STREAM* mainMusic;
+    SAMPLE *mainMusic;
 
     // Variables
     int animationFrame;
 
-    FONT* dosis_26;
+    FONT *dosis_26;
     // Player
     player *player1;
 
-    SAMPLE* win;
+    SAMPLE *win;
     SAMPLE *lose;
 
     // All stairs
@@ -48,11 +46,11 @@ class Game : public GameState
 
     bool sound_played;
     // Images
-    BITMAP* buffer, *stair_buffer;
-    BITMAP* background_sky, *background_buildings;
-    BITMAP* watch;
-    BITMAP* youwin;
-    BITMAP* youlose;
+    BITMAP *buffer, *stair_buffer;
+    BITMAP *background_sky, *background_buildings;
+    BITMAP *watch;
+    BITMAP *youwin;
+    BITMAP *youlose;
 
     float background_scroll;
     float time_to_complete;

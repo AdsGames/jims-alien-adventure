@@ -10,18 +10,17 @@
 
 using namespace std;
 
-class key_manager
-{
+class key_manager {
   public:
-    key_manager(int newX, int newY);
+    key_manager (int newX, int newY);
     virtual ~key_manager();
 
     // All keys
-    static BITMAP* keys[255];
-    static SAMPLE* sounds[5];
+    static BITMAP *keys[255];
+    static SAMPLE *sounds[5];
 
     // Functions
-    void draw( BITMAP *tempImage);
+    void draw (BITMAP *tempImage);
     void update();
 
     bool keyDown();
