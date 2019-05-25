@@ -5,16 +5,15 @@
 #include "tools.h"
 #include "globals.h"
 
-class goat
-{
+class goat {
   public:
-    goat(float newX, float newY, float newScale, float newSpeed);
+    goat (float newX, float newY, float newScale, float newSpeed);
     virtual ~goat();
 
     // Functions
-    void draw( BITMAP* tempImage);
+    void draw (BITMAP *tempImage);
     void update();
-    void fall(float newSpeed);
+    void fall (float newSpeed);
     bool kill();
 
     // Image

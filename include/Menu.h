@@ -4,20 +4,18 @@
 #include "GameState.h"
 
 #include <allegro.h>
-#include <alpng.h>
+#include <loadpng.h>
 #include <string>
 #include <vector>
 
-#include "fmod/fmod.h"
-#include "fmod/fmod_errors.h"
+#include <logg.h>
 
 #include "globals.h"
 #include "tools.h"
 #include "button.h"
 #include "goat.h"
 
-class Menu : public GameState
-{
+class Menu : public GameState {
   private:
     // Menu/GUI
     BITMAP *buffer;
@@ -42,7 +40,7 @@ class Menu : public GameState
     // Goats
     vector<goat> goats;
 
-    FSOUND_STREAM* music;
+    SAMPLE *music;
   protected:
   public:
     //Main loop functions

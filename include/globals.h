@@ -8,19 +8,18 @@
 using namespace std;
 
 // Set next state
-void set_next_state( int newState );
+void set_next_state (int newState);
 
 //Game states
-enum GameStates
-{
-    STATE_NULL,
-    STATE_INIT,
-    STATE_INTRO,
-    STATE_MENU,
-    STATE_STORY,
-    STATE_GAME,
-    STATE_EXIT,
-    STATE_MAP,
+enum GameStates {
+  STATE_NULL,
+  STATE_INIT,
+  STATE_INTRO,
+  STATE_MENU,
+  STATE_STORY,
+  STATE_GAME,
+  STATE_EXIT,
+  STATE_MAP,
 };
 
 // Endgame Variables

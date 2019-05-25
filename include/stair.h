@@ -6,32 +6,31 @@
 
 using namespace std;
 
-class stair
-{
+class stair {
   public:
-    stair(float newX, float newY, int newType);
+    stair (float newX, float newY, int newType);
     virtual ~stair();
 
     int getType();
-    void setType(int newType);
+    void setType (int newType);
 
     // FUNctions
-    void update( vector<stair>* allStairsCopy);
+    void update (vector<stair> *allStairsCopy);
     void movement();
-    void draw( BITMAP *tempImage);
+    void draw (BITMAP *tempImage);
 
-    static float location_y( float oldX);
-    int find_top_stair( int stairIndex);
+    static float location_y (float oldX);
+    int find_top_stair (int stairIndex);
 
     // Static members
     static int numberStairs;
     static float locationOfFinal;
     static float scrollSpeed;
     static bool final_stair_placed;
-    static BITMAP* image;
-    static BITMAP* stage_end_green;
-    static BITMAP* image_brick;
-    static BITMAP* stage_end_red;
+    static BITMAP *image;
+    static BITMAP *stage_end_green;
+    static BITMAP *image_brick;
+    static BITMAP *stage_end_red;
 
     static const int maxScrollSpeed;
   protected:
@@ -42,7 +41,7 @@ class stair
     int type;
     int stairID;
 
-    BITMAP* transparency_bitmap;
+    BITMAP *transparency_bitmap;
 };
 
 #endif // STAIR_H

@@ -1,32 +1,30 @@
 #include "player.h"
 
-BITMAP* player::image[8];
+BITMAP *player::image[8];
 int player::animation_frame;
 
-player::player(float newX, float newY)
-{
+player::player (float newX, float newY) {
   // Assign variables
   x = newX;
   y = newY;
 }
 
-int player::getX(){
+int player::getX() {
   return x;
 }
 
-int player::getY(){
+int player::getY() {
   return y;
 }
 
-player::~player()
-{
+player::~player() {
 }
 
-void player::draw( BITMAP *tempImage){
+void player::draw (BITMAP *tempImage) {
   // Draw
-  draw_sprite( tempImage, image[animation_frame], x, y);
+  draw_sprite (tempImage, image[animation_frame], x, y);
 }
 
-void player::update(){
+void player::update() {
 
 }

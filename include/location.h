@@ -9,12 +9,12 @@
 using namespace std;
 
 // Location for map
-class location{
+class location {
   public:
-    location(int newX, int newY, char newImage[], string newName);
+    location (int newX, int newY, char newImage[], string newName);
     virtual ~location();
 
-    void draw( BITMAP *tempImage);
+    void draw (BITMAP *tempImage);
 
     static BITMAP *pin_image;
     static BITMAP *pin_grey_image;
