@@ -1,10 +1,10 @@
-#include "player.h"
+#include "Player.h"
 
 #include <string>
 
 #include "tools.h"
 
-player::player (float x, float y) {
+Player::Player (float x, float y) {
   this -> x = x;
   this -> y = y;
   this -> frame = 0;
@@ -14,28 +14,28 @@ player::player (float x, float y) {
   }
 }
 
-player::~player() {
+Player::~Player() {
   for (int i = 0; i < 8; i++) {
     destroy_bitmap(images[i]);
   }
 }
 
-int player::getX() {
+int Player::getX() {
   return x;
 }
 
-int player::getY() {
+int Player::getY() {
   return y;
 }
 
-int player::getHeight() {
+int Player::getHeight() {
   return images[0] -> h;
 }
 
-void player::draw (BITMAP *buffer) {
+void Player::draw (BITMAP *buffer) {
   draw_sprite (buffer, images[frame], x, y);
 }
 
-void player::update(int frame) {
+void Player::update(int frame) {
   this -> frame = frame;
 }

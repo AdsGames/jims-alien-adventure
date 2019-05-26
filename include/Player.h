@@ -3,11 +3,11 @@
 
 #include <allegro.h>
 
-class player {
+class Player {
   public:
-    player (float x, float y);
-    player (const player& p);
-    virtual ~player();
+    Player (float x, float y);
+    Player (const Player& p);
+    virtual ~Player();
 
     void draw (BITMAP *buffer);
     void update(int frame);

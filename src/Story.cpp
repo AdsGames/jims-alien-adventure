@@ -1,7 +1,6 @@
 #include "Story.h"
 
 #include "tools.h"
-#include "globals.h"
 
 // Constructor
 Story::Story() {

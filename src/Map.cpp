@@ -47,7 +47,7 @@ void Map::update(StateEngine *engine) {
   poll_joystick();
 
   // Change level
-  if (mouse_b & 1 || (joystick_enabled && joy[0].button[0].b)) {
+  if (mouse_b & 1 || (num_joysticks > 0 && joy[0].button[0].b)) {
     for (unsigned int i = 0; i < locations.size(); i++) {
       if (locations.at(i) -> Hover()) {
         levelOn = locations.at(i) -> GetID();
@@ -57,7 +57,7 @@ void Map::update(StateEngine *engine) {
   }
 
   // Move cursor
-  if (joystick_enabled) {
+  if (num_joysticks > 0) {
     position_mouse (mouse_x + (joy[0].stick[0].axis[0].pos / 30), mouse_y + (joy[0].stick[0].axis[1].pos / 20));
   }
 
