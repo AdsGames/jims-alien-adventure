@@ -3,32 +3,32 @@
 
 #include <allegro.h>
 #include <string>
-#include "tools.h"
-#include "globals.h"
-
-using namespace std;
 
 // Location for map
 class location {
   public:
-    location (int newX, int newY, char newImage[], string newName);
+    location (int x, int y, int id);
+    location (const location& l);
     virtual ~location();
 
-    void draw (BITMAP *tempImage);
+    void Draw (BITMAP *tempImage);
 
-    static BITMAP *pin_image;
-    static BITMAP *pin_grey_image;
+    bool Hover();
 
-    bool CheckHover();
+    std::string GetName();
 
-    string getName();
-  protected:
-    BITMAP *image;
-    int x;
-    int y;
-    bool hover;
-    string name;
   private:
+    static BITMAP *pin_images[2];
+    static BITMAP *images[6];
+    static int location_count;
+
+    static const int num_locations;
+
+    void load_sprites();
+    void unload_sprites();
+
+    int id;
+    int x, y;
 };
 
 #endif // LOCATION_H

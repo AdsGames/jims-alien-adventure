@@ -1,25 +1,26 @@
 #include "button.h"
 
-using namespace std;
+#include "tools.h"
+#include "globals.h"
 
-Button::Button (char image1[], char image2[], int newX, int newY) {
-  // Images
-  if (! (images[0] = load_png (image1, NULL))) {
-    abort_on_error (("Cannot find image " + string (image1) + " \n Please check your files and try again").c_str());
-  }
+#include <iostream>
 
-  if (! (images[1] = load_png (image2, NULL))) {
-    abort_on_error (("Cannot find image " + string (image2) + " \n Please check your files and try again").c_str());
-  }
+Button::Button () {
+  images[0] = nullptr;
+  images[1] = nullptr;
 
-  // Size
-  button_height = images[0] -> h;
-  button_width = images[1] -> w;
+  height = 10;
+  width = 10;
 
-  // Position
-  x = newX;
-  y = newY;
-  hover = false;
+  this -> x = 0;
+  this -> y = 0;
+}
+
+Button::Button (int x, int y) :
+  Button () {
+
+  this -> x = x;
+  this -> y = y;
 }
 
 Button::~Button() {
@@ -27,33 +28,22 @@ Button::~Button() {
   destroy_bitmap (images[1]);
 }
 
-void Button::SetImages (char image1[], char image2[]) {
-  images[0] = load_png (image1, NULL);
-  images[1] = load_png (image2, NULL);
+// Load images from file
+void Button::SetImages (const char *image1, const char *image2) {
+  images[0] = load_png_ex (image1);
+  images[1] = load_png_ex (image2);
+
+  // Size
+  height = images[0] -> h;
+  width = images[1] -> w;
 }
 
-void Button::SetHover (bool newHover) {
-  hover = newHover;
+bool Button::Hover() {
+  return collision(mouse_x, mouse_x, x, x + width, mouse_y, mouse_y, y, y + height);
 }
 
-bool Button::GetHover() {
-  return hover;
-}
-
-bool Button::CheckHover() {
-  if (mouse_x > GetX() && mouse_x < GetX() + button_width && mouse_y > GetY() && mouse_y < GetY() + button_height) {
-    hover = true;
-  }
-  else {
-    hover = false;
-  }
-
-  return hover;
-}
-
-void Button::SetPosition (int newX, int newY) {
-  x = newX;
-  y = newY;
+bool Button::Clicked() {
+  return Hover() && (mouse_b & 1 || (joystick_enabled && joy[0].button[0].b));
 }
 
 int Button::GetX() {
@@ -64,11 +54,8 @@ int Button::GetY() {
   return y;
 }
 
-void Button::draw (BITMAP *tempBitmap) {
-  if (CheckHover()) {
-    draw_sprite (tempBitmap, images[1], x, y);
-  }
-  else {
-    draw_sprite (tempBitmap, images[0], x, y);
+void Button::Draw (BITMAP *buffer) {
+  if (images[Hover()]) {
+    draw_sprite (buffer, images[Hover()], x, y);
   }
 }

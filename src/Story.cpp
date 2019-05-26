@@ -1,43 +1,36 @@
 #include "Story.h"
 
+#include "tools.h"
+#include "globals.h"
+
+// Constructor
 Story::Story() {
-  // Create buffer image
   buffer = create_bitmap (SCREEN_W, SCREEN_H);
+  story_splash = load_png_ex("images/story_splash.png");
 
-  if (! (story_splash = load_png ("images/story_splash.png", NULL))) {
-    abort_on_error ("Cannot find image images/story_splash.png \n Please check your files and try again");
-  }
-
-
-  // Quick splash
   highcolor_fade_in (story_splash, 32);
+  flasher = 0;
 }
 
 // Update
-void Story::update() {
-  for (int i = 0; i < 127; i++) {
-    if (key[i]) {
-      set_next_state (STATE_MENU);
-      break;
-    }
+void Story::update(StateEngine *engine) {
+  if (keyboard_keypressed() || joy_buttonpressed()) {
+    setNextState (engine, StateEngine::STATE_MENU);
   }
 }
 
 // Draw
 void Story::draw() {
-  // Yay draw
+  // Background
   draw_sprite (buffer, story_splash, 0, 0);
 
-
-  if (frames_done % 40 == 0) {
-    is_showing_text = !is_showing_text;
-  }
-
-  if (is_showing_text) {
+  // Any key flasher
+  flasher = (flasher + 1) % flash_frequency;
+  if (flasher > flash_frequency / 2) {
     textprintf_ex (buffer, font, 25, SCREEN_H - 50, makecol (0, 0, 0), -1, "PRESS ANY KEY TO CONTINUE");
   }
 
-
+  // Buffer
   draw_sprite (screen, buffer, 0, 0);
 }
 

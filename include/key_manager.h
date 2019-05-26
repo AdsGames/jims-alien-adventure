@@ -1,14 +1,10 @@
 #ifndef KEY_MANAGER_H
 #define KEY_MANAGER_H
 
-#include <vector>
 #include <allegro.h>
+#include <vector>
 
 #include "key_data.h"
-#include "tools.h"
-#include "stair.h"
-
-using namespace std;
 
 class key_manager {
   public:
@@ -28,7 +24,7 @@ class key_manager {
   protected:
   private:
     // All keys for queue
-    vector<key_data> key_queue;
+    std::vector<key_data> key_queue;
 
     // Positioning
     int x;

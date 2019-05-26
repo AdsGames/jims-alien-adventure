@@ -1,26 +1,27 @@
 #ifndef MENU_H
 #define MENU_H
 
-#include "GameState.h"
+#include "State.h"
 
 #include <allegro.h>
-#include <loadpng.h>
-#include <string>
 #include <vector>
 
-#include <logg.h>
-
-#include "globals.h"
-#include "tools.h"
 #include "button.h"
 #include "goat.h"
 
-class Menu : public GameState {
+class Menu : public State {
+  public:
+    Menu();
+    ~Menu();
+
+    virtual void update(StateEngine *engine) override;
+    virtual void draw() override;
+
   private:
     // Menu/GUI
     BITMAP *buffer;
     BITMAP *title, *sky, *city;
-    BITMAP *cursor;
+    BITMAP *cursor, *cursor2;
     BITMAP *little_xbox_buttons;
     BITMAP *background[2];
 
@@ -28,7 +29,7 @@ class Menu : public GameState {
     SAMPLE *NOTALLOWED;
 
     // Buttons
-    Button *start, *story, *options, *exit;
+    Button start, story, options, exit;
 
     // Movement
     float title_y;
@@ -38,16 +39,9 @@ class Menu : public GameState {
     bool switchFlipped;
 
     // Goats
-    vector<goat> goats;
+    std::vector<goat> goats;
 
     SAMPLE *music;
-  protected:
-  public:
-    //Main loop functions
-    Menu();
-    void update();
-    void draw();
-    ~Menu();
 };
 
 #endif // MENU_H
