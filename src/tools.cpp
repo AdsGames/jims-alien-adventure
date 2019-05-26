@@ -1,5 +1,4 @@
 #include "tools.h"
-#include "globals.h"
 
 #include <logg.h>
 #include <loadpng.h>

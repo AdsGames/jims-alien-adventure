@@ -8,7 +8,6 @@
 // Endgame Variables
 extern bool distance_is_reached;
 extern bool switch_flicked;
-extern bool joystick_enabled;
 
 extern int levelOn;
 

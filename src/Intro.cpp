@@ -1,7 +1,6 @@
 #include "Intro.h"
 
 #include <iostream>
-#include "globals.h"
 #include "tools.h"
 
 Intro::Intro() {

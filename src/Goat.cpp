@@ -1,11 +1,11 @@
-#include "goat.h"
+#include "Goat.h"
 
 #include "tools.h"
 
-BITMAP *goat::goat_image[2] = { nullptr };
-int goat::goat_count = 0;
+BITMAP *Goat::goat_image[2] = { nullptr };
+int Goat::goat_count = 0;
 
-goat::goat (float x, float y, float scale, float speed) {
+Goat::Goat (float x, float y, float scale, float speed) {
   this -> x = x;
   this -> y = y;
   this -> scale = scale;
@@ -16,7 +16,7 @@ goat::goat (float x, float y, float scale, float speed) {
   goat_count++;
 }
 
-goat::goat (const goat& g) {
+Goat::Goat (const Goat& g) {
   this -> x = g.x;
   this -> y = g.y;
   this -> scale = g.scale;
@@ -27,40 +27,40 @@ goat::goat (const goat& g) {
   goat_count++;
 }
 
-goat::~goat() {
+Goat::~Goat() {
   goat_count--;
   if (goat_count == 0)
     unload_sprites();
 }
 
 // Load images
-void goat::load_sprites() {
+void Goat::load_sprites() {
   goat_image[0] = load_png_ex("images/goat_alien.png");
   goat_image[1] = load_png_ex("images/goat_alien_2.png");
 }
 
 // Unload images
-void goat::unload_sprites() {
+void Goat::unload_sprites() {
   destroy_bitmap(goat_image[0]);
   destroy_bitmap(goat_image[1]);
 }
 
 // Update
-void goat::update() {
+void Goat::update() {
   x -= speed;
 }
 
 // Kill
-bool goat::offScreen() {
+bool Goat::offScreen() {
   return (x + goat_image[0] -> w - speed < 0 || x - speed > SCREEN_W || y > SCREEN_H || y + goat_image[0] -> h < 0);
 }
 
 // Fall!
-void goat::fall (float speed) {
+void Goat::fall (float speed) {
   y += speed;
 }
 
 // Draw
-void goat::draw (BITMAP *buffer) {
+void Goat::draw (BITMAP *buffer) {
   stretch_sprite (buffer, goat_image[random (0, 1)], x, y, goat_image[0] -> w * scale, goat_image[1] -> h * scale);
 }

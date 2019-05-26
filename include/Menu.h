@@ -6,8 +6,8 @@
 #include <allegro.h>
 #include <vector>
 
-#include "button.h"
-#include "goat.h"
+#include "Button.h"
+#include "Goat.h"
 
 class Menu : public State {
   public:
@@ -38,7 +38,7 @@ class Menu : public State {
     bool switchFlipped;
 
     // Goats
-    std::vector<goat> goats;
+    std::vector<Goat> goats;
 
     SAMPLE *music;
 };

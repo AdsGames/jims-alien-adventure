@@ -3,11 +3,11 @@
 
 #include <allegro.h>
 
-class goat {
+class Goat {
   public:
-    goat (float x, float y, float scale, float speed);
-    goat (const goat& g);
-    virtual ~goat();
+    Goat (float x, float y, float scale, float speed);
+    Goat (const Goat& g);
+    virtual ~Goat();
 
     // Functions
     void update();
