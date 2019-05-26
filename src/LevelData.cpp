@@ -1,16 +1,13 @@
 #include "LevelData.h"
 
 #include <allegro.h>
-#include <iostream>
+#include "tools.h"
 
 LevelData *LevelData::instance = nullptr;
 
 LevelData::LevelData(const char *file) {
-  Load(file);
-}
-
-LevelData::~LevelData() {
-
+  if (!Load(file))
+    abort_on_error((std::string("Could not open config file ") + file).c_str());
 }
 
 bool LevelData::Load(const char *file) {

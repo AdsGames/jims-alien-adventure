@@ -7,7 +7,7 @@
 // Location for map
 class MapPin {
   public:
-    MapPin (int x, int y, int id);
+    MapPin (int x, int y, std::string folder, bool completed, int id);
     virtual ~MapPin();
 
     void Draw (BITMAP *tempImage);
@@ -17,15 +17,14 @@ class MapPin {
   private:
     BITMAP *image;
     static BITMAP *pin_images[2];
-    static int location_count;
-
-    static const int num_locations;
+    static int pin_count;
 
     void load_sprites();
     void unload_sprites();
 
     int id;
     int x, y;
+    bool completed;
 };
 
 #endif // MAP_PIN_H

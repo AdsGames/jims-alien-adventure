@@ -17,7 +17,7 @@ Map::Map() {
   // Add locations
   for (int i = 0; i < LevelData::GetLevelData() -> GetNumLevels(); i++) {
     Level *l = LevelData::GetLevelData() -> GetLevel(i);
-    locations.push_back (new MapPin(l -> pin_x, l -> pin_y, l -> id));
+    locations.push_back (new MapPin(l -> pin_x, l -> pin_y, l -> folder, l -> completed, l -> id));
   }
 
   // Cursor position
