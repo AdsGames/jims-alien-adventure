@@ -10,63 +10,62 @@
 				<Option output="build/Jim&apos;s Alien Adventure" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="build/" />
 				<Option object_output="output/" />
-				<Option type="0" />
+				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
-					<Add option="-O2" />
+					<Add option="-Wextra" />
+					<Add option="-Wall" />
+					<Add option="-std=c++14" />
+					<Add option="-g" />
 					<Add directory="include" />
 				</Compiler>
 				<Linker>
-					<Add option="-s" />
-					<Add option="-lfmod" />
-					<Add option="-lalpng" />
-					<Add option="-lalleg" />
+					<Add option="-llogg" />
+					<Add option="-lvorbisfile" />
+					<Add option="-lvorbis" />
+					<Add option="-logg" />
+					<Add option="-lloadpng" />
+					<Add option="-lalleg44" />
 				</Linker>
 			</Target>
 		</Build>
-		<Compiler>
-			<Add option="-Wall" />
-		</Compiler>
-		<Linker>
-			<Add option="-lfmod" />
-			<Add option="-lalpng" />
-			<Add option="-lalleg" />
-		</Linker>
+		<Unit filename="include/Button.h" />
 		<Unit filename="include/Game.h" />
-		<Unit filename="include/GameState.h" />
+		<Unit filename="include/Goat.h" />
 		<Unit filename="include/Init.h" />
 		<Unit filename="include/Intro.h" />
+		<Unit filename="include/KeyManager.h" />
+		<Unit filename="include/LevelData.h" />
 		<Unit filename="include/Map.h" />
+		<Unit filename="include/MapPin.h" />
 		<Unit filename="include/Menu.h" />
+		<Unit filename="include/Player.h" />
+		<Unit filename="include/Stair.h" />
+		<Unit filename="include/State.h" />
 		<Unit filename="include/Story.h" />
-		<Unit filename="include/button.h" />
 		<Unit filename="include/globals.h" />
-		<Unit filename="include/goat.h" />
 		<Unit filename="include/key_data.h" />
-		<Unit filename="include/key_manager.h" />
-		<Unit filename="include/location.h" />
-		<Unit filename="include/player.h" />
-		<Unit filename="include/stair.h" />
 		<Unit filename="include/tools.h" />
 		<Unit filename="res/resources.rc">
 			<Option compilerVar="WINDRES" />
 		</Unit>
+		<Unit filename="src/Button.cpp" />
 		<Unit filename="src/Game.cpp" />
-		<Unit filename="src/GameState.cpp" />
+		<Unit filename="src/Goat.cpp" />
 		<Unit filename="src/Init.cpp" />
 		<Unit filename="src/Intro.cpp" />
+		<Unit filename="src/KeyManager.cpp" />
+		<Unit filename="src/LevelData.cpp" />
 		<Unit filename="src/Map.cpp" />
+		<Unit filename="src/MapPin.cpp" />
 		<Unit filename="src/Menu.cpp" />
+		<Unit filename="src/Player.cpp" />
+		<Unit filename="src/Stair.cpp" />
+		<Unit filename="src/State.cpp" />
 		<Unit filename="src/Story.cpp" />
-		<Unit filename="src/button.cpp" />
 		<Unit filename="src/globals.cpp" />
-		<Unit filename="src/goat.cpp" />
 		<Unit filename="src/key_data.cpp" />
-		<Unit filename="src/key_manager.cpp" />
-		<Unit filename="src/location.cpp" />
 		<Unit filename="src/main.cpp" />
-		<Unit filename="src/player.cpp" />
-		<Unit filename="src/stair.cpp" />
 		<Unit filename="src/tools.cpp" />
 		<Extensions>
 			<code_completion />
