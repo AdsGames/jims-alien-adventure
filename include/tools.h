@@ -4,8 +4,8 @@
 #include <allegro.h>
 
 // Key or joy button pressed
-extern bool keyboard_keypressed();
-extern bool joy_buttonpressed();
+extern bool key_down();
+extern bool button_down();
 
 //Collision
 extern bool collision (int xMin1, int xMax1, int xMin2, int xMax2, int yMin1, int yMax1, int yMin2, int yMax2);
@@ -13,9 +13,6 @@ extern bool collision (int xMin1, int xMax1, int xMin2, int xMax2, int yMin1, in
 // Mouse position including resolution difference
 extern int mouseX();
 extern int mouseY();
-
-//Checks if file exists
-extern bool fexists (const char *filename);
 
 //Random number generator
 extern int random (int newLowest, int newHighest);

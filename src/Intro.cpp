@@ -24,7 +24,7 @@ Intro::~Intro() {
 }
 
 void Intro::update(StateEngine *engine) {
-  if (clock() - intro_time >= 3400 || keyboard_keypressed() || joy_buttonpressed()) {
+  if (clock() - intro_time >= 3400 || key_down() || button_down()) {
     setNextState (engine, StateEngine::STATE_MENU);
   }
 }
