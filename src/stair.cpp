@@ -1,6 +1,7 @@
 #include "stair.h"
 #include "globals.h"
 
+#include "LevelData.h"
 #include "tools.h"
 #include "globals.h"
 
@@ -56,10 +57,11 @@ stair::~stair() {
 
 // Load images
 void stair::load_sprites() {
-  images[IMG_STAIRS] = load_png_ex (("images/stairs/" + levelOn + "/stairs.png").c_str());
-  images[IMG_BRICK] = load_png_ex (("images/stairs/" + levelOn + "/brick.png").c_str());
-  images[IMG_TOP_RED] = load_png_ex (("images/stairs/" + levelOn + "/stage_end_red.png").c_str());
-  images[IMG_TOP_GREEN] = load_png_ex (("images/stairs/" + levelOn + "/stage_end_green.png").c_str());
+  std::string folder = LevelData::GetLevelData() -> GetLevel(levelOn) -> folder;
+  images[IMG_STAIRS] = load_png_ex (("images/levels/" + folder + "/stairs.png").c_str());
+  images[IMG_BRICK] = load_png_ex (("images/levels/" + folder + "/brick.png").c_str());
+  images[IMG_TOP_RED] = load_png_ex (("images/levels/" + folder + "/stage_end_red.png").c_str());
+  images[IMG_TOP_GREEN] = load_png_ex (("images/levels/" + folder + "/stage_end_green.png").c_str());
 }
 
 // Unload images

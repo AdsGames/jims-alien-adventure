@@ -9,7 +9,7 @@ class Init : public State {
     ~Init() {};
 
     virtual void update(StateEngine *engine) override;
-    virtual void draw() override {};
+    virtual void draw(BITMAP *buffer) override;
 };
 
 #endif // INIT_H

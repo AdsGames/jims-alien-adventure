@@ -4,9 +4,6 @@
 #include "tools.h"
 
 Map::Map() {
-  // Create buffer image
-  buffer = create_bitmap (SCREEN_W, SCREEN_H);
-
   // Load music
   music = load_ogg_ex("music/the-experiment.ogg");
 
@@ -18,18 +15,31 @@ Map::Map() {
   set_alpha_blender();
 
   // Add locations
-  locations.push_back (location(224, 210, 0));
-  locations.push_back (location(418, 243, 1));
-  locations.push_back (location(236, 216, 2));
-  locations.push_back (location(356, 193, 3));
-  locations.push_back (location(503, 250, 4));
-  locations.push_back (location(570, 217, 5));
+  for (int i = 0; i < LevelData::GetLevelData() -> GetNumLevels(); i++) {
+    Level *l = LevelData::GetLevelData() -> GetLevel(i);
+    locations.push_back (new MapPin(l -> pin_x, l -> pin_y, l -> id));
+  }
 
   // Cursor position
   position_mouse (SCREEN_W / 2, SCREEN_H / 2);
 
   // Start music
   play_sample (music, 255, 128, 1000, 1);
+}
+
+Map::~Map() {
+  // Destory Bitmaps
+  destroy_bitmap (map_image);
+  destroy_bitmap (cursor);
+
+  locations.clear();
+
+  // Stop music
+  stop_sample (music);
+  destroy_sample (music);
+
+  // Fade out
+  highcolor_fade_out (16);
 }
 
 void Map::update(StateEngine *engine) {
@@ -39,8 +49,8 @@ void Map::update(StateEngine *engine) {
   // Change level
   if (mouse_b & 1 || (joystick_enabled && joy[0].button[0].b)) {
     for (unsigned int i = 0; i < locations.size(); i++) {
-      if (locations.at (i).Hover()) {
-        levelOn = locations.at (i).GetName();
+      if (locations.at(i) -> Hover()) {
+        levelOn = locations.at(i) -> GetID();
         setNextState (engine, StateEngine::STATE_GAME);
       }
     }
@@ -57,7 +67,7 @@ void Map::update(StateEngine *engine) {
   }
 }
 
-void Map::draw() {
+void Map::draw(BITMAP *buffer) {
   // Draw background to screen
   rectfill (buffer, 0, 0, SCREEN_W, SCREEN_H, makecol (255, 255, 255));
 
@@ -66,28 +76,9 @@ void Map::draw() {
 
   // Locations
   for (unsigned int i = 0; i < locations.size(); i++) {
-    locations.at (i).Draw (buffer);
+    locations.at(i) -> Draw (buffer);
   }
 
   // Cursor
   draw_sprite (buffer, cursor, mouse_x - cursor -> w / 2, mouse_y - cursor -> h / 2);
-
-  // Draw Buffer
-  draw_sprite (screen, buffer, 0, 0);
-}
-
-Map::~Map() {
-  // Destory Bitmaps
-  destroy_bitmap (buffer);
-  destroy_bitmap (map_image);
-  destroy_bitmap (cursor);
-
-  locations.clear();
-
-  // Stop music
-  stop_sample (music);
-  destroy_sample (music);
-
-  // Fade out
-  highcolor_fade_out (16);
 }

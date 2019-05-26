@@ -18,7 +18,6 @@ Intro::Intro() {
 
 Intro::~Intro() {
   // Clear memory
-  destroy_bitmap (buffer);
   destroy_bitmap (splash);
   destroy_bitmap (logo);
 
@@ -32,11 +31,11 @@ void Intro::update(StateEngine *engine) {
   }
 }
 
-void Intro::draw() {
+void Intro::draw(BITMAP *buffer) {
   if (clock() - intro_time < 1700) {
-    stretch_sprite (screen, logo, 0, 0, SCREEN_W, SCREEN_H);
+    stretch_sprite (buffer, logo, 0, 0, SCREEN_W, SCREEN_H);
   }
   else {
-    stretch_sprite (screen, splash, 0, 0, SCREEN_W, SCREEN_H);
+    stretch_sprite (buffer, splash, 0, 0, SCREEN_W, SCREEN_H);
   }
 }

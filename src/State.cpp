@@ -21,9 +21,9 @@ StateEngine::StateEngine() {
 }
 
 // Draw
-void StateEngine::draw() {
+void StateEngine::draw(BITMAP *buffer) {
   if (state) {
-    state -> draw();
+    state -> draw(buffer);
   }
 }
 

@@ -4,9 +4,6 @@
 #include "tools.h"
 
 Menu::Menu() {
-  // Create buffer image
-  buffer = create_bitmap (SCREEN_W, SCREEN_H);
-
   // Load music
   music = load_ogg_ex("music/JAA-Theme.ogg");
 
@@ -18,8 +15,8 @@ Menu::Menu() {
   background[1] = load_png_ex ("images/menu/menu_2.png");
 
   title = load_png_ex ("images/menu/title.png");
-  sky = load_png_ex ("images/stairs/statue_of_liberty/sky.png");
-  city = load_png_ex ("images/stairs/statue_of_liberty/parallax.png");
+  sky = load_png_ex ("images/levels/statue_of_liberty/sky.png");
+  city = load_png_ex ("images/levels/statue_of_liberty/parallax.png");
   cursor = load_png_ex ("images/menu/cursor1.png");
   cursor2 = load_png_ex ("images/menu/cursor2.png");
 
@@ -52,6 +49,28 @@ Menu::Menu() {
   play_sample (music, 255, 128, 1000, 1);
 }
 
+Menu::~Menu() {
+  // Destory Bitmaps
+  destroy_bitmap (title);
+  destroy_bitmap (sky);
+  destroy_bitmap (city);
+  destroy_bitmap (cursor);
+  destroy_bitmap (background[0]);
+  destroy_bitmap (background[1]);
+
+  // Clear away goats
+  goats.clear();
+
+  // Stop music
+  stop_sample (music);
+
+  // Clear keybuff
+  clear_keybuf();
+
+  // Fade out
+  highcolor_fade_out (32);
+}
+
 void Menu::update(StateEngine *engine) {
   // Poll joystick
   poll_joystick();
@@ -80,7 +99,7 @@ void Menu::update(StateEngine *engine) {
     setNextState (engine, StateEngine::STATE_EXIT);
 
   // Motherfing goats!
-  if (random (0, 100) == 0) {
+  if (random (0, 80) == 0) {
     float randomDistance = float (random (2, 6)) / 10;
     goat newGoat (SCREEN_W, random (0, SCREEN_H), randomDistance, randomDistance * 3);
     goats.push_back (newGoat);
@@ -102,7 +121,7 @@ void Menu::update(StateEngine *engine) {
   }
 }
 
-void Menu::draw() {
+void Menu::draw(BITMAP *buffer) {
   // Draw background to screen
   rectfill (buffer, 0, 0, SCREEN_W, SCREEN_H, makecol (255, 255, 255));
 
@@ -145,30 +164,4 @@ void Menu::draw() {
   else {
     draw_sprite (buffer, cursor, mouse_x, mouse_y);
   }
-
-  // Draw Buffer
-  draw_sprite (screen, buffer, 0, 0);
-}
-
-Menu::~Menu() {
-  // Destory Bitmaps
-  destroy_bitmap (buffer);
-  destroy_bitmap (title);
-  destroy_bitmap (sky);
-  destroy_bitmap (city);
-  destroy_bitmap (cursor);
-  destroy_bitmap (background[0]);
-  destroy_bitmap (background[1]);
-
-  // Clear away goats
-  goats.clear();
-
-  // Stop music
-  stop_sample (music);
-
-  // Clear keybuff
-  clear_keybuf();
-
-  // Fade out
-  highcolor_fade_out (32);
 }
