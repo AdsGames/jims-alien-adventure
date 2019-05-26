@@ -9,7 +9,7 @@ class key_data {
 
     // Get key value
     int getValue();
-  protected:
+
   private:
     // Value stored
     int value;

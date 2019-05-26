@@ -1,25 +1,15 @@
 #ifndef INIT_H
 #define INIT_H
 
-#include "GameState.h"
+#include "State.h"
 
-#include <allegro.h>
-#include <loadpng.h>
-#include <string>
-#include <vector>
-
-#include "globals.h"
-#include "tools.h"
-
-class Init : public GameState {
-  private:
-  protected:
+class Init : public State {
   public:
-    //Main loop functions
     Init();
-    void update();
-    void draw();
-    ~Init();
+    ~Init() {};
+
+    virtual void update(StateEngine *engine) override;
+    virtual void draw() override {};
 };
 
 #endif // INIT_H

@@ -1,135 +1,83 @@
 #include "Menu.h"
 
+#include "globals.h"
+#include "tools.h"
+
 Menu::Menu() {
   // Create buffer image
   buffer = create_bitmap (SCREEN_W, SCREEN_H);
 
   // Load music
-  if (! (music = logg_load ("music/JAA-Theme.ogg"))) {
-    abort_on_error ("Cannot find music music/JAA-Theme.ogg \n Please check your files and try again");
-  }
+  music = load_ogg_ex("music/JAA-Theme.ogg");
 
   // Load sound
-  if (! (NOTALLOWED = load_sample ("sounds/goat.wav"))) {
-    abort_on_error ("Cannot find music sounds/goat.wav \n Please check your files and try again");
-  }
+  NOTALLOWED = load_sample_ex("sounds/goat.wav");
 
   // Load images
-  if (! (background[0] = load_png ("images/menu/menu.png", NULL))) {
-    abort_on_error ("Cannot find image images/menu/menu.png \n Please check your files and try again");
-  }
+  background[0] = load_png_ex("images/menu/menu.png");
+  background[1] = load_png_ex ("images/menu/menu_2.png");
 
-  if (! (background[1] = load_png ("images/menu/menu_2.png", NULL))) {
-    abort_on_error ("Cannot find image images/menu/menu_2.png \n Please check your files and try again");
-  }
+  title = load_png_ex ("images/menu/title.png");
+  sky = load_png_ex ("images/stairs/statue_of_liberty/sky.png");
+  city = load_png_ex ("images/stairs/statue_of_liberty/parallax.png");
+  cursor = load_png_ex ("images/menu/cursor1.png");
+  cursor2 = load_png_ex ("images/menu/cursor2.png");
 
-  if (! (title = load_png ("images/menu/title.png", NULL))) {
-    abort_on_error ("Cannot find image images/menu/title.png \n Please check your files and try again");
-  }
-
-  if (! (sky = load_png ("images/stairs/statue_of_liberty/sky.png", NULL))) {
-    abort_on_error ("Cannot find image images/stairs/statue_of_liberty/sky.png \n Please check your files and try again");
-  }
-
-  if (! (city = load_png ("images/stairs/statue_of_liberty/parallax.png", NULL))) {
-    abort_on_error ("Cannot find image images/stairs/statue_of_liberty/parallax.png \n Please check your files and try again");
-  }
-
-  if (! (cursor = load_png ("images/menu/cursor1.png", NULL))) {
-    abort_on_error ("Cannot find image images/menu/cursor1.png \n Please check your files and try again");
-  }
-
-  if (! (goat::goat_image[0] = load_png ("images/goat_alien.png", NULL))) {
-    abort_on_error ("Cannot find image images/goat_alien.png \n Please check your files and try again");
-  }
-
-  if (! (goat::goat_image[1] = load_png ("images/goat_alien_2.png", NULL))) {
-    abort_on_error ("Cannot find image images/goat_alien_2.png \n Please check your files and try again");
-  }
-
-  if (! (little_xbox_buttons = load_png ("images/menu/angle_buttons.png", NULL))) {
-    abort_on_error ("Cannot find image images/menu/angle_buttons.png \n Please check your files and try again");
-  }
-
-  // Temporary fonts
-  FONT *f1, *f2, *f3, *f4, *f5;
+  little_xbox_buttons = load_png_ex ("images/menu/angle_buttons.png");
 
   //Sets Font
-  if (! (f1 = load_font (("fonts/dosis.pcx"), NULL, NULL))) {
-    abort_on_error ("Cannot find font fonts/dosis.png \n Please check your files and try again");
-  }
-
-  f2 = extract_font_range (f1, ' ', 'A' - 1);
-  f3 = extract_font_range (f1, 'A', 'Z');
-  f4 = extract_font_range (f1, 'Z' + 1, 'z');
-
-  //Merge fonts
-  font = merge_fonts (f4, f5 = merge_fonts (f2, f3));
-
-  //Destroy temporary fonts
-  destroy_font (f1);
-  destroy_font (f2);
-  destroy_font (f3);
-  destroy_font (f4);
-  destroy_font (f5);
+  font = load_font_ex("fonts/dosis.pcx");
 
   // Allow transparency
   set_alpha_blender();
 
   // Variable set
-  title_y = -title -> h;
+  title_y = -(title -> h + 20);
   city_x = 0;
   switchFlipped = false;
 
   // Buttons
-  start = new Button ("images/menu/button_play.png", "images/menu/button_pushed_play.png", 30, 190);
-  story = new Button ("images/menu/button_story.png", "images/menu/button_pushed_story.png", 195, 190);
-  options = new Button ("images/menu/button_options.png", "images/menu/button_pushed_options.png", 30, 300);
-  exit = new Button ("images/menu/button_exit.png", "images/menu/button_pushed_exit.png", 195, 300);
+  start = Button (30, 190);
+  start.SetImages("images/menu/button_play.png", "images/menu/button_pushed_play.png");
+
+  story = Button (195, 190);
+  story.SetImages("images/menu/button_story.png", "images/menu/button_pushed_story.png");
+
+  options = Button (30, 300);
+  options.SetImages("images/menu/button_options.png", "images/menu/button_pushed_options.png");
+
+  exit = Button (195, 300);
+  exit.SetImages("images/menu/button_exit.png", "images/menu/button_pushed_exit.png");
 
   play_sample (music, 255, 128, 1000, 1);
 }
 
-void Menu::update() {
+void Menu::update(StateEngine *engine) {
   // Poll joystick
   poll_joystick();
 
   // Drop title
-  if (title_y < 20) {
-    title_y += (20 - title_y) / 80;
-  }
-  else {
-    title_y = 100;
-  }
+  title_y = title_y < 20 ? title_y + (20 - title_y) / 80 : 100;
 
   // Move city
-  if (city_x < -city -> w) {
-    city_x = city_x + city -> w;
-  }
-  else {
-    city_x -= 2;
-  }
-
+  city_x = city_x < -city -> w ? city_x + city -> w : city_x - 2;
 
   // Buttons
-  if ((start -> CheckHover() && mouse_b & 1) || (joystick_enabled && joy[0].button[0].b)) {
-    set_next_state (STATE_MAP);
-  }
+  if (start.Clicked())
+    setNextState (engine, StateEngine::STATE_MAP);
 
-  if ((story -> CheckHover() && mouse_b & 1) || (joystick_enabled && joy[0].button[2].b)) {
-    set_next_state (STATE_STORY);
-  }
+  if (story.Clicked())
+    setNextState (engine, StateEngine::STATE_STORY);
 
-  if ((options -> CheckHover() && mouse_b & 1) || (joystick_enabled && joy[0].button[3].b)) {
+  if (options.Clicked()) {
     play_sample (NOTALLOWED, 255, 125, 1000, 0);
-    float randomDistance = float (random (2, 6)) / 10;
+    float randomDistance = float (random (2, 6)) / 10.0f;
     goat newGoat (SCREEN_W, random (0, SCREEN_H), randomDistance, randomDistance * 3);
     goats.push_back (newGoat);
   }
 
-  if ((exit -> CheckHover() && mouse_b & 1) || (joystick_enabled && joy[0].button[1].b)) {
-    set_next_state (STATE_EXIT);
-  }
+  if (exit.Clicked())
+    setNextState (engine, StateEngine::STATE_EXIT);
 
   // Motherfing goats!
   if (random (0, 100) == 0) {
@@ -139,24 +87,16 @@ void Menu::update() {
   }
 
   // Update goats
-  for (unsigned int i = 0; i < goats.size(); i++) {
-    // Update
-    goats.at (i).update();
-
-    // Make them fall
-    if (switchFlipped) {
-      goats.at (i).fall (5);
-    }
-
-    // Destroy goat
-    if (goats.at (i).kill()) {
-      goats.erase (goats.begin() + i);
-    }
+  for (auto g = goats.begin(); g < goats.end(); ) {
+    g -> update();
+    g -> fall (switchFlipped * 5);
+    g -> offScreen() ? g = goats.erase(g) : ++g;
   }
 
   // Flip switch
   if (mouse_b & 1) {
-    if ((!switchFlipped && collisionAny (595, 607, mouse_x, mouse_x, 236, 248, mouse_y, mouse_y)) || (switchFlipped && collisionAny (579, 591, mouse_x, mouse_x, 235, 247, mouse_y, mouse_y))) {
+    if ((!switchFlipped && collision (595, 607, mouse_x, mouse_x, 236, 248, mouse_y, mouse_y)) ||
+         (switchFlipped && collision (579, 591, mouse_x, mouse_x, 235, 247, mouse_y, mouse_y))) {
       switchFlipped = !switchFlipped;
     }
   }
@@ -185,21 +125,26 @@ void Menu::draw() {
   draw_trans_sprite (buffer, title, 20, title_y);
 
   // Buttons
-  start -> draw (buffer);
-  story -> draw (buffer);
-  options -> draw (buffer);
-  exit -> draw (buffer);
+  start.Draw (buffer);
+  story.Draw (buffer);
+  options.Draw (buffer);
+  exit.Draw (buffer);
 
   // Joystick helpers
   if (joystick_enabled) {
-    masked_blit (little_xbox_buttons, buffer, 60, 0, start   -> GetX() + 25 - 4 * start   -> CheckHover(), start   -> GetY() + 114 - start   -> CheckHover(), 20, 20);
-    masked_blit (little_xbox_buttons, buffer, 40, 0, story   -> GetX() + 25 - 4 * story   -> CheckHover(), story   -> GetY() + 114 - story   -> CheckHover(), 20, 20);
-    masked_blit (little_xbox_buttons, buffer, 0, 0, options -> GetX() + 25 - 4 * options -> CheckHover(), options -> GetY() + 114 - options -> CheckHover(), 20, 20);
-    masked_blit (little_xbox_buttons, buffer, 20, 0, exit    -> GetX() + 25 - 4 * exit    -> CheckHover(), exit    -> GetY() + 114 - exit    -> CheckHover(), 20, 20);
+    masked_blit (little_xbox_buttons, buffer, 60, 0, start.GetX()   + 21 - 4 * start.Hover()  , start.GetY()   + 114 - start.Hover()  , 20, 20);
+    masked_blit (little_xbox_buttons, buffer, 40, 0, story.GetX()   + 25 - 4 * story.Hover()  , story.GetY()   + 114 - story.Hover()  , 20, 20);
+    masked_blit (little_xbox_buttons, buffer,  0, 0, options.GetX() + 25 - 4 * options.Hover(), options.GetY() + 114 - options.Hover(), 20, 20);
+    masked_blit (little_xbox_buttons, buffer, 20, 0, exit.GetX()    + 25 - 4 * exit.Hover()   , exit.GetY()    + 114 - exit.Hover()   , 20, 20);
   }
 
   // Cursor
-  draw_sprite (buffer, cursor, mouse_x, mouse_y);
+  if (start.Hover() || story.Hover() || options.Hover() || exit.Hover()) {
+    draw_sprite (buffer, cursor2, mouse_x, mouse_y);
+  }
+  else {
+    draw_sprite (buffer, cursor, mouse_x, mouse_y);
+  }
 
   // Draw Buffer
   draw_sprite (screen, buffer, 0, 0);
@@ -214,14 +159,6 @@ Menu::~Menu() {
   destroy_bitmap (cursor);
   destroy_bitmap (background[0]);
   destroy_bitmap (background[1]);
-  destroy_bitmap (goat::goat_image[0]);
-  destroy_bitmap (goat::goat_image[1]);
-
-  // Kill pointers
-  delete start;
-  delete story;
-  delete options;
-  delete exit;
 
   // Clear away goats
   goats.clear();

@@ -1,5 +1,10 @@
 #include "Game.h"
 
+#include <math.h>
+
+#include "globals.h"
+#include "tools.h"
+
 volatile int Game::timer1 = 0;
 volatile float Game::climb_time = 0;
 volatile float Game::time_since_win = 0;
@@ -45,158 +50,47 @@ void Game::init() {
   srand (time (NULL));
 
   // Load music
-  if (! (mainMusic = logg_load ("music/JAA-Ingame.ogg"))) {
-    abort_on_error ("Cannot find music music/JAA-Ingame.ogg \n Please check your files and try again");
-  }
+  music = load_ogg_ex("music/JAA-Ingame.ogg");
 
   // Load images
-  if (! (stair::image = load_png (("images/stairs/" + levelOn + "/stairs.png").c_str(), NULL))) {
-    abort_on_error (("Cannot find image images/stairs/" + levelOn + "/stairs.png \n Please check your files and try again").c_str());
-  }
-
-  if (! (stair::stage_end_red = load_png (("images/stairs/" + levelOn + "/stage_end_red.png").c_str(), NULL))) {
-    abort_on_error (("Cannot find image images/stairs/" + levelOn + "/stage_end_red.png \n Please check your files and try again").c_str());
-  }
-
-  if (! (stair::stage_end_green = load_png (("images/stairs/" + levelOn + "/stage_end_green.png").c_str(), NULL))) {
-    abort_on_error (("Cannot find image images/stairs/" + levelOn + "/stage_end_green.png \n Please check your files and try again").c_str());
-  }
-
-  if (! (stair::image_brick = load_png (("images/stairs/" + levelOn + "/brick.png").c_str(), NULL))) {
-    abort_on_error (("Cannot find image images/stairs/" + levelOn + "/brick.png \n Please check your files and try again").c_str());
-  }
-
-  if (! (background_sky = load_png (("images/stairs/" + levelOn + "/sky.png").c_str(), NULL))) {
-    abort_on_error (("Cannot find image images/stairs/" + levelOn + "/sky.png \n Please check your files and try again").c_str());
-  }
-
-  if (! (background_buildings = load_png (("images/stairs/" + levelOn + "/parallax.png").c_str(), NULL))) {
-    abort_on_error (("Cannot find image images/stairs/" + levelOn + "/parallax.png \n Please check your files and try again").c_str());
-  }
-
-  //Player
-  for (int i = 0; i < 8; i++) {
-    if (! (player::image[i] = load_png (("images/player/player_" + convertIntToString (i + 1) + ".png").c_str(), NULL))) {
-      abort_on_error (("Cannot find image images/player/player_" + convertIntToString (i + 1) + ".png \n Please check your files and try again").c_str());
-    }
-  }
+  background_sky = load_png_ex (("images/stairs/" + levelOn + "/sky.png").c_str());
+  background_buildings = load_png_ex (("images/stairs/" + levelOn + "/parallax.png").c_str());
 
   // Keys
-  if (! (key_manager::keys[KEY_UP] = load_png ("images/keys/key_up.png", NULL))) {
-    abort_on_error ("Cannot find image images/keys/key_up.png \n Please check your files and try again");
-  }
+  key_manager::keys[KEY_UP] = load_png_ex("images/keys/key_up.png");
+  key_manager::keys[KEY_DOWN] = load_png_ex("images/keys/key_down.png");
+  key_manager::keys[KEY_LEFT] = load_png_ex("images/keys/key_left.png");
+  key_manager::keys[KEY_RIGHT] = load_png_ex("images/keys/key_right.png");
+  key_manager::keys[0] = load_png_ex("images/keys/joy_a.png");
+  key_manager::keys[3] = load_png_ex("images/keys/joy_y.png");
+  key_manager::keys[2] = load_png_ex("images/keys/joy_x.png");
+  key_manager::keys[1] = load_png_ex("images/keys/joy_b.png");
 
-  if (! (key_manager::keys[KEY_DOWN] = load_png ("images/keys/key_down.png", NULL))) {
-    abort_on_error ("Cannot find image images/keys/key_down.png \n Please check your files and try again");
-  }
-
-  if (! (key_manager::keys[KEY_LEFT] = load_png ("images/keys/key_left.png", NULL))) {
-    abort_on_error ("Cannot find image images/keys/key_left.png \n Please check your files and try again");
-  }
-
-  if (! (key_manager::keys[KEY_RIGHT] = load_png ("images/keys/key_right.png", NULL))) {
-    abort_on_error ("Cannot find image images/keys/key_right.png \n Please check your files and try again");
-  }
-
-  // Buttons
-  if (! (key_manager::keys[0] = load_png ("images/keys/joy_a.png", NULL))) {
-    abort_on_error ("Cannot find image images/keys/joy_a.png \n Please check your files and try again");
-  }
-
-  if (! (key_manager::keys[3] = load_png ("images/keys/joy_y.png", NULL))) {
-    abort_on_error ("Cannot find image images/keys/joy_y.png \n Please check your files and try again");
-  }
-
-  if (! (key_manager::keys[2] = load_png ("images/keys/joy_x.png", NULL))) {
-    abort_on_error ("Cannot find image images/keys/joy_x.png \n Please check your files and try again");
-  }
-
-  if (! (key_manager::keys[1] = load_png ("images/keys/joy_b.png", NULL))) {
-    abort_on_error ("Cannot find image images/keys/joy_b.png \n Please check your files and try again");
-  }
-
-  if (! (watch = load_png ("images/watch.png", NULL))) {
-    abort_on_error ("Cannot find image images/watch.png \n Please check your files and try again");
-  }
-
-  if (! (youwin = load_png ("images/youwin.png", NULL))) {
-    abort_on_error ("Cannot find image images/youwin.png \n Please check your files and try again");
-  }
-
-  if (! (youlose = load_png ("images/youlose.png", NULL))) {
-    abort_on_error ("Cannot find image images/youlose.png \n Please check your files and try again");
-  }
-
-  // Goat
-  if (! (goat::goat_image[0] = load_png ("images/goat_alien.png", NULL))) {
-    abort_on_error ("Cannot find image images/goat_alien.png \n Please check your files and try again");
-  }
-
-  if (! (goat::goat_image[1] = load_png ("images/goat_alien_2.png", NULL))) {
-    abort_on_error ("Cannot find image images/goat_alien_2.png \n Please check your files and try again");
-  }
+  // Misc
+  watch = load_png_ex("images/watch.png");
+  youwin = load_png_ex("images/youwin.png");
+  youlose = load_png_ex("images/youlose.png");
 
   // Sounds
-  if (! (key_manager::sounds[0] = load_sample ("sounds/trip.wav"))) {
-    abort_on_error ("Cannot find sound sounds/trip.wav \n Please check your files and try again");
-  }
+  key_manager::sounds[0] = load_sample_ex ("sounds/trip.wav");
+  key_manager::sounds[1] = load_sample_ex ("sounds/ping.wav");
 
-  if (! (key_manager::sounds[1] = load_sample ("sounds/ping.wav"))) {
-    abort_on_error ("Cannot find sound sounds/ping.wav \n Please check your files and try again");
-  }
-
-  if (! (win = load_sample ("sounds/win.wav"))) {
-    abort_on_error ("Cannot find sound sounds/win.wav \n Please check your files and try again");
-  }
-
-  if (! (lose = load_sample ("sounds/lose.wav"))) {
-    abort_on_error ("Cannot find sound sounds/lose.wav \n Please check your files and try again");
-  }
+  win = load_sample_ex ("sounds/win.wav");
+  lose = load_sample_ex ("sounds/lose.wav");
 
   // Other Sprites
-  buffer = create_bitmap (SCREEN_W, SCREEN_H);
   stair_buffer = create_bitmap (SCREEN_W, SCREEN_H);
+  buffer = create_bitmap (SCREEN_W, SCREEN_H);
 
-  // Temporary fonts
-  FONT *f1, *f2, *f3, *f4, *f5;
-
-  //Sets Font
-  if (! (f1 = load_font (("fonts/dosis.pcx"), NULL, NULL))) {
-    abort_on_error ("Cannot find font fonts/dosis.pcx \n Please check your files and try again");
-  }
-
-  f2 = extract_font_range (f1, ' ', 'A' - 1);
-  f3 = extract_font_range (f1, 'A', 'Z');
-  f4 = extract_font_range (f1, 'Z' + 1, 'z');
-
-  //Merge fonts
-  font = merge_fonts (f4, f5 = merge_fonts (f2, f3));
-
-
-  if (! (f1 = load_font (("fonts/dosis_26.pcx"), NULL, NULL))) {
-    abort_on_error ("Cannot find font fonts/dosis_26.pcx \n Please check your files and try again");
-  }
-
-  f2 = extract_font_range (f1, ' ', 'A' - 1);
-  f3 = extract_font_range (f1, 'A', 'Z');
-  f4 = extract_font_range (f1, 'Z' + 1, 'z');
-
-  //Merge fonts
-  dosis_26 = merge_fonts (f4, f5 = merge_fonts (f2, f3));
-
-
-  //Destroy temporary fonts
-  destroy_font (f1);
-  destroy_font (f2);
-  destroy_font (f3);
-  destroy_font (f4);
-  destroy_font (f5);
+  // Sets Fonts
+  font = load_font_ex("fonts/dosis.pcx");
+  dosis_26 = load_font_ex("fonts/dosis_26.pcx");
 
   // Keys
   screen_keys = new key_manager (20, 50);
 
   // Player
-  player1 = new player ((10 * 30), (stair::location_y (10 * 30)) - player::image[0] -> h / 2);
+  player1 = new player (10 * 30, stair::location_y (10 * 30) - 90);
 
   // LEVEL DIFFICULTY!
   if (levelOn == "cn_tower") {
@@ -251,11 +145,11 @@ void Game::init() {
   stair::scrollSpeed = 0;
 
   // Start music
-  play_sample (mainMusic, 255, 128, 1000, 1);
+  play_sample (music, 255, 128, 1000, 1);
 }
 
 // Update game state
-void Game::update() {
+void Game::update(StateEngine *engine) {
 
   // Joystick input
   poll_joystick();
@@ -271,7 +165,7 @@ void Game::update() {
   }
 
   // When you reach destination
-  if ((player1 -> getY() <= (stair::locationOfFinal - (player1 -> image[0] -> h))) && stair::final_stair_placed) {
+  if ((player1 -> getY() <= (stair::locationOfFinal - player1 -> getHeight())) && stair::final_stair_placed) {
     switch_flicked = true;
 
     for (unsigned int i = 0; i < allStairs.size(); i++) {
@@ -304,21 +198,18 @@ void Game::update() {
   }
 
   // Character
-  player1 -> update();
-  player::animation_frame = int (timer1 * ceil (stair::scrollSpeed)) % 8;
+  player1 -> update(int (timer1 * ceil (stair::scrollSpeed)) % 8);
 
   // Update goats
-  for (unsigned int i = 0; i < goats.size(); i++) {
-    goats.at (i).update();
-
-    if (switch_flicked) {
-      goats.at (i).fall (6);
-    }
+  for (auto g = goats.begin(); g < goats.end(); ) {
+    g -> update();
+    g -> fall (switch_flicked * 5);
+    g -> offScreen() ? g = goats.erase(g) : ++g;
   }
 
   // End game
   if (time_since_win >= 3.0) {
-    set_next_state (STATE_MENU);
+    setNextState (engine, StateEngine::STATE_MENU);
   }
   else if (switch_flicked && time_since_win <= 0) {
     install_int_ex (endTimer, BPS_TO_TIMER (10));
@@ -334,7 +225,7 @@ void Game::update() {
 
   // Back to menu
   if (key[KEY_M]) {
-    set_next_state (STATE_MENU);
+    setNextState (engine, StateEngine::STATE_MENU);
   }
 
   if (time_to_complete - climb_time <= 0) {
@@ -345,7 +236,7 @@ void Game::update() {
       play_sample (lose, 255, 125, 1000, 0);
       sound_played = true;
       // Stop music
-      stop_sample (mainMusic);
+      stop_sample (music);
     }
   }
 
@@ -376,12 +267,9 @@ void Game::update() {
       play_sample (win, 255, 125, 1000, 0);
       sound_played = true;
       // Stop music
-      stop_sample (mainMusic);
+      stop_sample (music);
     }
   }
-
-  //set_next_state(STATE_MENU);
-
 
   // Key manager
   screen_keys -> update();
@@ -469,22 +357,11 @@ void Game::draw() {
 // Destroy
 Game::~Game() {
   // Destroy images
-  destroy_bitmap (buffer);
   destroy_bitmap (stair_buffer);
   destroy_bitmap (background_sky);
   destroy_bitmap (background_buildings);
   destroy_bitmap (watch);
   destroy_bitmap (youwin);
-
-  // Stair images
-  destroy_bitmap (stair::image);
-  destroy_bitmap (stair::stage_end_green);
-  destroy_bitmap (stair::image_brick);
-  destroy_bitmap (stair::stage_end_red);
-
-  // Goats
-  destroy_bitmap (goat::goat_image[0]);
-  destroy_bitmap (goat::goat_image[1]);
 
   // Fonts
   destroy_font (dosis_26);
@@ -501,7 +378,7 @@ Game::~Game() {
   allStairs.clear();
 
   // Stop music
-  stop_sample (mainMusic);
+  stop_sample (music);
 
   // Fade out
   highcolor_fade_out (16);

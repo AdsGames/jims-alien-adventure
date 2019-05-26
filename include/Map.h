@@ -1,20 +1,21 @@
 #ifndef MAP_H
 #define MAP_H
 
-#include "GameState.h"
+#include "State.h"
 
 #include <allegro.h>
-#include <loadpng.h>
-#include <string>
 #include <vector>
 
-#include <logg.h>
-
-#include "globals.h"
-#include "tools.h"
 #include "location.h"
 
-class Map : public GameState {
+class Map : public State {
+  public:
+    Map();
+    ~Map();
+
+    virtual void update(StateEngine *engine) override;
+    virtual void draw() override;
+
   private:
     // Map/GUI
     BITMAP *buffer;
@@ -23,17 +24,7 @@ class Map : public GameState {
 
     SAMPLE *music;
 
-    int mickeyx;
-    int mickeyy;
-
-    vector<location> mapLocations;
-  protected:
-  public:
-    //Main loop functions
-    Map();
-    void update();
-    void draw();
-    ~Map();
+    std::vector<location> locations;
 };
 
 #endif // MAP_H

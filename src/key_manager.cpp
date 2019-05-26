@@ -1,5 +1,8 @@
 #include "key_manager.h"
+
 #include "globals.h"
+#include "tools.h"
+#include "stair.h"
 
 BITMAP *key_manager::keys[255];
 SAMPLE *key_manager::sounds[5];
@@ -37,7 +40,14 @@ void key_manager::update() {
   // You haven't won
   if (!switch_flicked) {
     // Got a correct letter
-    if ((key_queue.size() > 0) && (!joystick_enabled && key[key_queue.at (0).getValue()] && keyIsPressed == false) || (joystick_enabled && joy[0].button[key_queue.at (0).getValue()].b && buttonIsPressed == false)) {
+    if ((key_queue.size() > 0) &&
+        ((!joystick_enabled &&
+          key[key_queue.at (0).getValue()] &&
+          !keyIsPressed) ||
+         (joystick_enabled &&
+          joy[0].button[key_queue.at (0).getValue()].b &&
+          !buttonIsPressed))) {
+
       // Nice sound
       play_sample (sounds[1], 255, 125, 1000, 0);
       key_queue.erase (key_queue.begin());

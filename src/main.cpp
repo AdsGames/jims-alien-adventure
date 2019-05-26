@@ -1,23 +1,16 @@
 #include <allegro.h>
-#include <loadpng.h>
-
-#include <logg.h>
 
 #include "globals.h"
 #include "tools.h"
 
-#include "GameState.h"
+#include "State.h"
 
-#include "Init.h"
-#include "Intro.h"
-#include "Menu.h"
-#include "Map.h"
-#include "Game.h"
-#include "Story.h"
+
+// State engine
+StateEngine game_state;
 
 // Close button
 volatile int close_button_pressed = FALSE;
-bool closeGame;
 
 // FPS System
 volatile int ticks = 0;
@@ -42,54 +35,6 @@ void close_button_handler (void) {
 }
 END_OF_FUNCTION (close_button_handler)
 
-//Game state object
-GameState *currentState = NULL;
-
-// Change game screen
-void change_state() {
-  //If the state needs to be changed
-  if (nextState != STATE_NULL) {
-    //Delete the current state
-    if (nextState != STATE_EXIT) {
-      delete currentState;
-      currentState = NULL;
-    }
-
-    //Change the state
-    switch (nextState) {
-      case STATE_INIT:
-        currentState = new Init();
-        break;
-
-      case STATE_INTRO:
-        currentState = new Intro();
-        break;
-
-      case STATE_MENU:
-        currentState = new Menu();
-        break;
-
-      case STATE_STORY:
-        currentState = new Story();
-        break;
-
-      case STATE_MAP:
-        currentState = new Map();
-        break;
-
-      case STATE_GAME:
-        currentState = new Game();
-        break;
-    }
-
-
-    //Change the current state ID
-    stateID = nextState;
-
-    //NULL the next state ID
-    nextState = STATE_NULL;
-  }
-}
 
 // Setup game
 void setup() {
@@ -100,8 +45,6 @@ void setup() {
   install_mouse();
   install_joystick (JOY_TYPE_AUTODETECT);
   install_sound (DIGI_AUTODETECT, MIDI_AUTODETECT, ".");
-  set_color_depth (32);
-
 
   // Setup for FPS system
   LOCK_VARIABLE (ticks);
@@ -116,19 +59,23 @@ void setup() {
   LOCK_FUNCTION (close_button_handler);
   set_close_button_callback (close_button_handler);
 
-  // Game state
-  stateID = STATE_NULL;
-  nextState = STATE_NULL;
-
-  // Variables
-  closeGame = false;
+  srand(time(NULL));
 }
 
-void clean_up() {
-  //Delete game state and free state resources
-  delete currentState;
+// Update
+void update() {
+  //Do state logic
+  game_state.update();
+
+  // Handle exit
+  if (game_state.getStateId() == StateEngine::STATE_EXIT)
+    close_button_pressed = true;
 }
 
+void draw() {
+  //Do state rendering
+  game_state.draw();
+}
 
 //Main function*/
 int main() {
@@ -136,48 +83,31 @@ int main() {
   setup();
 
   //Set the current state ID
-  stateID = STATE_INIT;
+  game_state.setNextState(StateEngine::STATE_INIT);
 
-  //Set the current game state object
-  currentState = new Init();
-
-  while (!key[KEY_ESC] && !close_button_pressed && stateID != STATE_EXIT) {
+  while (!key[KEY_ESC] && !close_button_pressed) {
     while (ticks == 0) {
       rest (1);
     }
-
     while (ticks > 0) {
       int old_ticks = ticks;
 
-      //Do state logic
-      currentState -> update();
-
-      //Change state if needed
-      change_state();
-
-      // Counter for FPS
-      frames_done++;
+      update();
 
       ticks--;
-
       if (old_ticks <= ticks) {
         break;
       }
     }
-
     if (game_time - old_time >= 10) {
       fps = frames_done;
       frames_done = 0;
       old_time = game_time;
     }
-
-    //Do state rendering
-    currentState -> draw();
+    draw();
+    frames_done++;
   }
-
-  //Clean up
-  clean_up();
 
   return 0;
 }
-END_OF_MAIN();
+END_OF_MAIN()

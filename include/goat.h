@@ -2,29 +2,31 @@
 #define GOAT_H
 
 #include <allegro.h>
-#include "tools.h"
-#include "globals.h"
 
 class goat {
   public:
-    goat (float newX, float newY, float newScale, float newSpeed);
+    goat (float x, float y, float scale, float speed);
+    goat (const goat& g);
     virtual ~goat();
 
     // Functions
-    void draw (BITMAP *tempImage);
     void update();
-    void fall (float newSpeed);
-    bool kill();
+    void fall (float speed);
+    bool offScreen();
+    void draw (BITMAP *buffer);
 
-    // Image
-    static BITMAP *goat_image[2];
-  protected:
   private:
     // Variables
     float x, y;
     float speed;
     float scale;
-    bool offScreen;
+
+    // Images
+    static BITMAP *goat_image[2];
+    static int goat_count;
+
+    void load_sprites();
+    void unload_sprites();
 
 };
 

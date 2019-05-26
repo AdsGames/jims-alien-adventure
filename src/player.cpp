@@ -1,12 +1,23 @@
 #include "player.h"
 
-BITMAP *player::image[8];
-int player::animation_frame;
+#include <string>
 
-player::player (float newX, float newY) {
-  // Assign variables
-  x = newX;
-  y = newY;
+#include "tools.h"
+
+player::player (float x, float y) {
+  this -> x = x;
+  this -> y = y;
+  this -> frame = 0;
+
+  for (int i = 0; i < 8; i++) {
+    images[i] = load_png_ex (("images/player/player_" + std::to_string(i + 1) + ".png").c_str());
+  }
+}
+
+player::~player() {
+  for (int i = 0; i < 8; i++) {
+    destroy_bitmap(images[i]);
+  }
 }
 
 int player::getX() {
@@ -17,14 +28,14 @@ int player::getY() {
   return y;
 }
 
-player::~player() {
+int player::getHeight() {
+  return images[0] -> h;
 }
 
-void player::draw (BITMAP *tempImage) {
-  // Draw
-  draw_sprite (tempImage, image[animation_frame], x, y);
+void player::draw (BITMAP *buffer) {
+  draw_sprite (buffer, images[frame], x, y);
 }
 
-void player::update() {
-
+void player::update(int frame) {
+  this -> frame = frame;
 }
