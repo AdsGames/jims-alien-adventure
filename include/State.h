@@ -27,7 +27,7 @@ class StateEngine {
     void update();
 
     // Draw
-    void draw();
+    void draw(BITMAP *buffer);
 
     // Set next state
     void setNextState(int newState);
@@ -71,7 +71,7 @@ class State {
     virtual ~State() {};
 
     // Draw to screen
-    virtual void draw() = 0;
+    virtual void draw(BITMAP *buffer) = 0;
 
     // Update logic
     virtual void update(StateEngine* engine) = 0;

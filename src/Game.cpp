@@ -46,15 +46,13 @@ void Game::init() {
   LOCK_VARIABLE (time_since_win);
   LOCK_FUNCTION (endTimer);
 
-  // Creates a random number generator (based on time)
-  srand (time (NULL));
-
   // Load music
   music = load_ogg_ex("music/JAA-Ingame.ogg");
 
   // Load images
-  background_sky = load_png_ex (("images/stairs/" + levelOn + "/sky.png").c_str());
-  background_buildings = load_png_ex (("images/stairs/" + levelOn + "/parallax.png").c_str());
+  levelPtr = LevelData::GetLevelData() -> GetLevel(levelOn);
+  background_sky = load_png_ex (("images/levels/" + levelPtr -> folder + "/sky.png").c_str());
+  background_buildings = load_png_ex (("images/levels/" + levelPtr -> folder + "/parallax.png").c_str());
 
   // Keys
   key_manager::keys[KEY_UP] = load_png_ex("images/keys/key_up.png");
@@ -80,7 +78,6 @@ void Game::init() {
 
   // Other Sprites
   stair_buffer = create_bitmap (SCREEN_W, SCREEN_H);
-  buffer = create_bitmap (SCREEN_W, SCREEN_H);
 
   // Sets Fonts
   font = load_font_ex("fonts/dosis.pcx");
@@ -91,33 +88,6 @@ void Game::init() {
 
   // Player
   player1 = new player (10 * 30, stair::location_y (10 * 30) - 90);
-
-  // LEVEL DIFFICULTY!
-  if (levelOn == "cn_tower") {
-    level_distance = 200;
-    time_to_complete = 50;
-  }
-  else if (levelOn == "statue_of_liberty") {
-    level_distance = 300;
-    time_to_complete = 60;
-  }
-  else if (levelOn == "stone_henge") {
-    level_distance = 400;
-    time_to_complete = 80;
-  }
-  else if (levelOn == "pyramids") {
-    level_distance = 500;
-    time_to_complete = 100;
-  }
-
-  if (levelOn == "taj_mahal") {
-    level_distance = 600;
-    time_to_complete = 120;
-  }
-  else if (levelOn == "wall_of_china") {
-    level_distance = 700;
-    time_to_complete = 100;
-  }
 
   // Reset variables
   animationFrame = 0;
@@ -148,6 +118,36 @@ void Game::init() {
   play_sample (music, 255, 128, 1000, 1);
 }
 
+// Destroy
+Game::~Game() {
+  // Destroy images
+  destroy_bitmap (stair_buffer);
+  destroy_bitmap (background_sky);
+  destroy_bitmap (background_buildings);
+  destroy_bitmap (watch);
+  destroy_bitmap (youwin);
+
+  // Fonts
+  destroy_font (dosis_26);
+
+  // Timers
+  remove_int (gameTimer);
+  remove_int (gameTicker);
+  remove_int (endTimer);
+
+  delete screen_keys;
+  delete player1;
+
+  goats.clear();
+  allStairs.clear();
+
+  // Stop music
+  stop_sample (music);
+
+  // Fade out
+  highcolor_fade_out (16);
+}
+
 // Update game state
 void Game::update(StateEngine *engine) {
 
@@ -176,7 +176,7 @@ void Game::update(StateEngine *engine) {
   }
 
   // You reached distance for spawning top!
-  if (distance_travelled > level_distance && !distance_is_reached) {
+  if (distance_travelled > levelPtr -> distance && !distance_is_reached) {
     distance_is_reached = true;
   }
 
@@ -228,9 +228,9 @@ void Game::update(StateEngine *engine) {
     setNextState (engine, StateEngine::STATE_MENU);
   }
 
-  if (time_to_complete - climb_time <= 0) {
+  if (levelPtr -> time - climb_time <= 0) {
     install_int_ex (endTimer, BPS_TO_TIMER (10));
-    climb_time = time_to_complete;
+    climb_time = levelPtr -> time;
 
     if (!sound_played) {
       play_sample (lose, 255, 125, 1000, 0);
@@ -242,26 +242,7 @@ void Game::update(StateEngine *engine) {
 
   if (switch_flicked) {
     // LEVEL DIFFICULTY!
-    if (levelOn == "cn_tower") {
-      beaten_levels[0] = true;
-
-    }
-    else if (levelOn == "pyramids") {
-      beaten_levels[1] = true;
-    }
-    else if (levelOn == "statue_of_liberty") {
-      beaten_levels[2] = true;
-    }
-    else if (levelOn == "stone_henge") {
-      beaten_levels[3] = true;
-    }
-
-    if (levelOn == "taj_mahal") {
-      beaten_levels[4] = true;
-    }
-    else if (levelOn == "wall_of_china") {
-      beaten_levels[5] = true;
-    }
+    levelPtr -> completed = true;
 
     if (!sound_played) {
       play_sample (win, 255, 125, 1000, 0);
@@ -276,7 +257,7 @@ void Game::update(StateEngine *engine) {
 }
 
 // Draw game state
-void Game::draw() {
+void Game::draw(BITMAP *buffer) {
   // Background
   rectfill (buffer, 0, 0, SCREEN_W, SCREEN_H, makecol (255, 255, 255));
   stretch_sprite (buffer, background_sky, 0, 0, SCREEN_W, SCREEN_H);
@@ -315,16 +296,16 @@ void Game::draw() {
   }
 
   if (!distance_is_reached) {
-    rectfill (buffer, 24, 24, 24 + (600 * (distance_travelled / level_distance)), 76, makecol (0, 255, 0));
+    rectfill (buffer, 24, 24, 24 + (600 * (distance_travelled / levelPtr -> distance)), 76, makecol (0, 255, 0));
   }
 
 
   if (!distance_is_reached) {
-    textprintf_ex (buffer, font, 20, 32, makecol (0, 0, 0), -1, "%4.0f/%i", distance_travelled, level_distance);
+    textprintf_ex (buffer, font, 20, 32, makecol (0, 0, 0), -1, "%4.0f/%i", distance_travelled, levelPtr -> distance);
   }
 
   if (distance_is_reached) {
-    textprintf_ex (buffer, font, 40, 32, makecol (0, 0, 0), -1, "%i/%i", level_distance, level_distance);
+    textprintf_ex (buffer, font, 40, 32, makecol (0, 0, 0), -1, "%i/%i", levelPtr -> distance, levelPtr -> distance);
   }
 
 
@@ -333,7 +314,7 @@ void Game::draw() {
     draw_sprite (buffer, youwin, 200, 200);
   }
 
-  if (time_to_complete - climb_time <= 0) {
+  if (levelPtr -> time - climb_time <= 0) {
     draw_sprite (buffer, youlose, 200, 200);
   }
 
@@ -341,45 +322,11 @@ void Game::draw() {
 
   draw_trans_sprite (buffer, watch, SCREEN_W - 122, SCREEN_H - 70);
 
-  if (time_to_complete - climb_time > 0) {
-    textprintf_ex (buffer, dosis_26, SCREEN_W - 97, SCREEN_H - 60, makecol (255, 255, 255), -1, "%4.1f", time_to_complete - climb_time);
+  if (levelPtr -> time - climb_time > 0) {
+    textprintf_ex (buffer, dosis_26, SCREEN_W - 97, SCREEN_H - 60, makecol (255, 255, 255), -1, "%4.1f", levelPtr -> time - climb_time);
   }
 
-  if (time_to_complete - climb_time <= 0) {
+  if (levelPtr -> time - climb_time <= 0) {
     textprintf_ex (buffer, dosis_26, SCREEN_W - 97, SCREEN_H - 60, makecol (255, 255, 255), -1, "0.0");
   }
-
-
-  // Buffer
-  draw_sprite (screen, buffer, 0, 0);
-}
-
-// Destroy
-Game::~Game() {
-  // Destroy images
-  destroy_bitmap (stair_buffer);
-  destroy_bitmap (background_sky);
-  destroy_bitmap (background_buildings);
-  destroy_bitmap (watch);
-  destroy_bitmap (youwin);
-
-  // Fonts
-  destroy_font (dosis_26);
-
-  // Timers
-  remove_int (gameTimer);
-  remove_int (gameTicker);
-  remove_int (endTimer);
-
-  delete screen_keys;
-  delete player1;
-
-  goats.clear();
-  allStairs.clear();
-
-  // Stop music
-  stop_sample (music);
-
-  // Fade out
-  highcolor_fade_out (16);
 }

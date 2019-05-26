@@ -6,7 +6,8 @@
 #include <allegro.h>
 #include <vector>
 
-#include "location.h"
+#include "MapPin.h"
+#include "LevelData.h"
 
 class Map : public State {
   public:
@@ -14,17 +15,16 @@ class Map : public State {
     ~Map();
 
     virtual void update(StateEngine *engine) override;
-    virtual void draw() override;
+    virtual void draw(BITMAP *buffer) override;
 
   private:
     // Map/GUI
-    BITMAP *buffer;
     BITMAP *map_image;
     BITMAP *cursor;
 
     SAMPLE *music;
 
-    std::vector<location> locations;
+    std::vector<MapPin*> locations;
 };
 
 #endif // MAP_H

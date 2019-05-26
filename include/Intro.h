@@ -12,11 +12,10 @@ class Intro : public State {
     ~Intro();
 
     virtual void update(StateEngine *engine) override;
-    virtual void draw() override;
+    virtual void draw(BITMAP *buffer) override;
 
   private:
     // Images
-    BITMAP *buffer;
     BITMAP *splash;
     BITMAP *logo;
 
