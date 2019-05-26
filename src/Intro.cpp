@@ -1,45 +1,19 @@
 #include "Intro.h"
+
+#include <iostream>
+#include "globals.h"
 #include "tools.h"
 
 Intro::Intro() {
   // Buffer
-  buffer = create_bitmap (SCREEN_W, SCREEN_H);
+  splash = load_png_ex("images/splash.png");
+  logo = load_png_ex("images/logo.png");
 
-  if (! (splash = load_png ("images/splash.png", NULL))) {
-    abort_on_error ("Cannot find image images/splash.png \n Please check your files and try again");
-  }
+  // Start timer
+  intro_time = clock();
 
-  if (! (logo = load_png ("images/logo.png", NULL))) {
-    abort_on_error ("Cannot find image images/logo.png \n Please check your files and try again");
-  }
-}
-
-void Intro::update() {
-}
-
-void Intro::draw() {
-  // Fade in
+  // Fade in title
   highcolor_fade_in (logo, 16);
-  rest (1000);
-  highcolor_fade_out (8);
-
-  // Fade in
-  highcolor_fade_in (splash, 16);
-  // Background
-  rectfill (buffer, 0, 0, SCREEN_W, SCREEN_W, makecol (255, 255, 255));
-
-  // Intro stuff here
-  textprintf_ex (buffer, font, 0, 130, makecol (255, 255, 255), makecol (0, 0, 0), "INTRO!");
-
-  // Draw Buffer
-  stretch_sprite (buffer, splash, 0, 0, SCREEN_W, SCREEN_H);
-  draw_sprite (screen, buffer, 0, 0);
-
-  // Wait
-  rest (2000);
-
-  // Wait 2 seconds then go to the menu
-  set_next_state (STATE_MENU);
 }
 
 Intro::~Intro() {
@@ -50,4 +24,19 @@ Intro::~Intro() {
 
   // Fade out
   highcolor_fade_out (16);
+}
+
+void Intro::update(StateEngine *engine) {
+  if (clock() - intro_time >= 3400 || keyboard_keypressed() || joy_buttonpressed()) {
+    setNextState (engine, StateEngine::STATE_MENU);
+  }
+}
+
+void Intro::draw() {
+  if (clock() - intro_time < 1700) {
+    stretch_sprite (screen, logo, 0, 0, SCREEN_W, SCREEN_H);
+  }
+  else {
+    stretch_sprite (screen, splash, 0, 0, SCREEN_W, SCREEN_H);
+  }
 }

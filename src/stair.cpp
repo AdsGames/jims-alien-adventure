@@ -1,43 +1,88 @@
 #include "stair.h"
 #include "globals.h"
 
-int stair::numberStairs;
-const int stair::maxScrollSpeed = 6;
-float stair::scrollSpeed;
-float stair::locationOfFinal = 0;
-BITMAP *stair::image;
-BITMAP *stair::image_brick;
-BITMAP *stair::stage_end_red;
-BITMAP *stair::stage_end_green;
-bool stair::final_stair_placed;
+#include "tools.h"
+#include "globals.h"
 
-stair::stair (float newX, float newY, int newType) {
-  x = newX;
-  y = newY;
-  type = newType;
+int stair::numberStairs = 0;
+const int stair::maxScrollSpeed = 6;
+float stair::scrollSpeed = 0;
+float stair::locationOfFinal = 0;
+
+int stair::stair_count = 0;
+BITMAP *stair::images[4] = { nullptr };
+bool stair::final_stair_placed = false;
+
+// Constructor
+stair::stair (float x, float y, int type) {
+  this -> x = x;
+  this -> y = y;
+  this -> type = type;
 
   stairID = numberStairs;
   numberStairs++;
 
   transparency_bitmap = create_bitmap (SCREEN_W, SCREEN_H);
   rectfill (transparency_bitmap, 0, 0, SCREEN_W, SCREEN_H, makecol (255, 0, 255));
+
+  if (stair_count == 0)
+    load_sprites();
+  stair_count++;
 }
 
-stair::~stair() {
-  //destroy_bitmap( transparency_bitmap);
+// Copy constructor
+stair::stair (const stair& s) {
+  x = s.x;
+  y = s.y;
+  type = s.type;
+  stairID = s.stairID;
+
+  transparency_bitmap = create_bitmap (SCREEN_W, SCREEN_H);
+  rectfill (transparency_bitmap, 0, 0, SCREEN_W, SCREEN_H, makecol (255, 0, 255));
+
+  if (stair_count == 0)
+    load_sprites();
+  stair_count++;
 }
+
+// Destructor
+stair::~stair() {
+  stair_count--;
+  if (stair_count == 0)
+    unload_sprites();
+
+  destroy_bitmap(transparency_bitmap);
+}
+
+// Load images
+void stair::load_sprites() {
+  images[IMG_STAIRS] = load_png_ex (("images/stairs/" + levelOn + "/stairs.png").c_str());
+  images[IMG_BRICK] = load_png_ex (("images/stairs/" + levelOn + "/brick.png").c_str());
+  images[IMG_TOP_RED] = load_png_ex (("images/stairs/" + levelOn + "/stage_end_red.png").c_str());
+  images[IMG_TOP_GREEN] = load_png_ex (("images/stairs/" + levelOn + "/stage_end_green.png").c_str());
+}
+
+// Unload images
+void stair::unload_sprites() {
+  destroy_bitmap(images[0]);
+  destroy_bitmap(images[1]);
+  destroy_bitmap(images[2]);
+  destroy_bitmap(images[3]);
+}
+
+
 int stair::getType() {
   return type;
 }
 
-void stair::setType (int newType) {
-  type = newType;
+void stair::setType (int type) {
+  this -> type = type;
 }
 
 // Update those stairs
-void stair::update (vector<stair> *allStairsCopy) {
-  // reset stairs
-  if (y > SCREEN_H + image -> h) {
+void stair::update (std::vector<stair> *allStairsCopy) {
+  // Reset stairs
+  if (y > SCREEN_H + images[IMG_STAIRS] -> h) {
     if (!distance_is_reached) {
       x = allStairsCopy -> at (find_top_stair (stairID)).x + 30;
       y = location_y (x);
@@ -65,44 +110,40 @@ void stair::movement() {
   }
 }
 
-// Draw those stairs
-// YES WE CAN
-void stair::draw (BITMAP *tempImage) {
-  // Draw stair and rectangle beside for effect
-  for (int i = x + image -> w - 30; i < SCREEN_W; i += image_brick -> w) {
-    draw_sprite (tempImage, image_brick, i, y + image -> h);
-  }
-
-  // Swaggin images
-  if (type == 0) {
-    draw_sprite (tempImage, image, x, y);
-  }
-  else if (type == 1) {
-    draw_sprite (tempImage, stage_end_red, x, y);
-    blit (transparency_bitmap, tempImage, 0, 0, x + stage_end_red -> w, y, SCREEN_W, SCREEN_H);
-    line (tempImage, x + stage_end_red -> w - 1, y + 30, x + stage_end_red -> w - 1, SCREEN_H, makecol (168, 148, 148));
-  }
-  else if (type == 2) {
-    draw_sprite (tempImage, stage_end_green, x, y);
-    blit (transparency_bitmap, tempImage, 0, 0, x + stage_end_green -> w, y, SCREEN_W, SCREEN_H);
-    line (tempImage, x + stage_end_green-> w - 1, y + 30, x + stage_end_green -> w - 1, SCREEN_H, makecol (168, 148, 148));
-  }
-}
-
 // Line y position
-float stair::location_y (float oldX) {
-  return (SCREEN_H - ((oldX - SCREEN_W / 4) / 30) * 37);
+float stair::location_y (float last_x) {
+  return SCREEN_H - ((last_x - SCREEN_W / 4) / 30) * 37;
 }
 
 // Find the top
-int stair::find_top_stair (int stairIndex) {
-  // New index
-  int bottomIndex = stairIndex - 1;
+int stair::find_top_stair (int index) {
+  return (index - 1) < 0 ? numberStairs - 1 : index - 1;
+}
 
-  // Too High? Wrap around (only happens when number is max)
-  if (bottomIndex < 0) {
-    bottomIndex = numberStairs - 1;
+// Draw those stairs
+// YES WE CAN
+void stair::draw (BITMAP *buffer) {
+  // Draw stair and rectangle beside for effect
+  for (int i = x + images[IMG_STAIRS] -> w - 30; i < SCREEN_W; i += images[IMG_BRICK] -> w) {
+    draw_sprite (buffer, images[IMG_BRICK], i, y + images[IMG_STAIRS] -> h);
   }
 
-  return bottomIndex;
+  // Swaggin images
+  switch (type) {
+    case 0:
+      draw_sprite (buffer, images[IMG_STAIRS], x, y);
+      break;
+    case 1:
+      draw_sprite (buffer, images[IMG_TOP_RED], x, y);
+      blit (transparency_bitmap, buffer, 0, 0, x + images[IMG_TOP_RED] -> w, y, SCREEN_W, SCREEN_H);
+      line (buffer, x + images[IMG_TOP_RED] -> w - 1, y + 30, x + images[IMG_TOP_RED] -> w - 1, SCREEN_H, makecol (168, 148, 148));
+      break;
+    case 2:
+      draw_sprite (buffer, images[IMG_TOP_GREEN], x, y);
+      blit (transparency_bitmap, buffer, 0, 0, x + images[IMG_TOP_GREEN] -> w, y, SCREEN_W, SCREEN_H);
+      line (buffer, x + images[IMG_TOP_GREEN]-> w - 1, y + 30, x + images[IMG_TOP_GREEN] -> w - 1, SCREEN_H, makecol (168, 148, 148));
+      break;
+    default:
+      break;
+  }
 }

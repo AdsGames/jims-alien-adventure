@@ -1,58 +1,29 @@
 #include "Map.h"
 
+#include "globals.h"
+#include "tools.h"
+
 Map::Map() {
   // Create buffer image
   buffer = create_bitmap (SCREEN_W, SCREEN_H);
 
   // Load music
-  if (! (music = logg_load ("music/the-experiment.ogg"))) {
-    abort_on_error ("Cannot find music music/the-experiment.ogg \n Please check your files and try again");
-  }
+  music = load_ogg_ex("music/the-experiment.ogg");
 
   // Load images
-  if (! (map_image = load_png ("images/map/map.png", NULL))) {
-    abort_on_error ("Cannot find image images/map/map.png \n Please check your files and try again");
-  }
-
-  if (! (cursor = load_png ("images/map/cursor.png", NULL))) {
-    abort_on_error ("Cannot find image images/map/cursor.png \n Please check your files and try again");
-  }
-
-
-  // Locations
-  if (! (location::pin_image = load_png ("images/map/pin.png", NULL))) {
-    abort_on_error ("Cannot find image images/map/pin.png \n Please check your files and try again");
-  }
-
-  // Locations
-  if (! (location::pin_grey_image = load_png ("images/map/pin_grey.png", NULL))) {
-    abort_on_error ("Cannot find image images/map/pin_grey.png \n Please check your files and try again");
-  }
+  map_image = load_png_ex("images/map/map.png");
+  cursor = load_png_ex("images/map/cursor.png");
 
   // Allow transparency
   set_alpha_blender();
 
-  // Clear mapLocations
-  mapLocations.clear();
-
   // Add locations
-  location cn_tower (224, 210, "images/map/icon_cntower.png", "cn_tower");
-  mapLocations.push_back (cn_tower);
-
-  location pyramids (418, 243, "images/map/icon_pyramids.png", "pyramids");
-  mapLocations.push_back (pyramids);
-
-  location statue_of_liberty (236, 216, "images/map/icon_statueofliberty.png", "statue_of_liberty");
-  mapLocations.push_back (statue_of_liberty);
-
-  location stone_henge (356, 193, "images/map/icon_stonehenge.png", "stone_henge");
-  mapLocations.push_back (stone_henge);
-
-  location taj_mahal (503, 250, "images/map/icon_tajmahal.png", "taj_mahal");
-  mapLocations.push_back (taj_mahal);
-
-  location wall_of_china (570, 217, "images/map/icon_wallofchina.png", "wall_of_china");
-  mapLocations.push_back (wall_of_china);
+  locations.push_back (location(224, 210, 0));
+  locations.push_back (location(418, 243, 1));
+  locations.push_back (location(236, 216, 2));
+  locations.push_back (location(356, 193, 3));
+  locations.push_back (location(503, 250, 4));
+  locations.push_back (location(570, 217, 5));
 
   // Cursor position
   position_mouse (SCREEN_W / 2, SCREEN_H / 2);
@@ -61,16 +32,16 @@ Map::Map() {
   play_sample (music, 255, 128, 1000, 1);
 }
 
-void Map::update() {
+void Map::update(StateEngine *engine) {
   // Update joystick
   poll_joystick();
 
   // Change level
   if (mouse_b & 1 || (joystick_enabled && joy[0].button[0].b)) {
-    for (unsigned int i = 0; i < mapLocations.size(); i++) {
-      if (mapLocations.at (i).CheckHover()) {
-        levelOn = mapLocations.at (i).getName();
-        set_next_state (STATE_GAME);
+    for (unsigned int i = 0; i < locations.size(); i++) {
+      if (locations.at (i).Hover()) {
+        levelOn = locations.at (i).GetName();
+        setNextState (engine, StateEngine::STATE_GAME);
       }
     }
   }
@@ -82,7 +53,7 @@ void Map::update() {
 
   // Back to menu
   if (key[KEY_M]) {
-    set_next_state (STATE_MENU);
+    setNextState (engine, StateEngine::STATE_MENU);
   }
 }
 
@@ -94,8 +65,8 @@ void Map::draw() {
   draw_sprite (buffer, map_image, 0, 0);
 
   // Locations
-  for (unsigned int i = 0; i < mapLocations.size(); i++) {
-    mapLocations.at (i).draw (buffer);
+  for (unsigned int i = 0; i < locations.size(); i++) {
+    locations.at (i).Draw (buffer);
   }
 
   // Cursor
@@ -110,11 +81,12 @@ Map::~Map() {
   destroy_bitmap (buffer);
   destroy_bitmap (map_image);
   destroy_bitmap (cursor);
-  mapLocations.clear();
-  destroy_bitmap (location::pin_image);
+
+  locations.clear();
 
   // Stop music
   stop_sample (music);
+  destroy_sample (music);
 
   // Fade out
   highcolor_fade_out (16);
