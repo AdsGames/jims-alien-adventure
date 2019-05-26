@@ -1,13 +1,12 @@
 #include <allegro.h>
 
-#include "globals.h"
-#include "tools.h"
-
 #include "State.h"
-
 
 // State engine
 StateEngine game_state;
+
+// Buffer
+BITMAP *buffer;
 
 // Close button
 volatile int close_button_pressed = FALSE;
@@ -16,9 +15,9 @@ volatile int close_button_pressed = FALSE;
 volatile int ticks = 0;
 const int updates_per_second = 60;
 volatile int game_time = 0;
-
-int fps;
-int old_time;
+int frames_done = 0;
+int fps = 0;
+int old_time = 0;
 
 void ticker() {
   ticks++;
@@ -59,7 +58,11 @@ void setup() {
   LOCK_FUNCTION (close_button_handler);
   set_close_button_callback (close_button_handler);
 
-  srand(time(NULL));
+  // Set up screen
+  set_color_depth (32);
+  set_gfx_mode (GFX_AUTODETECT_WINDOWED, 740, 540, 0, 0);
+
+  buffer = create_bitmap(SCREEN_W, SCREEN_H);
 }
 
 // Update
@@ -72,9 +75,10 @@ void update() {
     close_button_pressed = true;
 }
 
+//Do state rendering
 void draw() {
-  //Do state rendering
-  game_state.draw();
+  game_state.draw(buffer);
+  stretch_sprite(screen, buffer, 0, 0, SCREEN_W, SCREEN_H);
 }
 
 //Main function*/

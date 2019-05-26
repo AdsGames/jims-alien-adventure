@@ -1,25 +1,22 @@
-#ifndef LOCATION_H
-#define LOCATION_H
+#ifndef MAP_PIN_H
+#define MAP_PIN_H
 
 #include <allegro.h>
 #include <string>
 
 // Location for map
-class location {
+class MapPin {
   public:
-    location (int x, int y, int id);
-    location (const location& l);
-    virtual ~location();
+    MapPin (int x, int y, int id);
+    virtual ~MapPin();
 
     void Draw (BITMAP *tempImage);
-
     bool Hover();
-
-    std::string GetName();
+    int GetID();
 
   private:
+    BITMAP *image;
     static BITMAP *pin_images[2];
-    static BITMAP *images[6];
     static int location_count;
 
     static const int num_locations;
@@ -31,4 +28,4 @@ class location {
     int x, y;
 };
 
-#endif // LOCATION_H
+#endif // MAP_PIN_H

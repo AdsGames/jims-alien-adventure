@@ -15,11 +15,10 @@ class Menu : public State {
     ~Menu();
 
     virtual void update(StateEngine *engine) override;
-    virtual void draw() override;
+    virtual void draw(BITMAP *buffer) override;
 
   private:
     // Menu/GUI
-    BITMAP *buffer;
     BITMAP *title, *sky, *city;
     BITMAP *cursor, *cursor2;
     BITMAP *little_xbox_buttons;

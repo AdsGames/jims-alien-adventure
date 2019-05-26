@@ -10,6 +10,7 @@
 #include "player.h"
 #include "goat.h"
 #include "key_manager.h"
+#include "LevelData.h"
 
 // Main game screen
 class Game : public State {
@@ -19,7 +20,7 @@ class Game : public State {
 
     void init();
     virtual void update(StateEngine *engine) override;
-    virtual void draw() override;
+    virtual void draw(BITMAP *buffer) override;
 
   private:
     // Music
@@ -39,20 +40,22 @@ class Game : public State {
     std::vector<stair> allStairs;
     std::vector<goat> goats;
 
+    Level *levelPtr;
+
     // Key Manager
     key_manager *screen_keys;
 
     bool sound_played;
 
     // Images
-    BITMAP *buffer, *stair_buffer;
+    BITMAP *stair_buffer;
     BITMAP *background_sky, *background_buildings;
     BITMAP *watch;
     BITMAP *youwin;
     BITMAP *youlose;
 
     float background_scroll;
-    float time_to_complete;
+    float distance_travelled;
 
     // Timers
     static volatile int timer1;
