@@ -11,6 +11,7 @@
 #include "Goat.h"
 #include "KeyManager.h"
 #include "LevelData.h"
+#include "Timer.h"
 
 // Main game screen
 class Game : public State {
@@ -26,46 +27,38 @@ class Game : public State {
     // Music
     SAMPLE *music;
 
-    // Variables
-    int animationFrame;
-
+    // Fonts
     FONT *dosis_26;
 
-    // Player
-    Player *player1;
+    // Sounds
+    SAMPLE *win, *lose;
 
-    SAMPLE *win;
-    SAMPLE *lose;
+    // Player
+    Player *player;
 
     // All stairs
-    std::vector<Stair> allStairs;
+    std::vector<Stair> stairs;
     std::vector<Goat> goats;
 
+    // Level pointer for quick lookups
     Level *levelPtr;
 
     // Key Manager
     key_manager *screen_keys;
 
-    bool sound_played;
-
     // Images
-    BITMAP *stair_buffer;
-    BITMAP *background_sky, *background_buildings;
+    BITMAP *background, *parallax;
     BITMAP *watch;
-    BITMAP *youwin;
-    BITMAP *youlose;
+    BITMAP *youwin, *youlose;
 
-    float background_scroll;
+    float parallax_scroll;
     float distance_travelled;
+    float scroll_speed;
+    const float max_scroll_speed = 6.0f;
 
     // Timers
-    static volatile int timer1;
-    static volatile float climb_time;
-    static volatile float time_since_win;
-
-    static void gameTicker();
-    static void gameTimer();
-    static void endTimer();
+    Timer start_time;
+    Timer end_time;
 };
 
 #endif

@@ -2,8 +2,6 @@
 
 #include "tools.h"
 
-#include <iostream>
-
 Button::Button () {
   images[0] = nullptr;
   images[1] = nullptr;

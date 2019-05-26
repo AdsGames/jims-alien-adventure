@@ -4,37 +4,36 @@
 #include <allegro.h>
 #include <vector>
 
-#include "key_data.h"
-
 class key_manager {
   public:
-    key_manager (int newX, int newY);
+    key_manager (int x, int y);
     virtual ~key_manager();
-
-    // All keys
-    static BITMAP *keys[255];
-    static SAMPLE *sounds[5];
 
     // Functions
     void draw (BITMAP *tempImage);
-    void update();
+    int update();
 
     bool keyDown();
     bool buttonDown();
-  protected:
+
   private:
     // All keys for queue
-    std::vector<key_data> key_queue;
+    std::vector<int> key_queue;
+
+    // Push new key
+    void pushKey();
+    void popKey();
+
+    // Images and sounds
+    BITMAP *keys[127];
+    SAMPLE *sounds[5];
 
     // Positioning
     int x;
     int y;
 
     // Any key?
-    bool buttonPressedCombo();
-    bool keyPressedCombo();
-    bool buttonIsPressed;
-    bool keyIsPressed;
+    bool past_frame_input;
 };
 
 #endif // KEY_MANAGER_H
