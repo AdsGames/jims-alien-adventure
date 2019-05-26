@@ -1,6 +1,5 @@
 #include "Intro.h"
 
-#include <iostream>
 #include "tools.h"
 
 Intro::Intro() {

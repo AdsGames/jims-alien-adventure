@@ -5,8 +5,6 @@
 #include "globals.h"
 
 int Stair::numberStairs = 0;
-const int Stair::maxScrollSpeed = 6;
-float Stair::scrollSpeed = 0;
 float Stair::locationOfFinal = 0;
 
 int Stair::stair_count = 0;
@@ -97,9 +95,9 @@ void Stair::update (std::vector<Stair> *allStairsCopy) {
   }
 }
 
-void Stair::movement() {
+void Stair::scroll (float speed) {
   // Move
-  x -= scrollSpeed;
+  x -= speed;
 
   // Top of map
   if (type == 1 || type == 2) {

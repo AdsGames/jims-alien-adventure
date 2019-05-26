@@ -2,7 +2,6 @@
 
 #include <logg.h>
 #include <loadpng.h>
-#include <sstream>
 #include <fstream>
 
 //Iterates through the number of buttons in a joystick and returns true if any keys are pressed
@@ -54,22 +53,19 @@ int random (int newLowest, int newHighest) {
 // Fade in
 void highcolor_fade_in (BITMAP *bmp_orig, int speed) {
   BITMAP *bmp_buff = create_bitmap (SCREEN_W, SCREEN_H);
-  BITMAP *str_orig = create_bitmap (SCREEN_W, SCREEN_H);
-  stretch_sprite (str_orig, bmp_orig, 0, 0, SCREEN_W, SCREEN_H);
 
-  if (speed <= 0) {
-    speed = 16;
-  }
+  speed = speed <= 0 ? 16 : speed;
 
   for (int a = 0; a < 256; a += speed) {
     clear (bmp_buff);
     set_trans_blender (0, 0, 0, a);
-    draw_trans_sprite (bmp_buff, str_orig, 0, 0);
+    draw_trans_sprite (bmp_buff, bmp_orig, 0, 0);
     vsync();
     stretch_sprite (screen, bmp_buff, 0, 0,  SCREEN_W, SCREEN_H);
   }
 
-  stretch_sprite (screen, str_orig, 0, 0,  SCREEN_W, SCREEN_H);
+  destroy_bitmap (bmp_buff);
+  stretch_sprite (screen, bmp_orig, 0, 0,  SCREEN_W, SCREEN_H);
 }
 
 // Fade out
@@ -78,9 +74,7 @@ void highcolor_fade_out (int speed) {
   BITMAP *bmp_orig = create_bitmap (SCREEN_W, SCREEN_H);
   blit (screen, bmp_orig, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
 
-  if (speed <= 0) {
-    speed = 16;
-  }
+  speed = speed <= 0 ? 16 : speed;
 
   for (int a = 255 - speed; a > 0; a -= speed) {
     clear (bmp_buff);
@@ -90,6 +84,7 @@ void highcolor_fade_out (int speed) {
     stretch_sprite (screen, bmp_buff, 0, 0,  SCREEN_W, SCREEN_H);
   }
 
+  destroy_bitmap (bmp_buff);
   destroy_bitmap (bmp_orig);
   rectfill (screen, 0, 0,  SCREEN_W, SCREEN_H, makecol (0, 0, 0));
 }

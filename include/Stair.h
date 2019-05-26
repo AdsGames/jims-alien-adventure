@@ -20,7 +20,7 @@ class Stair {
 
     // FUNctions
     void update (std::vector<Stair> *allStairsCopy);
-    void movement();
+    void scroll (float speed);
     void draw (BITMAP *buffer);
 
     static float location_y (float last_x);
@@ -29,9 +29,7 @@ class Stair {
     // Static members
     static int numberStairs;
     static float locationOfFinal;
-    static float scrollSpeed;
     static bool final_stair_placed;
-    static const int maxScrollSpeed;
 
   private:
     float x;
