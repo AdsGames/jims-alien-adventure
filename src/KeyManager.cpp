@@ -1,10 +1,9 @@
 #include "KeyManager.h"
 
-#include "globals.h"
 #include "tools.h"
 
 // Init
-key_manager::key_manager (int x, int y) {
+KeyManager::KeyManager (int x, int y) {
   // Set position
   this -> x = x;
   this -> y = y;
@@ -30,7 +29,7 @@ key_manager::key_manager (int x, int y) {
   sounds[1] = load_sample_ex ("sounds/ping.wav");
 }
 
-key_manager::~key_manager() {
+KeyManager::~KeyManager() {
   destroy_bitmap(keys[KEY_UP]);
   destroy_bitmap(keys[KEY_DOWN]);
   destroy_bitmap(keys[KEY_LEFT]);
@@ -45,13 +44,13 @@ key_manager::~key_manager() {
 }
 
 // Push key
-void key_manager::pushKey() {
+void KeyManager::pushKey() {
   int value = num_joysticks > 0 ? random (0, 3) : random (KEY_LEFT, KEY_DOWN);
   key_queue.push_back (value);
 }
 
 // Pop key
-void key_manager::popKey() {
+void KeyManager::popKey() {
   key_queue.erase (key_queue.begin());
 }
 
@@ -59,11 +58,11 @@ void key_manager::popKey() {
 // Return  0 nothing pressed
 //         1 success
 //        -1 failure
-int key_manager::update() {
+int KeyManager::update() {
   int result = 0;
 
   // Got a correct letter
-  if (key_queue.size() > 0 && !past_frame_input && (buttonDown() || keyDown())) {
+  if (key_queue.size() > 0 && !past_frame_input && (button_down() || key_down())) {
     if (key[key_queue.at(0)] || joy[0].button[key_queue.at(0)].b) {
       play_sample (sounds[1], 255, 125, 1000, 0);
       popKey();
@@ -77,13 +76,13 @@ int key_manager::update() {
   }
 
   // Prevents held keys
-  past_frame_input = (num_joysticks > 0) ? buttonDown() : keyDown();
+  past_frame_input = (num_joysticks > 0) ? button_down() : key_down();
 
   return result;
 }
 
 // Draw
-void key_manager::draw (BITMAP *tempImage) {
+void KeyManager::draw (BITMAP *tempImage) {
   // Background
   rectfill (tempImage, x + 15, y + 75, x   + 209 - 80, y + 83 + (key_queue.size() * 90), makecol (155, 155, 155));
 
@@ -92,24 +91,4 @@ void key_manager::draw (BITMAP *tempImage) {
     set_trans_blender (255, 255, 255, 255 - ((255 / 4) * i));
     draw_trans_sprite (tempImage, keys[key_queue.at(i)], x + 20,  - (i * 90) + y + 350);
   }
-}
-
-// Key down
-bool key_manager::keyDown() {
-  for (int i = 0; i < 127; i++) {
-    if (key[i]) {
-      return true;
-    }
-  }
-  return false;
-}
-
-// Joystick
-bool key_manager::buttonDown() {
-  for (int i = 0; i < 10; i++) {
-    if (joy[0].button[i].b) {
-      return true;
-    }
-  }
-  return false;
 }

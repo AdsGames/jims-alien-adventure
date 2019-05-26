@@ -17,7 +17,7 @@ Story::~Story() {
 
 // Update
 void Story::update(StateEngine *engine) {
-  if (keyboard_keypressed() || joy_buttonpressed()) {
+  if (key_down() || button_down()) {
     setNextState (engine, StateEngine::STATE_MENU);
   }
 

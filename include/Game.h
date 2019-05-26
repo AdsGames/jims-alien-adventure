@@ -44,16 +44,18 @@ class Game : public State {
     Level *levelPtr;
 
     // Key Manager
-    key_manager *screen_keys;
+    KeyManager *screen_keys;
 
     // Images
     BITMAP *background, *parallax;
     BITMAP *watch;
     BITMAP *youwin, *youlose;
+    BITMAP *stair_buffer;
 
     float parallax_scroll;
     float distance_travelled;
     float scroll_speed;
+    bool distance_is_reached;
     const float max_scroll_speed = 6.0f;
 
     // Timers

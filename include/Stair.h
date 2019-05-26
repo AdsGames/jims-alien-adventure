@@ -4,45 +4,32 @@
 #include <vector>
 #include <allegro.h>
 
-#define IMG_BRICK 0
-#define IMG_STAIRS 1
-#define IMG_TOP_RED 2
-#define IMG_TOP_GREEN 3
+#define IMG_STAIRS 0
+#define IMG_TOP_RED 1
+#define IMG_TOP_GREEN 2
+#define IMG_BRICK 3
 
 class Stair {
   public:
-    Stair (float newX, float newY, int newType);
+    Stair (float x);
     Stair (const Stair& s);
     virtual ~Stair();
 
-    int getType();
-    void setType (int newType);
-
     // FUNctions
-    void update (std::vector<Stair> *allStairsCopy);
-    void scroll (float speed);
+    void update (float distanceRemaining, float speed);
     void draw (BITMAP *buffer);
 
-    static float location_y (float last_x);
-    int find_top_stair (int index);
-
-    // Static members
-    static int numberStairs;
-    static float locationOfFinal;
-    static bool final_stair_placed;
-
   private:
-    float x;
-    float y;
+    float location_y (float last_x);
+    static bool last_stair_placed;
 
+    float x, y;
     int type;
-    int stairID;
 
     // Images
     BITMAP *transparency_bitmap;
 
     static BITMAP *images[4];
-
     static int stair_count;
 
     void load_sprites();
