@@ -87,7 +87,7 @@ void Game::init() {
   screen_keys = new key_manager (20, 50);
 
   // Player
-  player1 = new player (10 * 30, stair::location_y (10 * 30) - 90);
+  player1 = new Player (10 * 30, Stair::location_y (10 * 30) - 90);
 
   // Reset variables
   animationFrame = 0;
@@ -95,9 +95,9 @@ void Game::init() {
   distance_travelled = 0.0;
   switch_flicked = false;
   distance_is_reached = false;
-  stair::final_stair_placed = false;
-  stair::locationOfFinal = 0;
-  stair::numberStairs = 0;
+  Stair::final_stair_placed = false;
+  Stair::locationOfFinal = 0;
+  Stair::numberStairs = 0;
   sound_played = false;
 
   timer1 = 0;
@@ -106,13 +106,13 @@ void Game::init() {
 
   // Stairs (offset is 30 px)
   for (int i = SCREEN_W / 4; i < SCREEN_W; i += 30) {
-    stair newStair (i, stair::location_y (i), 0);
+    Stair newStair (i, Stair::location_y (i), 0);
     allStairs.push_back (newStair);
   }
 
 
   // Init variables
-  stair::scrollSpeed = 0;
+  Stair::scrollSpeed = 0;
 
   // Start music
   play_sample (music, 255, 128, 1000, 1);
@@ -161,11 +161,11 @@ void Game::update(StateEngine *engine) {
 
   // Add to distance until switch is flicked
   if (!switch_flicked) {
-    distance_travelled += stair::scrollSpeed / 25;
+    distance_travelled += Stair::scrollSpeed / 25;
   }
 
   // When you reach destination
-  if ((player1 -> getY() <= (stair::locationOfFinal - player1 -> getHeight())) && stair::final_stair_placed) {
+  if ((player1 -> getY() <= (Stair::locationOfFinal - player1 -> getHeight())) && Stair::final_stair_placed) {
     switch_flicked = true;
 
     for (unsigned int i = 0; i < allStairs.size(); i++) {
@@ -182,7 +182,7 @@ void Game::update(StateEngine *engine) {
 
 
   // Scroll background
-  background_scroll -= stair::scrollSpeed / 4;
+  background_scroll -= Stair::scrollSpeed / 4;
 
   if (background_scroll < 0) {
     background_scroll = 1024;
@@ -198,7 +198,7 @@ void Game::update(StateEngine *engine) {
   }
 
   // Character
-  player1 -> update(int (timer1 * ceil (stair::scrollSpeed)) % 8);
+  player1 -> update(int (timer1 * ceil (Stair::scrollSpeed)) % 8);
 
   // Update goats
   for (auto g = goats.begin(); g < goats.end(); ) {
@@ -219,7 +219,7 @@ void Game::update(StateEngine *engine) {
   // Motherfing goats!
   if (random (0, 100) == 0) {
     float randomDistance = float (random (2, 6)) / 10;
-    goat newGoat (SCREEN_W, random (0, SCREEN_H), randomDistance, randomDistance * 3);
+    Goat newGoat (SCREEN_W, random (0, SCREEN_H), randomDistance, randomDistance * 3);
     goats.push_back (newGoat);
   }
 

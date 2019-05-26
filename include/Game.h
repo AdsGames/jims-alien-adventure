@@ -6,10 +6,10 @@
 #include <allegro.h>
 #include <vector>
 
-#include "stair.h"
-#include "player.h"
-#include "goat.h"
-#include "key_manager.h"
+#include "Stair.h"
+#include "Player.h"
+#include "Goat.h"
+#include "KeyManager.h"
 #include "LevelData.h"
 
 // Main game screen
@@ -30,15 +30,16 @@ class Game : public State {
     int animationFrame;
 
     FONT *dosis_26;
+
     // Player
-    player *player1;
+    Player *player1;
 
     SAMPLE *win;
     SAMPLE *lose;
 
     // All stairs
-    std::vector<stair> allStairs;
-    std::vector<goat> goats;
+    std::vector<Stair> allStairs;
+    std::vector<Goat> goats;
 
     Level *levelPtr;
 
