@@ -30,29 +30,28 @@ void Game::init() {
   win = load_sample_ex ("sounds/win.wav");
   lose = load_sample_ex ("sounds/lose.wav");
 
+  // Stair buffer
+  stair_buffer = create_bitmap (SCREEN_W, SCREEN_H);
+
   // Sets Fonts
   font = load_font_ex("fonts/dosis.pcx");
   dosis_26 = load_font_ex("fonts/dosis_26.pcx");
 
   // Keys
-  screen_keys = new key_manager (20, 50);
+  screen_keys = new KeyManager (20, 50);
 
   // Player
-  player = new Player (10 * 30, Stair::location_y (10 * 30) - 90);
+  player = new Player (300, 300);
 
   // Reset variables
   parallax_scroll = 0.0;
   distance_travelled = 0.0;
-  switch_flicked = false;
   distance_is_reached = false;
-  Stair::final_stair_placed = false;
-  Stair::locationOfFinal = 0;
-  Stair::numberStairs = 0;
   scroll_speed = 0.0f;
 
   // Stairs (offset is 30 px)
-  for (int i = SCREEN_W / 4; i < SCREEN_W; i += 30) {
-    stairs.push_back (Stair(i, Stair::location_y (i), 0));
+  for (int i = 0; i < SCREEN_W; i += 30) {
+    stairs.push_back (Stair(i));
   }
 
   // Start music
@@ -66,6 +65,7 @@ Game::~Game() {
   destroy_bitmap (parallax);
   destroy_bitmap (watch);
   destroy_bitmap (youwin);
+  destroy_bitmap (stair_buffer);
 
   // Fonts
   destroy_font (dosis_26);
@@ -96,19 +96,18 @@ void Game::update(StateEngine *engine) {
   // Start timer
   if (!start_time.IsRunning() &&
        start_time.GetElapsedTime<seconds>() == 0 &&
-      (screen_keys -> buttonDown() || screen_keys -> keyDown())) {
+      (button_down() || key_down())) {
     start_time.Start();
   }
 
   // Win
-  if (switch_flicked) {
+  if (distance_is_reached) {
     if (start_time.IsRunning()) {
       start_time.Stop();
       end_time.Start();
       levelPtr -> completed = true;
       play_sample (win, 255, 125, 1000, 0);
       stop_sample (music);
-      scroll_speed = 0;
     }
   }
 
@@ -123,8 +122,16 @@ void Game::update(StateEngine *engine) {
     }
   }
 
-  // Get key triggers
+  // Move
   else {
+    distance_travelled += scroll_speed;
+    if (distance_travelled > levelPtr -> distance) {
+      distance_travelled = levelPtr -> distance;
+      distance_is_reached = true;
+      scroll_speed = 0;
+    }
+
+    // Get key triggers
     int input = screen_keys -> update();
 
     // Success!
@@ -133,51 +140,27 @@ void Game::update(StateEngine *engine) {
     }
     // Failure
     else if (input == -1) {
-      scroll_speed /= 4;
-    }
-
-    // Slow stairs down
-    if (scroll_speed > 0.01) {
-      scroll_speed -= 0.02;
-    }
-    else {
-      scroll_speed = 0;
+      scroll_speed /= 4.0f;
     }
   }
 
-  // Move
-  if (!distance_is_reached) {
-    distance_travelled += scroll_speed / 25;
-    if (distance_travelled >= levelPtr -> distance) {
-      distance_travelled = levelPtr -> distance;
-      distance_is_reached = true;
-    }
+  // Slow stairs down
+  if (scroll_speed > 0.02f) {
+    scroll_speed -= 0.02f;
   }
-
-  // When you reach destination
-  if ((player -> getY() <= (Stair::locationOfFinal - player -> getHeight())) && Stair::final_stair_placed) {
-    switch_flicked = true;
-
-    for (auto s = stairs.begin(); s < stairs.end(); s++) {
-      if (s -> getType() == 1) {
-        s -> setType (2);
-      }
-    }
+  else {
+    scroll_speed = 0;
   }
 
   // Scroll background
-  parallax_scroll = scroll_speed / 4;
-  if (parallax_scroll < 0) {
-    parallax_scroll = 1024;
+  parallax_scroll = scroll_speed / 4.0f;
+  if (parallax_scroll < 0.0f) {
+    parallax_scroll = 1024.0f;
   }
 
   // Stairs!
   for (auto s = stairs.begin(); s < stairs.end(); s++) {
-    s -> update (&stairs);
-  }
-
-  for (auto s = stairs.begin(); s < stairs.end(); s++) {
-    s -> scroll(scroll_speed);
+    s -> update (levelPtr -> distance - distance_travelled, scroll_speed);
   }
 
   // Character
@@ -186,7 +169,7 @@ void Game::update(StateEngine *engine) {
   // Update goats
   for (auto g = goats.begin(); g < goats.end(); ) {
     g -> update();
-    g -> fall (switch_flicked * 5);
+    g -> fall (distance_is_reached * 5);
     g -> offScreen() ? g = goats.erase(g) : ++g;
   }
 
@@ -213,9 +196,11 @@ void Game::draw(BITMAP *buffer) {
   }
 
   // Stairs!
+  clear_to_color(stair_buffer, 0xFF00FF);
   for (auto s = stairs.begin(); s < stairs.end(); s++) {
-    s -> draw (buffer);
+    s -> draw (stair_buffer);
   }
+  draw_sprite(buffer, stair_buffer, 0, 0);
 
   // Character
   player -> draw (buffer);
@@ -227,7 +212,7 @@ void Game::draw(BITMAP *buffer) {
   textprintf_ex (buffer, font, 20, 32, makecol (0, 0, 0), -1, "%4.0f/%i", distance_travelled, levelPtr -> distance);
 
   // Win / Lose text
-  if (switch_flicked) {
+  if (distance_is_reached) {
     draw_sprite (buffer, youwin, 200, 200);
   }
   else if (start_time.GetElapsedTime<seconds>() >= levelPtr -> time) {

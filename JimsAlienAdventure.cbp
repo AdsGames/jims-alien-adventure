@@ -43,8 +43,8 @@
 		<Unit filename="include/Stair.h" />
 		<Unit filename="include/State.h" />
 		<Unit filename="include/Story.h" />
+		<Unit filename="include/Timer.h" />
 		<Unit filename="include/globals.h" />
-		<Unit filename="include/key_data.h" />
 		<Unit filename="include/tools.h" />
 		<Unit filename="res/resources.rc">
 			<Option compilerVar="WINDRES" />
@@ -63,8 +63,8 @@
 		<Unit filename="src/Stair.cpp" />
 		<Unit filename="src/State.cpp" />
 		<Unit filename="src/Story.cpp" />
+		<Unit filename="src/Timer.cpp" />
 		<Unit filename="src/globals.cpp" />
-		<Unit filename="src/key_data.cpp" />
 		<Unit filename="src/main.cpp" />
 		<Unit filename="src/tools.cpp" />
 		<Extensions>

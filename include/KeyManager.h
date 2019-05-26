@@ -1,20 +1,17 @@
-#ifndef KEY_MANAGER_H
-#define KEY_MANAGER_H
+#ifndef KEYMANAGER_H
+#define KEYMANAGER_H
 
 #include <allegro.h>
 #include <vector>
 
-class key_manager {
+class KeyManager {
   public:
-    key_manager (int x, int y);
-    virtual ~key_manager();
+    KeyManager (int x, int y);
+    virtual ~KeyManager();
 
     // Functions
     void draw (BITMAP *tempImage);
     int update();
-
-    bool keyDown();
-    bool buttonDown();
 
   private:
     // All keys for queue
@@ -36,4 +33,4 @@ class key_manager {
     bool past_frame_input;
 };
 
-#endif // KEY_MANAGER_H
+#endif // KEYMANAGER_H
