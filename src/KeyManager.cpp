@@ -1,8 +1,8 @@
-#include "key_manager.h"
+#include "KeyManager.h"
 
 #include "globals.h"
 #include "tools.h"
-#include "stair.h"
+#include "Stair.h"
 
 BITMAP *key_manager::keys[255];
 SAMPLE *key_manager::sounds[5];
@@ -15,12 +15,12 @@ key_manager::key_manager (int newX, int newY) {
 
   // Add keys
   for (int i = 0; i < 4; i++) {
-    if (!joystick_enabled) {
+    if (!(num_joysticks > 0)) {
       key_data newKey (random (KEY_LEFT, KEY_DOWN));
       key_queue.push_back (newKey);
     }
 
-    if (joystick_enabled) {
+    if (num_joysticks > 0) {
       key_data newKey (random (0, 3));
       key_queue.push_back (newKey);
     }
@@ -41,10 +41,10 @@ void key_manager::update() {
   if (!switch_flicked) {
     // Got a correct letter
     if ((key_queue.size() > 0) &&
-        ((!joystick_enabled &&
+        ((!(num_joysticks > 0) &&
           key[key_queue.at (0).getValue()] &&
           !keyIsPressed) ||
-         (joystick_enabled &&
+         (num_joysticks > 0 &&
           joy[0].button[key_queue.at (0).getValue()].b &&
           !buttonIsPressed))) {
 
@@ -53,7 +53,7 @@ void key_manager::update() {
       key_queue.erase (key_queue.begin());
 
       // Add key to queue
-      if (joystick_enabled) {
+      if (num_joysticks > 0) {
         key_data newKey (random (0, 3));
         key_queue.push_back (newKey);
       }
@@ -63,13 +63,13 @@ void key_manager::update() {
       }
 
       // Increase speed
-      if (stair::scrollSpeed < stair::maxScrollSpeed) {
-        stair::scrollSpeed += 0.8;
+      if (Stair::scrollSpeed < Stair::maxScrollSpeed) {
+        Stair::scrollSpeed += 0.8;
       }
     }
     else if ((keyDown() && keyIsPressed == false) || (buttonDown() && buttonIsPressed == false)) {
-      if (stair::scrollSpeed > 0) {
-        stair::scrollSpeed /= 4;
+      if (Stair::scrollSpeed > 0) {
+        Stair::scrollSpeed /= 4;
       }
 
       play_sample (sounds[0], 255, 125, 1000, 0);
@@ -77,24 +77,24 @@ void key_manager::update() {
   }
   // Stop
   else {
-    stair::scrollSpeed = 0;
+    Stair::scrollSpeed = 0;
   }
 
   // Prevents held keys
-  if (!joystick_enabled) {
+  if (!(num_joysticks > 0)) {
     keyIsPressed = keyDown();
   }
 
-  if (joystick_enabled) {
+  if (num_joysticks > 0) {
     buttonIsPressed = buttonDown();
   }
 
   // Slow stairs down
-  if (stair::scrollSpeed > 0.01) {
-    stair::scrollSpeed -= 0.02;
+  if (Stair::scrollSpeed > 0.01) {
+    Stair::scrollSpeed -= 0.02;
   }
   else {
-    stair::scrollSpeed = 0;
+    Stair::scrollSpeed = 0;
   }
 }
 

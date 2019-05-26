@@ -1,6 +1,5 @@
 #include "Menu.h"
 
-#include "globals.h"
 #include "tools.h"
 
 Menu::Menu() {
@@ -91,7 +90,7 @@ void Menu::update(StateEngine *engine) {
   if (options.Clicked()) {
     play_sample (NOTALLOWED, 255, 125, 1000, 0);
     float randomDistance = float (random (2, 6)) / 10.0f;
-    goat newGoat (SCREEN_W, random (0, SCREEN_H), randomDistance, randomDistance * 3);
+    Goat newGoat (SCREEN_W, random (0, SCREEN_H), randomDistance, randomDistance * 3);
     goats.push_back (newGoat);
   }
 
@@ -101,7 +100,7 @@ void Menu::update(StateEngine *engine) {
   // Motherfing goats!
   if (random (0, 80) == 0) {
     float randomDistance = float (random (2, 6)) / 10;
-    goat newGoat (SCREEN_W, random (0, SCREEN_H), randomDistance, randomDistance * 3);
+    Goat newGoat (SCREEN_W, random (0, SCREEN_H), randomDistance, randomDistance * 3);
     goats.push_back (newGoat);
   }
 
@@ -150,7 +149,7 @@ void Menu::draw(BITMAP *buffer) {
   exit.Draw (buffer);
 
   // Joystick helpers
-  if (joystick_enabled) {
+  if (num_joysticks > 0) {
     masked_blit (little_xbox_buttons, buffer, 60, 0, start.GetX()   + 21 - 4 * start.Hover()  , start.GetY()   + 114 - start.Hover()  , 20, 20);
     masked_blit (little_xbox_buttons, buffer, 40, 0, story.GetX()   + 25 - 4 * story.Hover()  , story.GetY()   + 114 - story.Hover()  , 20, 20);
     masked_blit (little_xbox_buttons, buffer,  0, 0, options.GetX() + 25 - 4 * options.Hover(), options.GetY() + 114 - options.Hover(), 20, 20);

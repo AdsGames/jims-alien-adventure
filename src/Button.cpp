@@ -1,7 +1,6 @@
-#include "button.h"
+#include "Button.h"
 
 #include "tools.h"
-#include "globals.h"
 
 #include <iostream>
 
@@ -43,7 +42,7 @@ bool Button::Hover() {
 }
 
 bool Button::Clicked() {
-  return Hover() && (mouse_b & 1 || (joystick_enabled && joy[0].button[0].b));
+  return Hover() && (mouse_b & 1 || (num_joysticks > 0 && joy[0].button[0].b));
 }
 
 int Button::GetX() {

@@ -9,17 +9,17 @@
 #define IMG_TOP_RED 2
 #define IMG_TOP_GREEN 3
 
-class stair {
+class Stair {
   public:
-    stair (float newX, float newY, int newType);
-    stair (const stair& s);
-    virtual ~stair();
+    Stair (float newX, float newY, int newType);
+    Stair (const Stair& s);
+    virtual ~Stair();
 
     int getType();
     void setType (int newType);
 
     // FUNctions
-    void update (std::vector<stair> *allStairsCopy);
+    void update (std::vector<Stair> *allStairsCopy);
     void movement();
     void draw (BITMAP *buffer);
 

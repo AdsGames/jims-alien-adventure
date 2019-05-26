@@ -1,7 +1,6 @@
 #include "MapPin.h"
 
 #include "tools.h"
-#include "globals.h"
 
 BITMAP *MapPin::pin_images[2] = { nullptr };
 int MapPin::pin_count = 0;
