@@ -7,7 +7,10 @@ You must link with allegro 4, lib ogg and the allegro loadpng addon:
 
 They should be linked in this order
 ```
+-llogg
+-lvorbisfile
+-lvorbis
 -logg
--lalleg44
 -lloadpng
+-lalleg44
 ```
