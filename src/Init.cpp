@@ -17,8 +17,6 @@ void Init::update(StateEngine *engine) {
   setNextState (engine, StateEngine::STATE_INTRO);
 }
 
-
-
 void Init::draw(BITMAP *buffer) {
   clear_to_color(buffer, 0xFFFFFF);
 }
