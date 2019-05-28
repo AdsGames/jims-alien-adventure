@@ -211,7 +211,7 @@ void Game::draw(BITMAP *buffer) {
   // Distance
   rectfill (buffer, 20, 20, 620, 80, makecol (0, 0, 0));
   rectfill (buffer, 24, 24, 616, 76, makecol (255, 255, 255));
-  rectfill (buffer, 24, 24, 24 + (600 * (distance_travelled / levelPtr -> distance)), 76, makecol (0, 255, 0));
+  rectfill (buffer, 24, 24, 24 + (592 * (distance_travelled / levelPtr -> distance)), 76, makecol (0, 255, 0));
   textprintf_ex (buffer, font, 30, 32, makecol (0, 0, 0), -1, "%4.0f/%i", distance_travelled, levelPtr -> distance);
 
   // Win / Lose text

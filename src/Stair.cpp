@@ -40,8 +40,10 @@ Stair::Stair (const Stair& s) {
 // Destructor
 Stair::~Stair() {
   stair_count--;
-  if (stair_count == 0)
+  if (stair_count == 0) {
     unload_sprites();
+    last_stair_placed = false;
+  }
 
   destroy_bitmap(transparency_bitmap);
 }
