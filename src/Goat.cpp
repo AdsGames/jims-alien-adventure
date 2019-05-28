@@ -5,11 +5,11 @@
 BITMAP *Goat::goat_image[2] = { nullptr };
 int Goat::goat_count = 0;
 
-Goat::Goat (float x, float y, float scale, float speed) {
+Goat::Goat (float x, float y, float scale) {
   this -> x = x;
   this -> y = y;
   this -> scale = scale;
-  this -> speed = speed;
+  this -> speed = scale * 3.0f;
 
   if (goat_count == 0)
     load_sprites();

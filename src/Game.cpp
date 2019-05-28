@@ -5,7 +5,7 @@
 #include "globals.h"
 #include "tools.h"
 
-#include <iostream>
+#include <algorithm>
 
 Game::Game() {
   init();
@@ -65,6 +65,7 @@ Game::~Game() {
   destroy_bitmap (parallax);
   destroy_bitmap (watch);
   destroy_bitmap (youwin);
+  destroy_bitmap (youlose);
   destroy_bitmap (stair_buffer);
 
   // Fonts
@@ -77,7 +78,9 @@ Game::~Game() {
   stairs.clear();
 
   // Stop music
-  stop_sample (music);
+  destroy_sample (music);
+  destroy_sample (win);
+  destroy_sample (lose);
 
   // Fade out
   highcolor_fade_out (16);
@@ -164,7 +167,7 @@ void Game::update(StateEngine *engine) {
   }
 
   // Character
-  player -> update(int (ceil (scroll_speed)) % 8);
+  player -> update(int (ceil (start_time.GetElapsedTime<milliseconds>() / 100.0f * scroll_speed)) % 8);
 
   // Update goats
   for (auto g = goats.begin(); g < goats.end(); ) {
@@ -175,8 +178,8 @@ void Game::update(StateEngine *engine) {
 
   // Spawn some motherfing goats!
   if (random (0, 100) == 0) {
-    float randomDistance = float (random (2, 6)) / 10;
-    goats.push_back (Goat(SCREEN_W, random (0, SCREEN_H), randomDistance, randomDistance * 3));
+    goats.push_back (Goat(SCREEN_W, random (0, SCREEN_H), float (random (5, 60)) / 100.0f));
+    std::sort(goats.begin(), goats.end());
   }
 }
 
@@ -209,7 +212,7 @@ void Game::draw(BITMAP *buffer) {
   rectfill (buffer, 20, 20, 620, 80, makecol (0, 0, 0));
   rectfill (buffer, 24, 24, 616, 76, makecol (255, 255, 255));
   rectfill (buffer, 24, 24, 24 + (600 * (distance_travelled / levelPtr -> distance)), 76, makecol (0, 255, 0));
-  textprintf_ex (buffer, font, 20, 32, makecol (0, 0, 0), -1, "%4.0f/%i", distance_travelled, levelPtr -> distance);
+  textprintf_ex (buffer, font, 30, 32, makecol (0, 0, 0), -1, "%4.0f/%i", distance_travelled, levelPtr -> distance);
 
   // Win / Lose text
   if (distance_is_reached) {
