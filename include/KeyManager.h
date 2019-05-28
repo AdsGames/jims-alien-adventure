@@ -22,8 +22,8 @@ class KeyManager {
     void popKey();
 
     // Images and sounds
-    BITMAP *keys[127];
-    SAMPLE *sounds[5];
+    BITMAP *keys[KEY_MAX];
+    SAMPLE *sounds[2];
 
     // Positioning
     int x;

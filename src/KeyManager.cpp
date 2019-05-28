@@ -15,6 +15,10 @@ KeyManager::KeyManager (int x, int y) {
   // No keys down
   past_frame_input = false;
 
+  // Nullify keys
+  for (int i = 0; i < KEY_MAX; i++)
+    keys[i] = nullptr;
+
   // Load images
   keys[KEY_UP] = load_png_ex("images/keys/key_up.png");
   keys[KEY_DOWN] = load_png_ex("images/keys/key_down.png");
@@ -30,17 +34,13 @@ KeyManager::KeyManager (int x, int y) {
 }
 
 KeyManager::~KeyManager() {
-  destroy_bitmap(keys[KEY_UP]);
-  destroy_bitmap(keys[KEY_DOWN]);
-  destroy_bitmap(keys[KEY_LEFT]);
-  destroy_bitmap(keys[KEY_RIGHT]);
-  destroy_bitmap(keys[0]);
-  destroy_bitmap(keys[1]);
-  destroy_bitmap(keys[2]);
-  destroy_bitmap(keys[3]);
+  for (int i = 0; i < KEY_MAX; i++)
+    destroy_bitmap(keys[i]);
 
   destroy_sample(sounds[0]);
   destroy_sample(sounds[1]);
+
+  key_queue.clear();
 }
 
 // Push key

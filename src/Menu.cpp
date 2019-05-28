@@ -2,6 +2,8 @@
 
 #include "tools.h"
 
+#include <algorithm>
+
 Menu::Menu() {
   // Load music
   music = load_ogg_ex("music/JAA-Theme.ogg");
@@ -54,6 +56,8 @@ Menu::~Menu() {
   destroy_bitmap (sky);
   destroy_bitmap (city);
   destroy_bitmap (cursor);
+  destroy_bitmap (cursor2);
+  destroy_bitmap (little_xbox_buttons);
   destroy_bitmap (background[0]);
   destroy_bitmap (background[1]);
 
@@ -61,7 +65,8 @@ Menu::~Menu() {
   goats.clear();
 
   // Stop music
-  stop_sample (music);
+  destroy_sample (music);
+  destroy_sample (NOTALLOWED);
 
   // Clear keybuff
   clear_keybuf();
@@ -87,21 +92,18 @@ void Menu::update(StateEngine *engine) {
   if (story.Clicked())
     setNextState (engine, StateEngine::STATE_STORY);
 
-  if (options.Clicked()) {
-    play_sample (NOTALLOWED, 255, 125, 1000, 0);
-    float randomDistance = float (random (2, 6)) / 10.0f;
-    Goat newGoat (SCREEN_W, random (0, SCREEN_H), randomDistance, randomDistance * 3);
-    goats.push_back (newGoat);
-  }
-
   if (exit.Clicked())
     setNextState (engine, StateEngine::STATE_EXIT);
 
   // Motherfing goats!
-  if (random (0, 80) == 0) {
-    float randomDistance = float (random (2, 6)) / 10;
-    Goat newGoat (SCREEN_W, random (0, SCREEN_H), randomDistance, randomDistance * 3);
-    goats.push_back (newGoat);
+  if (random (0, 80) == 0 || options.Clicked()) {
+    goats.push_back (Goat(SCREEN_W, random (0, SCREEN_H), float(random (5, 60)) / 100.0f));
+    std::sort(goats.begin(), goats.end());
+
+    if (options.Clicked()) {
+      stop_sample (NOTALLOWED);
+      play_sample (NOTALLOWED, 255, 125, 1000, 0);
+    }
   }
 
   // Update goats
@@ -132,8 +134,8 @@ void Menu::draw(BITMAP *buffer) {
   draw_sprite (buffer, city, city_x + city -> w, SCREEN_H - city -> h);
 
   // Draw goats
-  for (unsigned int i = 0; i < goats.size(); i++) {
-    goats.at (i).draw (buffer);
+  for (auto g = goats.begin(); g < goats.end(); ++g) {
+    g -> draw (buffer);
   }
 
   // Stairs
