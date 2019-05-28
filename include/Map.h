@@ -24,7 +24,7 @@ class Map : public State {
 
     SAMPLE *music;
 
-    std::vector<MapPin*> locations;
+    std::vector<MapPin*> pins;
 };
 
 #endif // MAP_H

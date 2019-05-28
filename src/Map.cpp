@@ -14,10 +14,10 @@ Map::Map() {
   // Allow transparency
   set_alpha_blender();
 
-  // Add locations
+  // Add pins
   for (int i = 0; i < LevelData::GetLevelData() -> GetNumLevels(); i++) {
     Level *l = LevelData::GetLevelData() -> GetLevel(i);
-    locations.push_back (new MapPin(l -> pin_x, l -> pin_y, l -> folder, l -> completed, l -> id));
+    pins.push_back (new MapPin(l -> pin_x, l -> pin_y, l -> folder, l -> completed, l -> id));
   }
 
   // Cursor position
@@ -32,10 +32,13 @@ Map::~Map() {
   destroy_bitmap (map_image);
   destroy_bitmap (cursor);
 
-  locations.clear();
+  // Destroy pins
+  for (auto p : pins) {
+    delete p;
+  }
+  pins.clear();
 
-  // Stop music
-  stop_sample (music);
+  // Destroy music
   destroy_sample (music);
 
   // Fade out
@@ -48,9 +51,9 @@ void Map::update(StateEngine *engine) {
 
   // Change level
   if (mouse_b & 1 || (num_joysticks > 0 && joy[0].button[0].b)) {
-    for (unsigned int i = 0; i < locations.size(); i++) {
-      if (locations.at(i) -> Hover()) {
-        levelOn = locations.at(i) -> GetID();
+    for (auto p : pins) {
+      if (p -> Hover()) {
+        levelOn = p -> GetID();
         setNextState (engine, StateEngine::STATE_GAME);
       }
     }
@@ -75,8 +78,8 @@ void Map::draw(BITMAP *buffer) {
   draw_sprite (buffer, map_image, 0, 0);
 
   // Locations
-  for (unsigned int i = 0; i < locations.size(); i++) {
-    locations.at(i) -> Draw (buffer);
+  for (auto p : pins) {
+    p -> Draw (buffer);
   }
 
   // Cursor
