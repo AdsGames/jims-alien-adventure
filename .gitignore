@@ -1,5 +1,6 @@
 *.db
 *.depend
-*.o
+output/
 *.layout
 *.exe
+build/Jim*s*Alien*Adventure
