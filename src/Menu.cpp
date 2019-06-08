@@ -116,7 +116,7 @@ void Menu::update(StateEngine *engine) {
   // Flip switch
   if (mouse_b & 1) {
     if ((!switchFlipped && collision (595, 607, mouse_x, mouse_x, 236, 248, mouse_y, mouse_y)) ||
-         (switchFlipped && collision (579, 591, mouse_x, mouse_x, 235, 247, mouse_y, mouse_y))) {
+        (switchFlipped && collision (579, 591, mouse_x, mouse_x, 235, 247, mouse_y, mouse_y))) {
       switchFlipped = !switchFlipped;
     }
   }
@@ -152,10 +152,10 @@ void Menu::draw(BITMAP *buffer) {
 
   // Joystick helpers
   if (num_joysticks > 0) {
-    masked_blit (little_xbox_buttons, buffer, 60, 0, start.GetX()   + 21 - 4 * start.Hover()  , start.GetY()   + 114 - start.Hover()  , 20, 20);
-    masked_blit (little_xbox_buttons, buffer, 40, 0, story.GetX()   + 25 - 4 * story.Hover()  , story.GetY()   + 114 - story.Hover()  , 20, 20);
+    masked_blit (little_xbox_buttons, buffer, 60, 0, start.GetX()   + 21 - 4 * start.Hover(), start.GetY()   + 114 - start.Hover(), 20, 20);
+    masked_blit (little_xbox_buttons, buffer, 40, 0, story.GetX()   + 25 - 4 * story.Hover(), story.GetY()   + 114 - story.Hover(), 20, 20);
     masked_blit (little_xbox_buttons, buffer,  0, 0, options.GetX() + 25 - 4 * options.Hover(), options.GetY() + 114 - options.Hover(), 20, 20);
-    masked_blit (little_xbox_buttons, buffer, 20, 0, exit.GetX()    + 25 - 4 * exit.Hover()   , exit.GetY()    + 114 - exit.Hover()   , 20, 20);
+    masked_blit (little_xbox_buttons, buffer, 20, 0, exit.GetX()    + 25 - 4 * exit.Hover(), exit.GetY()    + 114 - exit.Hover(), 20, 20);
   }
 
   // Cursor

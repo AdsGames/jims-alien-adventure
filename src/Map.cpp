@@ -36,6 +36,7 @@ Map::~Map() {
   for (auto p : pins) {
     delete p;
   }
+
   pins.clear();
 
   // Destroy music

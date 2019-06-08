@@ -19,11 +19,12 @@ Stair::Stair (float x) {
 
   if (stair_count == 0)
     load_sprites();
+
   stair_count++;
 }
 
 // Copy constructor
-Stair::Stair (const Stair& s) {
+Stair::Stair (const Stair &s) {
   x = s.x;
   y = s.y;
   type = s.type;
@@ -34,12 +35,14 @@ Stair::Stair (const Stair& s) {
 
   if (stair_count == 0)
     load_sprites();
+
   stair_count++;
 }
 
 // Destructor
 Stair::~Stair() {
   stair_count--;
+
   if (stair_count == 0) {
     unload_sprites();
     last_stair_placed = false;
@@ -76,6 +79,7 @@ void Stair::update (float distanceRemaining, float speed) {
       type = 1;
       last_stair_placed = true;
     }
+
     x += images[IMG_STAIRS] -> w * int(SCREEN_W / images[IMG_STAIRS] -> w);
   }
 

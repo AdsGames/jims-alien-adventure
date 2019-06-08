@@ -6,7 +6,7 @@
 class Goat {
   public:
     Goat (float x, float y, float scale);
-    Goat (const Goat& g);
+    Goat (const Goat &g);
     virtual ~Goat();
 
     // Functions
@@ -16,7 +16,7 @@ class Goat {
     void draw (BITMAP *buffer);
 
     // Sorting operator
-    bool operator < (const Goat& g) const {
+    bool operator < (const Goat &g) const {
       return (scale == g.scale) ? y < g.y : scale < g.scale;
     }
 
