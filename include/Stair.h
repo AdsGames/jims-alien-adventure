@@ -12,7 +12,7 @@
 class Stair {
   public:
     Stair (float x);
-    Stair (const Stair& s);
+    Stair (const Stair &s);
     virtual ~Stair();
 
     // FUNctions

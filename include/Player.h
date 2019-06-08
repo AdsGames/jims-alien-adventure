@@ -6,7 +6,7 @@
 class Player {
   public:
     Player (float x, float y);
-    Player (const Player& p);
+    Player (const Player &p);
     virtual ~Player();
 
     void draw (BITMAP *buffer);

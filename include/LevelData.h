@@ -22,12 +22,12 @@ class LevelData {
 
     int GetNumLevels();
 
-    static LevelData* GetLevelData();
+    static LevelData *GetLevelData();
   private:
     LevelData(const char *file);
 
     static LevelData *instance;
-    std::vector<Level*> levels;
+    std::vector<Level *> levels;
 };
 
 #endif // LEVELDATA_H

@@ -14,6 +14,7 @@ MapPin::MapPin (int x, int y, std::string folder, bool completed, int id) {
 
   if (pin_count == 0)
     load_sprites();
+
   pin_count++;
 
   this -> y -= pin_images[0] -> h / 2;
@@ -23,6 +24,7 @@ MapPin::MapPin (int x, int y, std::string folder, bool completed, int id) {
 // De-construct
 MapPin::~MapPin() {
   pin_count--;
+
   if (pin_count == 0)
     unload_sprites();
 
