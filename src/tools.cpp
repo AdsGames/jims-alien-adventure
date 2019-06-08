@@ -12,6 +12,7 @@ bool key_down() {
       return true;
     }
   }
+
   return false;
 }
 
@@ -22,6 +23,7 @@ bool button_down() {
       return true;
     }
   }
+
   return false;
 }
 
@@ -34,7 +36,7 @@ bool collision (int xMin1, int xMax1, int xMin2, int xMax2, int yMin1, int yMax1
 int random (int low, int high) {
   std::random_device dev;
   std::mt19937 rng(dev());
-  std::uniform_int_distribution<std::mt19937::result_type> dist6(low,high); // distribution in range [1, 6]
+  std::uniform_int_distribution<std::mt19937::result_type> dist6(low, high); // distribution in range [1, 6]
 
   return dist6(rng);
 }
@@ -90,39 +92,47 @@ void abort_on_error (const char *message) {
 }
 
 // Load image
-BITMAP* load_png_ex(const char *path) {
+BITMAP *load_png_ex(const char *path) {
   BITMAP *temp = nullptr;
+
   if (!(temp = load_png(path, nullptr))) {
     abort_on_error ((std::string("Cannot find image (") + path + ") \n Please check your files and try again").c_str());
   }
+
   return temp;
 }
 
 // Load ogg
-SAMPLE* load_ogg_ex(const char *path) {
+SAMPLE *load_ogg_ex(const char *path) {
   SAMPLE *temp = nullptr;
+
   if (!(temp = logg_load(path))) {
     abort_on_error ((std::string("Cannot find music (") + path + ") \n Please check your files and try again").c_str());
   }
+
   return temp;
 }
 
 
 // Load sample
-SAMPLE* load_sample_ex(const char *path) {
+SAMPLE *load_sample_ex(const char *path) {
   SAMPLE *temp = nullptr;
+
   if (!(temp = load_sample(path))) {
     abort_on_error ((std::string("Cannot find sample (") + path + ") \n Please check your files and try again").c_str());
   }
+
   return temp;
 }
 
 // Load font
-FONT* load_font_ex(const char *path) {
+FONT *load_font_ex(const char *path) {
   FONT *temp = nullptr;
+
   if (!(temp = load_font(path, nullptr, nullptr))) {
     abort_on_error ((std::string("Cannot find font (") + path + ") \n Please check your files and try again").c_str());
   }
+
   return temp;
 }
 

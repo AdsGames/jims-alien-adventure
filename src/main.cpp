@@ -93,21 +93,25 @@ int main() {
     while (ticks == 0) {
       rest (1);
     }
+
     while (ticks > 0) {
       int old_ticks = ticks;
 
       update();
 
       ticks--;
+
       if (old_ticks <= ticks) {
         break;
       }
     }
+
     if (game_time - old_time >= 10) {
       fps = frames_done;
       frames_done = 0;
       old_time = game_time;
     }
+
     draw();
     frames_done++;
   }

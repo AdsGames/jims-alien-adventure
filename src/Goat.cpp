@@ -13,10 +13,11 @@ Goat::Goat (float x, float y, float scale) {
 
   if (goat_count == 0)
     load_sprites();
+
   goat_count++;
 }
 
-Goat::Goat (const Goat& g) {
+Goat::Goat (const Goat &g) {
   this -> x = g.x;
   this -> y = g.y;
   this -> scale = g.scale;
@@ -24,11 +25,13 @@ Goat::Goat (const Goat& g) {
 
   if (goat_count == 0)
     load_sprites();
+
   goat_count++;
 }
 
 Goat::~Goat() {
   goat_count--;
+
   if (goat_count == 0)
     unload_sprites();
 }
