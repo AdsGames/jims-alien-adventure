@@ -15,7 +15,7 @@ extern int mouseX();
 extern int mouseY();
 
 //Random number generator
-extern int random (int newLowest, int newHighest);
+extern int random (int low, int high);
 
 // Fade in and out
 extern void highcolor_fade_in (BITMAP *bmp_orig, int speed);
