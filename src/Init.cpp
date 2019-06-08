@@ -9,7 +9,7 @@ Init::Init() {
   set_window_title ("Jim's Alien Adventure");
   set_display_switch_mode(SWITCH_BACKGROUND);
 
-  srand(time(NULL));
+  srand(time(nullptr));
   set_alpha_blender();
 }
 
