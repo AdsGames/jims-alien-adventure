@@ -24,7 +24,7 @@ class LevelData {
 
     static LevelData *GetLevelData();
   private:
-    LevelData(const char *file);
+    explicit LevelData(const char *file);
 
     static LevelData *instance;
     std::vector<Level *> levels;
