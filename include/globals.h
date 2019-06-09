@@ -1,6 +1,6 @@
 #ifndef GLOBALS_H
-  #define GLOBALS_H
+#define GLOBALS_H
 
-  extern int levelOn;
+extern int levelOn;
 
 #endif

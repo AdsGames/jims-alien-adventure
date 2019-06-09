@@ -12,11 +12,6 @@ class Player {
     void draw (BITMAP *buffer);
     void update(int frame);
 
-    int getX();
-    int getY();
-
-    int getHeight();
-
   private:
     // Frame
     int frame;

@@ -20,18 +20,6 @@ Player::~Player() {
   }
 }
 
-int Player::getX() {
-  return x;
-}
-
-int Player::getY() {
-  return y;
-}
-
-int Player::getHeight() {
-  return images[0] -> h;
-}
-
 void Player::draw (BITMAP *buffer) {
   draw_sprite (buffer, images[frame], x, y);
 }

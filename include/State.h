@@ -67,6 +67,8 @@ class StateEngine {
  *********/
 class State {
   public:
+    State() {}
+
     // Virtual destructor
     virtual ~State() {};
 
@@ -83,8 +85,9 @@ class State {
     int getStatus();
 
   private:
-    // State status
-    int status;
+    // Disallow copy
+    State(const State &);
+    State &operator=(const State &);
 };
 
 #endif // STATE_H
