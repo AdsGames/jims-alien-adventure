@@ -7,7 +7,7 @@
 // Location for map
 class MapPin {
   public:
-    MapPin (int x, int y, std::string folder, bool completed, int id);
+    MapPin (int x, int y, std::string &folder, bool completed, int id);
     virtual ~MapPin();
 
     void Draw (BITMAP *tempImage);

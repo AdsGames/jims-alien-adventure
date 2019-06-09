@@ -6,7 +6,7 @@ BITMAP *MapPin::pin_images[2] = { nullptr };
 int MapPin::pin_count = 0;
 
 // Construct
-MapPin::MapPin (int x, int y, std::string folder, bool completed, int id) {
+MapPin::MapPin (int x, int y, std::string &folder, bool completed, int id) {
   this -> x = x;
   this -> y = y;
   this -> id = id;
