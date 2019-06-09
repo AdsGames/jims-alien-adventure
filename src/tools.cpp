@@ -5,6 +5,9 @@
 #include <fstream>
 #include <random>
 
+// Random device
+std::random_device dev;
+
 //Iterates through the number of buttons in a joystick and returns true if any keys are pressed
 bool key_down() {
   for (int i = 0; i < KEY_MAX; i++) {
@@ -34,7 +37,6 @@ bool collision (int xMin1, int xMax1, int xMin2, int xMax2, int yMin1, int yMax1
 
 //Random number generator. Use int random(lowest,highest);
 int random (int low, int high) {
-  std::random_device dev;
   std::mt19937 rng(dev());
   std::uniform_int_distribution<std::mt19937::result_type> dist6(low, high); // distribution in range [1, 6]
 
