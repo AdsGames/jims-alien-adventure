@@ -5,3 +5,4 @@ output/
 *.exe
 build/Jim*s*Alien*Adventure*
 CppCheckResults.xml
+*.dll

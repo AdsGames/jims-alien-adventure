@@ -14,9 +14,30 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add option="-DALLEGRO_STATICLINK" />
 				</Compiler>
 				<Linker>
-					<Add option="-lalleg44" />
+					<Add option="-static-libstdc++" />
+					<Add option="-static-libgcc" />
+					<Add option="-static" />
+					<Add option="-lloadpng" />
+					<Add option="-lpng" />
+					<Add option="-lz" />
+					<Add option="-llogg" />
+					<Add option="-lvorbisfile" />
+					<Add option="-lvorbis" />
+					<Add option="-logg" />
+					<Add option="-lalleg" />
+					<Add option="-lkernel32" />
+					<Add option="-luser32" />
+					<Add option="-lgdi32" />
+					<Add option="-lcomdlg32" />
+					<Add option="-lole32" />
+					<Add option="-ldinput" />
+					<Add option="-lddraw" />
+					<Add option="-ldxguid" />
+					<Add option="-lwinmm" />
+					<Add option="-ldsound" />
 				</Linker>
 			</Target>
 			<Target title="debug_linux">
@@ -29,6 +50,8 @@
 					<Add option="-g" />
 				</Compiler>
 				<Linker>
+					<Add option="-llogg" />
+					<Add option="-lloadpng" />
 					<Add option="-lalleg" />
 				</Linker>
 			</Target>
@@ -40,10 +63,31 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O3" />
+					<Add option="-DALLEGRO_STATICLINK" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add option="-lalleg44" />
+					<Add option="-static-libstdc++" />
+					<Add option="-static-libgcc" />
+					<Add option="-static" />
+					<Add option="-lloadpng" />
+					<Add option="-lpng" />
+					<Add option="-lz" />
+					<Add option="-llogg" />
+					<Add option="-lvorbisfile" />
+					<Add option="-lvorbis" />
+					<Add option="-logg" />
+					<Add option="-lalleg" />
+					<Add option="-lkernel32" />
+					<Add option="-luser32" />
+					<Add option="-lgdi32" />
+					<Add option="-lcomdlg32" />
+					<Add option="-lole32" />
+					<Add option="-ldinput" />
+					<Add option="-lddraw" />
+					<Add option="-ldxguid" />
+					<Add option="-lwinmm" />
+					<Add option="-ldsound" />
 				</Linker>
 			</Target>
 			<Target title="release_linux">
@@ -57,6 +101,8 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
+					<Add option="-llogg" />
+					<Add option="-lloadpng" />
 					<Add option="-lalleg" />
 				</Linker>
 			</Target>
@@ -78,13 +124,6 @@
 			<Add option="-std=c++14" />
 			<Add directory="include" />
 		</Compiler>
-		<Linker>
-			<Add option="-llogg" />
-			<Add option="-lvorbisfile" />
-			<Add option="-lvorbis" />
-			<Add option="-logg" />
-			<Add option="-lloadpng" />
-		</Linker>
 		<Unit filename="include/Button.h" />
 		<Unit filename="include/Game.h" />
 		<Unit filename="include/Goat.h" />
