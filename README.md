@@ -9,7 +9,7 @@ A button mashing game with the objective of preventing goat aliens from destroyi
 #### Install Libraries
 
 ```bash
-pacman --noconfirm -S mingw-w64-i686-gcc-libs mingw-w64-i686-dumb mingw-w64-i686-flac mingw-w64-i686-opusfile mingw-w64-i686-freetype mingw-w64-i686-libjpeg-turbo mingw-w64-i686-libpng mingw-w64-i686-libvorbis mingw-w64-i686-libwebp mingw-w64-i686-openal mingw-w64-i686-physfs mingw-w64-i686-allegro mingw-w64-i686-box2d
+https://www.allegro.cc/files/?v=4.4
 ```
 
 #### Build
@@ -27,7 +27,7 @@ make
 #### Install Libraries
 
 ```bash
-brew install allegro
+https://github.com/msikma/liballeg.4.4.2-osx
 ```
 
 #### Build
@@ -36,6 +36,27 @@ brew install allegro
 cmake -G "Unix Makefiles" .
 ```
 
+```bash
+make
+```
+
+### Linux
+
+#### Install Libraries
+
+```bash
+sudo apt-get install liballegro4-dev libloadpng4-dev liblogg4-dev
+```
+
+#### Build
+
+```bash
+cmake -G "Unix Makefiles" .
+```
+
+```bash
+make
+```
 ```bash
 make
 ```
