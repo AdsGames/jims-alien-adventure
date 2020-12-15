@@ -57,24 +57,4 @@ cmake -G "Unix Makefiles" .
 ```bash
 make
 ```
-```bash
-make
-```
 
-### Linux
-
-#### Install Libraries
-
-```bash
-sudo apt install liballegro5-dev liballegro-acodec5-dev liballegro-audio5-dev liballegro-image5-dev liballegro-dialog5-dev liballegro-ttf5-dev libbox2d-dev
-```
-
-#### Build
-
-```bash
-cmake -G "Unix Makefiles" .
-```
-
-```bash
-make
-```
