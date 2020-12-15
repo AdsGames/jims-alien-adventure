@@ -1,30 +1,59 @@
 # JimsAlienAdventure
+
 A button mashing game with the objective of preventing goat aliens from destroying famous international cities
 
-## Compiling
+## Getting started
 
-### Windows
-You must install allegro 4, lib ogg and the allegro loadpng addon:
-- [Allegro 4](http://liballeg.org/api.html)
+### Windows (MSYS2)
 
+#### Install Libraries
 
-Open code blocks project, select debug as the build target and build
+```bash
+pacman --noconfirm -S mingw-w64-i686-gcc-libs mingw-w64-i686-dumb mingw-w64-i686-flac mingw-w64-i686-opusfile mingw-w64-i686-freetype mingw-w64-i686-libjpeg-turbo mingw-w64-i686-libpng mingw-w64-i686-libvorbis mingw-w64-i686-libwebp mingw-w64-i686-openal mingw-w64-i686-physfs mingw-w64-i686-allegro mingw-w64-i686-box2d
+```
 
+#### Build
+
+```bash
+cmake -G "MSYS Makefiles" .
+```
+
+```bash
+make
+```
+
+### Mac OS
+
+#### Install Libraries
+
+```bash
+brew install allegro
+```
+
+#### Build
+
+```bash
+cmake -G "Unix Makefiles" .
+```
+
+```bash
+make
+```
 
 ### Linux
-```sudo apt-get install liballegro4-dev```
 
-```sudo apt-get install libloadpng4-dev```
+#### Install Libraries
 
-```sudo apt-get install liblogg4-dev```
-
-Open code blocks project, select debug-linux as the build target and build
-
-## Linking
-In case you are not using the code blocks project provided
-```
--llogg
--lloadpng
--lalleg44 or -lalleg
+```bash
+sudo apt install liballegro5-dev liballegro-acodec5-dev liballegro-audio5-dev liballegro-image5-dev liballegro-dialog5-dev liballegro-ttf5-dev libbox2d-dev
 ```
 
+#### Build
+
+```bash
+cmake -G "Unix Makefiles" .
+```
+
+```bash
+make
+```
