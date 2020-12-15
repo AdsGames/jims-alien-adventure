@@ -5,32 +5,32 @@
 #include <vector>
 
 class KeyManager {
-  public:
-    KeyManager (int x, int y);
-    virtual ~KeyManager();
+ public:
+  KeyManager(int x, int y);
+  virtual ~KeyManager();
 
-    // Functions
-    void draw (BITMAP *tempImage);
-    int update();
+  // Functions
+  void draw(BITMAP* tempImage);
+  int update();
 
-  private:
-    // All keys for queue
-    std::vector<int> key_queue;
+ private:
+  // All keys for queue
+  std::vector<int> key_queue;
 
-    // Push new key
-    void pushKey();
-    void popKey();
+  // Push new key
+  void pushKey();
+  void popKey();
 
-    // Images and sounds
-    BITMAP *keys[KEY_MAX];
-    SAMPLE *sounds[2];
+  // Images and sounds
+  BITMAP* keys[KEY_MAX];
+  SAMPLE* sounds[2];
 
-    // Positioning
-    int x;
-    int y;
+  // Positioning
+  int x;
+  int y;
 
-    // Any key?
-    bool past_frame_input;
+  // Any key?
+  bool past_frame_input;
 };
 
-#endif // KEYMANAGER_H
+#endif  // KEYMANAGER_H

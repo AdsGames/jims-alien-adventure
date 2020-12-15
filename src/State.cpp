@@ -3,10 +3,10 @@
 #include <iostream>
 
 #include "Game.h"
-#include "Menu.h"
-#include "Map.h"
 #include "Init.h"
 #include "Intro.h"
+#include "Map.h"
+#include "Menu.h"
 #include "Story.h"
 
 /*****************
@@ -21,16 +21,16 @@ StateEngine::StateEngine() {
 }
 
 // Draw
-void StateEngine::draw(BITMAP *buffer) {
+void StateEngine::draw(BITMAP* buffer) {
   if (state) {
-    state -> draw(buffer);
+    state->draw(buffer);
   }
 }
 
 // Update
 void StateEngine::update() {
   if (state) {
-    state -> update(this);
+    state->update(this);
   }
 
   changeState();
@@ -60,7 +60,7 @@ void StateEngine::changeState() {
   }
 
   // Change the state
-  switch(nextState) {
+  switch (nextState) {
     case STATE_GAME:
       state = new Game();
       std::cout << ("Switched state to game.\n");
@@ -103,12 +103,11 @@ void StateEngine::changeState() {
   nextState = STATE_NULL;
 }
 
-
 /*********
  * STATE
  *********/
 
 // Change state
-void State::setNextState(StateEngine *engine, int state) {
-  engine -> setNextState(state);
+void State::setNextState(StateEngine* engine, int state) {
+  engine->setNextState(state);
 }

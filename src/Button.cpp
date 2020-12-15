@@ -2,41 +2,40 @@
 
 #include "tools.h"
 
-Button::Button () {
+Button::Button() {
   images[0] = nullptr;
   images[1] = nullptr;
 
   height = 10;
   width = 10;
 
-  this -> x = 0;
-  this -> y = 0;
+  this->x = 0;
+  this->y = 0;
 }
 
-Button::Button (int x, int y) :
-  Button () {
-
-  this -> x = x;
-  this -> y = y;
+Button::Button(int x, int y) : Button() {
+  this->x = x;
+  this->y = y;
 }
 
 Button::~Button() {
-  destroy_bitmap (images[0]);
-  destroy_bitmap (images[1]);
+  destroy_bitmap(images[0]);
+  destroy_bitmap(images[1]);
 }
 
 // Load images from file
-void Button::SetImages (const char *image1, const char *image2) {
-  images[0] = load_png_ex (image1);
-  images[1] = load_png_ex (image2);
+void Button::SetImages(const char* image1, const char* image2) {
+  images[0] = load_png_ex(image1);
+  images[1] = load_png_ex(image2);
 
   // Size
-  height = images[0] -> h;
-  width = images[1] -> w;
+  height = images[0]->h;
+  width = images[1]->w;
 }
 
 bool Button::Hover() {
-  return collision(mouse_x, mouse_x, x, x + width, mouse_y, mouse_y, y, y + height);
+  return collision(mouse_x, mouse_x, x, x + width, mouse_y, mouse_y, y,
+                   y + height);
 }
 
 bool Button::Clicked() {
@@ -51,8 +50,8 @@ int Button::GetY() {
   return y;
 }
 
-void Button::Draw (BITMAP *buffer) {
+void Button::Draw(BITMAP* buffer) {
   if (images[Hover()]) {
-    draw_sprite (buffer, images[Hover()], x, y);
+    draw_sprite(buffer, images[Hover()], x, y);
   }
 }

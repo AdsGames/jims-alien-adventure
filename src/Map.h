@@ -6,25 +6,25 @@
 #include <allegro.h>
 #include <vector>
 
-#include "MapPin.h"
 #include "LevelData.h"
+#include "MapPin.h"
 
 class Map : public State {
-  public:
-    Map();
-    ~Map();
+ public:
+  Map();
+  ~Map();
 
-    virtual void update(StateEngine *engine) override;
-    virtual void draw(BITMAP *buffer) override;
+  virtual void update(StateEngine* engine) override;
+  virtual void draw(BITMAP* buffer) override;
 
-  private:
-    // Map/GUI
-    BITMAP *map_image;
-    BITMAP *cursor;
+ private:
+  // Map/GUI
+  BITMAP* map_image;
+  BITMAP* cursor;
 
-    SAMPLE *music;
+  SAMPLE* music;
 
-    std::vector<MapPin *> pins;
+  std::vector<MapPin*> pins;
 };
 
-#endif // MAP_H
+#endif  // MAP_H

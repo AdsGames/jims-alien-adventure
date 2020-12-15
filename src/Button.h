@@ -4,29 +4,28 @@
 #include <allegro.h>
 
 class Button {
-  public:
-    Button ();
-    Button (int x, int y);
-    ~Button();
+ public:
+  Button();
+  Button(int x, int y);
+  ~Button();
 
-    bool Hover();
-    bool Clicked();
-    void SetImages (const char *image1, const char *image2);
+  bool Hover();
+  bool Clicked();
+  void SetImages(const char* image1, const char* image2);
 
-    int GetX();
-    int GetY();
+  int GetX();
+  int GetY();
 
-    void Draw (BITMAP *buffer);
+  void Draw(BITMAP* buffer);
 
-  private:
-    int height;
-    int width;
+ private:
+  int height;
+  int width;
 
-    int x;
-    int y;
+  int x;
+  int y;
 
-    BITMAP *images[2];
+  BITMAP* images[2];
 };
 
 #endif
-

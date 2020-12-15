@@ -2,14 +2,14 @@
 
 #include "tools.h"
 
-BITMAP *Goat::goat_image[2] = { nullptr };
+BITMAP* Goat::goat_image[2] = {nullptr};
 int Goat::goat_count = 0;
 
-Goat::Goat (float x, float y, float scale) {
-  this -> x = x;
-  this -> y = y;
-  this -> scale = scale;
-  this -> speed = scale * 3.0f;
+Goat::Goat(float x, float y, float scale) {
+  this->x = x;
+  this->y = y;
+  this->scale = scale;
+  this->speed = scale * 3.0f;
 
   if (goat_count == 0)
     load_sprites();
@@ -17,11 +17,11 @@ Goat::Goat (float x, float y, float scale) {
   goat_count++;
 }
 
-Goat::Goat (const Goat &g) {
-  this -> x = g.x;
-  this -> y = g.y;
-  this -> scale = g.scale;
-  this -> speed = g.speed;
+Goat::Goat(const Goat& g) {
+  this->x = g.x;
+  this->y = g.y;
+  this->scale = g.scale;
+  this->speed = g.speed;
 
   if (goat_count == 0)
     load_sprites();
@@ -55,15 +55,17 @@ void Goat::update() {
 
 // Kill
 bool Goat::offScreen() {
-  return (x + goat_image[0] -> w - speed < 0 || x - speed > SCREEN_W || y > SCREEN_H || y + goat_image[0] -> h < 0);
+  return (x + goat_image[0]->w - speed < 0 || x - speed > SCREEN_W ||
+          y > SCREEN_H || y + goat_image[0]->h < 0);
 }
 
 // Fall!
-void Goat::fall (float speed) {
+void Goat::fall(float speed) {
   y += speed;
 }
 
 // Draw
-void Goat::draw (BITMAP *buffer) {
-  stretch_sprite (buffer, goat_image[random (0, 1)], x, y, goat_image[0] -> w * scale, goat_image[1] -> h * scale);
+void Goat::draw(BITMAP* buffer) {
+  stretch_sprite(buffer, goat_image[random(0, 1)], x, y,
+                 goat_image[0]->w * scale, goat_image[1]->h * scale);
 }

@@ -19,75 +19,74 @@ class State;
  * STATE ENGINE
  *****************/
 class StateEngine {
-  public:
-    // Init
-    StateEngine();
+ public:
+  // Init
+  StateEngine();
 
-    // Update
-    void update();
+  // Update
+  void update();
 
-    // Draw
-    void draw(BITMAP *buffer);
+  // Draw
+  void draw(BITMAP* buffer);
 
-    // Set next state
-    void setNextState(int newState);
+  // Set next state
+  void setNextState(int newState);
 
-    // Get state id
-    int getStateId();
+  // Get state id
+  int getStateId();
 
-    // Game states
-    enum programStates {
-      STATE_NULL,
-      STATE_EXIT,
-      STATE_INIT,
-      STATE_INTRO,
-      STATE_MENU,
-      STATE_STORY,
-      STATE_GAME,
-      STATE_MAP
-    };
+  // Game states
+  enum programStates {
+    STATE_NULL,
+    STATE_EXIT,
+    STATE_INIT,
+    STATE_INTRO,
+    STATE_MENU,
+    STATE_STORY,
+    STATE_GAME,
+    STATE_MAP
+  };
 
-  private:
-    // Change state
-    void changeState();
+ private:
+  // Change state
+  void changeState();
 
-    // Stores states
-    State *state;
+  // Stores states
+  State* state;
 
-    // Next state
-    int nextState = STATE_NULL;
+  // Next state
+  int nextState = STATE_NULL;
 
-    // State id
-    int currentState = STATE_NULL;
-
+  // State id
+  int currentState = STATE_NULL;
 };
 
 /*********
  * STATE
  *********/
 class State {
-  public:
-    State() {}
+ public:
+  State() {}
 
-    // Virtual destructor
-    virtual ~State() {};
+  // Virtual destructor
+  virtual ~State(){};
 
-    // Draw to screen
-    virtual void draw(BITMAP *buffer) = 0;
+  // Draw to screen
+  virtual void draw(BITMAP* buffer) = 0;
 
-    // Update logic
-    virtual void update(StateEngine *engine) = 0;
+  // Update logic
+  virtual void update(StateEngine* engine) = 0;
 
-    // Change state
-    void setNextState(StateEngine *engine, int state);
+  // Change state
+  void setNextState(StateEngine* engine, int state);
 
-    // Get status
-    int getStatus();
+  // Get status
+  int getStatus();
 
-  private:
-    // Disallow copy
-    State(const State &);
-    State &operator=(const State &);
+ private:
+  // Disallow copy
+  State(const State&);
+  State& operator=(const State&);
 };
 
-#endif // STATE_H
+#endif  // STATE_H

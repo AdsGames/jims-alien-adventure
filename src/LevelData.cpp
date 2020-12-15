@@ -3,14 +3,14 @@
 #include <allegro.h>
 #include "tools.h"
 
-LevelData *LevelData::instance = nullptr;
+LevelData* LevelData::instance = nullptr;
 
-LevelData::LevelData(const char *file) {
+LevelData::LevelData(const char* file) {
   if (!Load(file))
     abort_on_error((std::string("Could not open config file ") + file).c_str());
 }
 
-bool LevelData::Load(const char *file) {
+bool LevelData::Load(const char* file) {
   push_config_state();
   set_config_file(file);
 
@@ -23,16 +23,17 @@ bool LevelData::Load(const char *file) {
 
   // Iterate over levels
   for (int i = 0; i < num_levels; i++) {
-    Level *l = new Level;
-    const char *level_header = (std::string("level") + std::to_string(i)).c_str();
-    l -> distance = get_config_int(level_header, "distance", -1);
-    l -> time = get_config_int(level_header, "time", -1);
-    l -> pin_x = get_config_int(level_header, "pinx", -1);
-    l -> pin_y = get_config_int(level_header, "piny", -1);
-    l -> folder = std::string(get_config_string(level_header, "folder", ""));
-    l -> name = std::string(get_config_string(level_header, "name", ""));
-    l -> id = i;
-    l -> completed = false;
+    Level* l = new Level;
+    const char* level_header =
+        (std::string("level") + std::to_string(i)).c_str();
+    l->distance = get_config_int(level_header, "distance", -1);
+    l->time = get_config_int(level_header, "time", -1);
+    l->pin_x = get_config_int(level_header, "pinx", -1);
+    l->pin_y = get_config_int(level_header, "piny", -1);
+    l->folder = std::string(get_config_string(level_header, "folder", ""));
+    l->name = std::string(get_config_string(level_header, "name", ""));
+    l->id = i;
+    l->completed = false;
     levels.push_back(l);
   }
 
@@ -45,11 +46,11 @@ int LevelData::GetNumLevels() {
   return levels.size();
 }
 
-Level *LevelData::GetLevel(unsigned int id) {
+Level* LevelData::GetLevel(unsigned int id) {
   return (id > levels.size()) ? nullptr : levels.at(id);
 }
 
-LevelData *LevelData::GetLevelData() {
+LevelData* LevelData::GetLevelData() {
   if (!instance)
     instance = new LevelData("levels.ini");
 

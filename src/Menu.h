@@ -10,37 +10,37 @@
 #include "Goat.h"
 
 class Menu : public State {
-  public:
-    Menu();
-    ~Menu();
+ public:
+  Menu();
+  ~Menu();
 
-    virtual void update(StateEngine *engine) override;
-    virtual void draw(BITMAP *buffer) override;
+  virtual void update(StateEngine* engine) override;
+  virtual void draw(BITMAP* buffer) override;
 
-  private:
-    // Menu/GUI
-    BITMAP *title, *sky, *city;
-    BITMAP *cursor, *cursor2;
-    BITMAP *little_xbox_buttons;
-    BITMAP *background[2];
+ private:
+  // Menu/GUI
+  BITMAP *title, *sky, *city;
+  BITMAP *cursor, *cursor2;
+  BITMAP* little_xbox_buttons;
+  BITMAP* background[2];
 
-    // Sound
-    SAMPLE *NOTALLOWED;
+  // Sound
+  SAMPLE* NOTALLOWED;
 
-    // Buttons
-    Button start, story, options, exit;
+  // Buttons
+  Button start, story, options, exit;
 
-    // Movement
-    float title_y;
-    float city_x;
+  // Movement
+  float title_y;
+  float city_x;
 
-    // Flippy switch
-    bool switchFlipped;
+  // Flippy switch
+  bool switchFlipped;
 
-    // Goats
-    std::vector<Goat> goats;
+  // Goats
+  std::vector<Goat> goats;
 
-    SAMPLE *music;
+  SAMPLE* music;
 };
 
-#endif // MENU_H
+#endif  // MENU_H

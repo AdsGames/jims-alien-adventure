@@ -11,29 +11,28 @@ Intro::Intro() {
   intro_time = clock();
 
   // Fade in title
-  highcolor_fade_in (logo, 16);
+  highcolor_fade_in(logo, 16);
 }
 
 Intro::~Intro() {
   // Clear memory
-  destroy_bitmap (splash);
-  destroy_bitmap (logo);
+  destroy_bitmap(splash);
+  destroy_bitmap(logo);
 
   // Fade out
-  highcolor_fade_out (16);
+  highcolor_fade_out(16);
 }
 
-void Intro::update(StateEngine *engine) {
+void Intro::update(StateEngine* engine) {
   if (clock() - intro_time >= 3400 || key_down() || button_down()) {
-    setNextState (engine, StateEngine::STATE_MENU);
+    setNextState(engine, StateEngine::STATE_MENU);
   }
 }
 
-void Intro::draw(BITMAP *buffer) {
+void Intro::draw(BITMAP* buffer) {
   if (clock() - intro_time < 1700) {
-    stretch_sprite (buffer, logo, 0, 0, SCREEN_W, SCREEN_H);
-  }
-  else {
-    stretch_sprite (buffer, splash, 0, 0, SCREEN_W, SCREEN_H);
+    stretch_sprite(buffer, logo, 0, 0, SCREEN_W, SCREEN_H);
+  } else {
+    stretch_sprite(buffer, splash, 0, 0, SCREEN_W, SCREEN_H);
   }
 }

@@ -4,23 +4,23 @@
 #include <allegro.h>
 
 class Player {
-  public:
-    Player (float x, float y);
-    Player (const Player &p);
-    virtual ~Player();
+ public:
+  Player(float x, float y);
+  Player(const Player& p);
+  virtual ~Player();
 
-    void draw (BITMAP *buffer);
-    void update(int frame);
+  void draw(BITMAP* buffer);
+  void update(int frame);
 
-  private:
-    // Frame
-    int frame;
+ private:
+  // Frame
+  int frame;
 
-    // Variables
-    float x, y;
+  // Variables
+  float x, y;
 
-    // Images
-    BITMAP *images[8];
+  // Images
+  BITMAP* images[8];
 };
 
-#endif // PLAYER_H
+#endif  // PLAYER_H

@@ -6,17 +6,17 @@
 #include <allegro.h>
 
 class Story : public State {
-  public:
-    Story();
-    ~Story();
+ public:
+  Story();
+  ~Story();
 
-    virtual void update(StateEngine *engine) override;
-    virtual void draw(BITMAP *buffer) override;
+  virtual void update(StateEngine* engine) override;
+  virtual void draw(BITMAP* buffer) override;
 
-  private:
-    const char flash_frequency = 30;
-    char flasher;
-    BITMAP *story_splash;
+ private:
+  const char flash_frequency = 30;
+  char flasher;
+  BITMAP* story_splash;
 };
 
-#endif // STORY_H
+#endif  // STORY_H
