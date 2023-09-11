@@ -2,7 +2,7 @@
 
 #include "tools.h"
 
-BITMAP* Goat::goat_image[2] = {nullptr};
+asw::Texture Goat::goat_image[2] = {nullptr};
 int Goat::goat_count = 0;
 
 Goat::Goat(float x, float y, float scale) {
@@ -11,10 +11,10 @@ Goat::Goat(float x, float y, float scale) {
   this->scale = scale;
   this->speed = scale * 3.0f;
 
-  if (goat_count == 0)
-    load_sprites();
-
-  goat_count++;
+  if (goat_image[0].get() == nullptr || goat_image[1].get() == nullptr) {
+    goat_image[0] = asw::assets::loadTexture("assets/images/goat_alien.png");
+    goat_image[1] = asw::assets::loadTexture("assets/images/goat_alien_2.png");
+  }
 }
 
 Goat::Goat(const Goat& g) {
@@ -22,30 +22,6 @@ Goat::Goat(const Goat& g) {
   this->y = g.y;
   this->scale = g.scale;
   this->speed = g.speed;
-
-  if (goat_count == 0)
-    load_sprites();
-
-  goat_count++;
-}
-
-Goat::~Goat() {
-  goat_count--;
-
-  if (goat_count == 0)
-    unload_sprites();
-}
-
-// Load images
-void Goat::load_sprites() {
-  goat_image[0] = load_png_ex("images/goat_alien.png");
-  goat_image[1] = load_png_ex("images/goat_alien_2.png");
-}
-
-// Unload images
-void Goat::unload_sprites() {
-  destroy_bitmap(goat_image[0]);
-  destroy_bitmap(goat_image[1]);
 }
 
 // Update
@@ -55,8 +31,9 @@ void Goat::update() {
 
 // Kill
 bool Goat::offScreen() {
-  return (x + goat_image[0]->w - speed < 0 || x - speed > SCREEN_W ||
-          y > SCREEN_H || y + goat_image[0]->h < 0);
+  auto size = asw::util::getTextureSize(goat_image[0]);
+  return (x + size.x - speed < 0 || x - speed > asw::display::getSize().x ||
+          y > asw::display::getSize().y || y + size.y < 0);
 }
 
 // Fall!
@@ -65,7 +42,8 @@ void Goat::fall(float speed) {
 }
 
 // Draw
-void Goat::draw(BITMAP* buffer) {
-  stretch_sprite(buffer, goat_image[random(0, 1)], x, y,
-                 goat_image[0]->w * scale, goat_image[1]->h * scale);
+void Goat::draw() {
+  auto size = asw::util::getTextureSize(goat_image[0]);
+  asw::draw::stretchSprite(goat_image[random(0, 1)], x, y, size.x * scale,
+                           size.y * scale);
 }

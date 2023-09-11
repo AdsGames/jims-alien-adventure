@@ -1,43 +1,45 @@
 #include "LevelData.h"
 
-#include <allegro.h>
+#include <asw/asw.h>
+#include <fstream>
+#include <nlohmann/json.hpp>
 #include "tools.h"
 
 LevelData* LevelData::instance = nullptr;
 
-LevelData::LevelData(const char* file) {
-  if (!Load(file))
-    abort_on_error((std::string("Could not open config file ") + file).c_str());
+LevelData::LevelData(const std::string path) {
+  if (!Load(path)) {
+    asw::util::abortOnError(std::string("Could not open config file ") + path);
+  }
 }
 
-bool LevelData::Load(const char* file) {
-  push_config_state();
-  set_config_file(file);
-
-  // Get levels
-  int num_levels = get_config_int("levels", "numlevels", -1);
-
-  // Invalid file
-  if (num_levels == -1)
+bool LevelData::Load(const std::string path) {
+  // Open file or abort if it does not exist
+  std::ifstream file(path);
+  if (!file.is_open()) {
     return false;
-
-  // Iterate over levels
-  for (int i = 0; i < num_levels; i++) {
-    Level* l = new Level;
-    const char* level_header =
-        (std::string("level") + std::to_string(i)).c_str();
-    l->distance = get_config_int(level_header, "distance", -1);
-    l->time = get_config_int(level_header, "time", -1);
-    l->pin_x = get_config_int(level_header, "pinx", -1);
-    l->pin_y = get_config_int(level_header, "piny", -1);
-    l->folder = std::string(get_config_string(level_header, "folder", ""));
-    l->name = std::string(get_config_string(level_header, "name", ""));
-    l->id = i;
-    l->completed = false;
-    levels.push_back(l);
   }
 
-  pop_config_state();
+  // Create buffer
+  nlohmann::json doc = nlohmann::json::parse(file);
+
+  // Get levels
+  int id = 0;
+  for (auto const& level : doc) {
+    Level* l = new Level;
+
+    l->distance = level["distance"];
+    l->time = level["time"];
+    l->pin_x = level["pinx"];
+    l->pin_y = level["piny"];
+    l->folder = level["folder"];
+    l->name = level["name"];
+    l->id = id;
+    l->completed = false;
+    levels.push_back(l);
+
+    id++;
+  }
 
   return true;
 }
@@ -51,8 +53,9 @@ Level* LevelData::GetLevel(unsigned int id) {
 }
 
 LevelData* LevelData::GetLevelData() {
-  if (!instance)
-    instance = new LevelData("levels.ini");
+  if (!instance) {
+    instance = new LevelData("./assets/levels.json");
+  }
 
   return instance;
 }

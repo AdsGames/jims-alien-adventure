@@ -3,20 +3,20 @@
 
 #include "State.h"
 
-#include <allegro.h>
+#include <asw/asw.h>
 
 class Story : public State {
  public:
   Story();
-  ~Story();
 
   virtual void update(StateEngine* engine) override;
-  virtual void draw(BITMAP* buffer) override;
+  virtual void draw() override;
 
  private:
   const char flash_frequency = 30;
   char flasher;
-  BITMAP* story_splash;
+  asw::Texture story_splash;
+  asw::Font font;
 };
 
 #endif  // STORY_H

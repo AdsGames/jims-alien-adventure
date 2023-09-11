@@ -1,0 +1,50 @@
+[
+  {
+    "distance": 5000,
+    "time": 40,
+    "folder": "cn_tower",
+    "name": "CN Tower",
+    "pinx": 224,
+    "piny": 210
+  },
+  {
+    "distance": 7500,
+    "time": 50,
+    "folder": "statue_of_liberty",
+    "name": "Statue of Liberty",
+    "pinx": 236,
+    "piny": 216
+  },
+  {
+    "distance": 10000,
+    "time": 60,
+    "folder": "stone_henge",
+    "name": "Stone Henge",
+    "pinx": 356,
+    "piny": 193
+  },
+  {
+    "distance": 12500,
+    "time": 80,
+    "folder": "pyramids",
+    "name": "Pyramids",
+    "pinx": 418,
+    "piny": 243
+  },
+  {
+    "distance": 15000,
+    "time": 70,
+    "folder": "taj_mahal",
+    "name": "Taj Mahal",
+    "pinx": 503,
+    "piny": 250
+  },
+  {
+    "distance": 17500,
+    "time": 80,
+    "folder": "wall_of_china",
+    "name": "Wall of China",
+    "pinx": 570,
+    "piny": 217
+  }
+]

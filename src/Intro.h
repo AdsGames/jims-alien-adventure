@@ -3,24 +3,24 @@
 
 #include "State.h"
 
-#include <allegro.h>
+#include <asw/asw.h>
+#include <asw/util/Timer.h>
 
 // Intro screen of game
 class Intro : public State {
  public:
   Intro();
-  ~Intro();
 
   virtual void update(StateEngine* engine) override;
-  virtual void draw(BITMAP* buffer) override;
+  virtual void draw() override;
 
  private:
   // Images
-  BITMAP* splash;
-  BITMAP* logo;
+  asw::Texture splash;
+  asw::Texture logo;
 
   // Time
-  clock_t intro_time;
+  Timer timer;
 };
 
 #endif  // INTRO_H

@@ -17,7 +17,7 @@ struct Level {
 
 class LevelData {
  public:
-  bool Load(const char* file);
+  bool Load(const std::string file);
   Level* GetLevel(unsigned int id);
 
   int GetNumLevels();
@@ -25,7 +25,7 @@ class LevelData {
   static LevelData* GetLevelData();
 
  private:
-  explicit LevelData(const char* file);
+  explicit LevelData(const std::string file);
 
   static LevelData* instance;
   std::vector<Level*> levels;

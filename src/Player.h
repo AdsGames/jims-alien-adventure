@@ -1,15 +1,13 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include <allegro.h>
+#include <asw/asw.h>
 
 class Player {
  public:
   Player(float x, float y);
-  Player(const Player& p);
-  virtual ~Player();
 
-  void draw(BITMAP* buffer);
+  void draw();
   void update(int frame);
 
  private:
@@ -20,7 +18,7 @@ class Player {
   float x, y;
 
   // Images
-  BITMAP* images[8];
+  asw::Texture images[8];
 };
 
 #endif  // PLAYER_H

@@ -18,28 +18,25 @@ Button::Button(int x, int y) : Button() {
   this->y = y;
 }
 
-Button::~Button() {
-  destroy_bitmap(images[0]);
-  destroy_bitmap(images[1]);
-}
-
 // Load images from file
-void Button::SetImages(const char* image1, const char* image2) {
-  images[0] = load_png_ex(image1);
-  images[1] = load_png_ex(image2);
+void Button::SetImages(const std::string image1, const std::string image2) {
+  images[0] = asw::assets::loadTexture(image1);
+  images[1] = asw::assets::loadTexture(image2);
 
   // Size
-  height = images[0]->h;
-  width = images[1]->w;
+  auto size = asw::util::getTextureSize(images[0]);
+
+  height = size.y;
+  width = size.x;
 }
 
 bool Button::Hover() {
-  return collision(mouse_x, mouse_x, x, x + width, mouse_y, mouse_y, y,
-                   y + height);
+  return collision(asw::input::mouse.x, asw::input::mouse.x, x, x + width,
+                   asw::input::mouse.y, asw::input::mouse.y, y, y + height);
 }
 
 bool Button::Clicked() {
-  return Hover() && (mouse_b & 1 || (num_joysticks > 0 && joy[0].button[0].b));
+  return Hover() && (asw::input::mouse.pressed[1]);
 }
 
 int Button::GetX() {
@@ -50,8 +47,8 @@ int Button::GetY() {
   return y;
 }
 
-void Button::Draw(BITMAP* buffer) {
+void Button::Draw() {
   if (images[Hover()]) {
-    draw_sprite(buffer, images[Hover()], x, y);
+    asw::draw::sprite(images[Hover()], x, y);
   }
 }

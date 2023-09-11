@@ -1,19 +1,18 @@
 #ifndef GOAT_H
 #define GOAT_H
 
-#include <allegro.h>
+#include <asw/asw.h>
 
 class Goat {
  public:
   Goat(float x, float y, float scale);
   Goat(const Goat& g);
-  virtual ~Goat();
 
   // Functions
   void update();
   void fall(float speed);
   bool offScreen();
-  void draw(BITMAP* buffer);
+  void draw();
 
   // Sorting operator
   bool operator<(const Goat& g) const {
@@ -27,11 +26,10 @@ class Goat {
   float scale;
 
   // Images
-  static BITMAP* goat_image[2];
+  static asw::Texture goat_image[2];
   static int goat_count;
 
   void load_sprites();
-  void unload_sprites();
 };
 
 #endif  // GOAT_H
