@@ -3,7 +3,8 @@
 
 #include "State.h"
 
-#include <allegro.h>
+#include <asw/asw.h>
+#include <asw/util/Timer.h>
 #include <vector>
 
 #include "Goat.h"
@@ -11,27 +12,27 @@
 #include "LevelData.h"
 #include "Player.h"
 #include "Stair.h"
-#include "Timer.h"
 
 // Main game screen
 class Game : public State {
  public:
   Game();
-  ~Game();
 
   void init();
   virtual void update(StateEngine* engine) override;
-  virtual void draw(BITMAP* buffer) override;
+  virtual void draw() override;
 
  private:
   // Music
-  SAMPLE* music;
+  asw::Sample music;
 
   // Fonts
-  FONT* dosis_26;
+  asw::Font font;
+  asw::Font dosis_26;
 
   // Sounds
-  SAMPLE *win, *lose;
+  asw::Sample win;
+  asw::Sample lose;
 
   // Player
   Player* player;
@@ -47,10 +48,12 @@ class Game : public State {
   KeyManager* screen_keys;
 
   // Images
-  BITMAP *background, *parallax;
-  BITMAP* watch;
-  BITMAP *youwin, *youlose;
-  BITMAP* stair_buffer;
+  asw::Texture background;
+  asw::Texture parallax;
+  asw::Texture watch;
+  asw::Texture youwin;
+  asw::Texture youlose;
+  asw::Texture stair_buffer;
 
   float parallax_scroll;
   float distance_travelled;

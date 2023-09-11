@@ -1,22 +1,19 @@
 #include "Init.h"
 
-#include <allegro.h>
+#include <asw/asw.h>
+#include <time.h>
 
 #include "LevelData.h"
 #include "tools.h"
 
 Init::Init() {
-  set_window_title("Jim's Alien Adventure");
-  set_display_switch_mode(SWITCH_BACKGROUND);
-
+  asw::display::setTitle("Jim's Alien Adventure");
+  asw::display::setIcon("assets/images/icon.png");
   srand(time(nullptr));
-  set_alpha_blender();
 }
 
 void Init::update(StateEngine* engine) {
   setNextState(engine, StateEngine::STATE_INTRO);
 }
 
-void Init::draw(BITMAP* buffer) {
-  clear_to_color(buffer, 0xFFFFFF);
-}
+void Init::draw() {}

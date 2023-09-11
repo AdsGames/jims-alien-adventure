@@ -4,35 +4,26 @@
 
 Intro::Intro() {
   // Buffer
-  splash = load_png_ex("images/splash.png");
-  logo = load_png_ex("images/logo.png");
+  splash = asw::assets::loadTexture("assets/images/splash.png");
+  logo = asw::assets::loadTexture("assets/images/logo.png");
 
   // Start timer
-  intro_time = clock();
-
-  // Fade in title
-  highcolor_fade_in(logo, 16);
-}
-
-Intro::~Intro() {
-  // Clear memory
-  destroy_bitmap(splash);
-  destroy_bitmap(logo);
-
-  // Fade out
-  highcolor_fade_out(16);
+  timer.start();
 }
 
 void Intro::update(StateEngine* engine) {
-  if (clock() - intro_time >= 3400 || key_down() || button_down()) {
+  if (timer.getElapsedTime<std::chrono::milliseconds>() >= 3400 ||
+      asw::input::keyboard.anyPressed || asw::input::mouse.anyPressed) {
     setNextState(engine, StateEngine::STATE_MENU);
   }
 }
 
-void Intro::draw(BITMAP* buffer) {
-  if (clock() - intro_time < 1700) {
-    stretch_sprite(buffer, logo, 0, 0, SCREEN_W, SCREEN_H);
+void Intro::draw() {
+  if (timer.getElapsedTime<std::chrono::milliseconds>() < 1700) {
+    asw::draw::stretchSprite(logo, 0, 0, asw::display::getSize().x,
+                             asw::display::getSize().y);
   } else {
-    stretch_sprite(buffer, splash, 0, 0, SCREEN_W, SCREEN_H);
+    asw::draw::stretchSprite(splash, 0, 0, asw::display::getSize().x,
+                             asw::display::getSize().y);
   }
 }

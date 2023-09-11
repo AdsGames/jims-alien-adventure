@@ -13,30 +13,31 @@ Game::Game() {
 
 void Game::init() {
   // Load music
-  music = load_ogg_ex("music/JAA-Ingame.ogg");
+  music = asw::assets::loadSample("assets/music/JAA-Ingame.ogg");
 
   // Load images
   levelPtr = LevelData::GetLevelData()->GetLevel(levelOn);
-  background =
-      load_png_ex(("images/levels/" + levelPtr->folder + "/sky.png").c_str());
-  parallax = load_png_ex(
-      ("images/levels/" + levelPtr->folder + "/parallax.png").c_str());
+  background = asw::assets::loadTexture("assets/images/levels/" +
+                                        levelPtr->folder + "/sky.png");
+  parallax = asw::assets::loadTexture("assets/images/levels/" +
+                                      levelPtr->folder + "/parallax.png");
 
   // Misc
-  watch = load_png_ex("images/watch.png");
-  youwin = load_png_ex("images/youwin.png");
-  youlose = load_png_ex("images/youlose.png");
+  watch = asw::assets::loadTexture("assets/images/watch.png");
+  youwin = asw::assets::loadTexture("assets/images/youwin.png");
+  youlose = asw::assets::loadTexture("assets/images/youlose.png");
 
   // Sounds
-  win = load_sample_ex("sounds/win.wav");
-  lose = load_sample_ex("sounds/lose.wav");
+  win = asw::assets::loadSample("assets/sounds/win.wav");
+  lose = asw::assets::loadSample("assets/sounds/lose.wav");
 
   // Stair buffer
-  stair_buffer = create_bitmap(SCREEN_W, SCREEN_H);
+  stair_buffer = asw::assets::createTexture(asw::display::getSize().x,
+                                            asw::display::getSize().y);
 
   // Sets Fonts
-  font = load_font_ex("fonts/dosis.pcx");
-  dosis_26 = load_font_ex("fonts/dosis_26.pcx");
+  font = asw::assets::loadFont("assets/fonts/dosis.ttf", 28);
+  dosis_26 = asw::assets::loadFont("assets/fonts/dosis.ttf", 26);
 
   // Keys
   screen_keys = new KeyManager(20, 50);
@@ -51,76 +52,48 @@ void Game::init() {
   scroll_speed = 0.0f;
 
   // Stairs (offset is 30 px)
-  for (int i = 0; i < SCREEN_W; i += 30) {
+  for (int i = 0; i < asw::display::getSize().x; i += 30) {
     stairs.push_back(Stair(i));
   }
 
   // Start music
-  play_sample(music, 255, 128, 1000, 1);
-}
-
-// Destroy
-Game::~Game() {
-  // Destroy images
-  destroy_bitmap(background);
-  destroy_bitmap(parallax);
-  destroy_bitmap(watch);
-  destroy_bitmap(youwin);
-  destroy_bitmap(youlose);
-  destroy_bitmap(stair_buffer);
-
-  // Fonts
-  destroy_font(dosis_26);
-
-  delete screen_keys;
-  delete player;
-
-  goats.clear();
-  stairs.clear();
-
-  // Stop music
-  destroy_sample(music);
-  destroy_sample(win);
-  destroy_sample(lose);
-
-  // Fade out
-  highcolor_fade_out(16);
+  asw::sound::play(music, 255, 128, 1);
 }
 
 // Update game state
 void Game::update(StateEngine* engine) {
-  // Joystick input
-  poll_joystick();
-
   // Back to menu if M or win/lose
-  if (key[KEY_M] || end_time.GetElapsedTime<seconds>() >= 3) {
+  if (asw::input::keyboard.down[SDL_SCANCODE_M] ||
+      end_time.getElapsedTime<std::chrono::seconds>() >= 3) {
     setNextState(engine, StateEngine::STATE_MENU);
   }
 
   // Start timer
-  if (!start_time.IsRunning() && start_time.GetElapsedTime<seconds>() == 0 &&
-      (button_down() || key_down())) {
-    start_time.Start();
+  if (!start_time.isRunning() &&
+      start_time.getElapsedTime<std::chrono::seconds>() == 0 &&
+      asw::input::keyboard.anyPressed) {
+    start_time.start();
   }
 
   // Win
   if (distance_is_reached) {
-    if (start_time.IsRunning()) {
-      start_time.Stop();
-      end_time.Start();
+    if (start_time.isRunning()) {
+      start_time.stop();
+      end_time.start();
       levelPtr->completed = true;
-      play_sample(win, 255, 125, 1000, 0);
-      stop_sample(music);
+      asw::sound::play(win, 255, 125, 0);
+      // stop_sample(music);
     }
   }
 
   // Lose
-  else if (start_time.GetElapsedTime<seconds>() >= levelPtr->time) {
-    if (start_time.IsRunning()) {
-      start_time.Stop();
-      end_time.Start();
-      play_sample(lose, 255, 125, 1000, 0);
-      stop_sample(music);
+  else if (start_time.getElapsedTime<std::chrono::seconds>() >=
+           levelPtr->time) {
+    if (start_time.isRunning()) {
+      start_time.stop();
+      end_time.start();
+      asw::sound::play(lose, 255, 125, 0);
+      // stop_sample(music);
       scroll_speed = 0;
     }
   }
@@ -168,9 +141,10 @@ void Game::update(StateEngine* engine) {
   }
 
   // Character
-  player->update(int(ceil(start_time.GetElapsedTime<milliseconds>() / 100.0f *
-                          scroll_speed)) %
-                 8);
+  player->update(
+      int(ceil(start_time.getElapsedTime<std::chrono::milliseconds>() / 100.0f *
+               scroll_speed)) %
+      8);
 
   // Update goats
   for (auto g = goats.begin(); g < goats.end();) {
@@ -181,61 +155,64 @@ void Game::update(StateEngine* engine) {
 
   // Spawn some motherfing goats!
   if (random(0, 100) == 0) {
-    goats.push_back(
-        Goat(SCREEN_W, random(0, SCREEN_H), float(random(5, 60)) / 100.0f));
+    goats.push_back(Goat(asw::display::getSize().x,
+                         random(0, asw::display::getSize().y),
+                         float(random(5, 60)) / 100.0f));
     std::sort(goats.begin(), goats.end());
   }
 }
 
 // Draw game state
-void Game::draw(BITMAP* buffer) {
+void Game::draw() {
   // Background
-  clear_to_color(buffer, 0x000000);
-  stretch_sprite(buffer, background, 0, 0, SCREEN_W, SCREEN_H);
+  asw::draw::stretchSprite(background, 0, 0, asw::display::getSize().x,
+                           asw::display::getSize().y);
 
   // Paralax
-  draw_sprite(buffer, parallax, 0 + parallax_scroll, SCREEN_H - 270);
-  draw_sprite(buffer, parallax, -1024 + parallax_scroll, SCREEN_H - 270);
+  asw::draw::sprite(parallax, 0 + parallax_scroll,
+                    asw::display::getSize().y - 270);
+  asw::draw::sprite(parallax, -1024 + parallax_scroll,
+                    asw::display::getSize().y - 270);
 
   // Draw goats
   for (auto g = goats.begin(); g < goats.end(); g++) {
-    g->draw(buffer);
+    g->draw();
   }
 
   // Stairs!
-  clear_to_color(stair_buffer, 0xFF00FF);
-
   for (auto s = stairs.begin(); s < stairs.end(); s++) {
-    s->draw(stair_buffer);
+    s->draw();
   }
 
-  draw_sprite(buffer, stair_buffer, 0, 0);
-
   // Character
-  player->draw(buffer);
+  player->draw();
 
   // Distance
-  rectfill(buffer, 20, 20, 620, 80, makecol(0, 0, 0));
-  rectfill(buffer, 24, 24, 616, 76, makecol(255, 255, 255));
-  rectfill(buffer, 24, 24,
-           24 + (592 * (distance_travelled / levelPtr->distance)), 76,
-           makecol(0, 255, 0));
-  textprintf_ex(buffer, font, 30, 32, makecol(0, 0, 0), -1, "%4.0f/%i",
-                distance_travelled, levelPtr->distance);
+  asw::draw::rectFill(20, 20, 600, 60, asw::util::makeColor(0, 0, 0));
+  asw::draw::rectFill(24, 24, 592, 52, asw::util::makeColor(255, 255, 255));
+  asw::draw::rectFill(24, 24, 592 * (distance_travelled / levelPtr->distance),
+                      52, asw::util::makeColor(0, 255, 0));
+  asw::draw::text(
+      font, string_format("%4.0f/%d", distance_travelled, levelPtr->distance),
+      30, 32, asw::util::makeColor(0, 0, 0));
 
   // Win / Lose text
   if (distance_is_reached) {
-    draw_sprite(buffer, youwin, 200, 200);
-  } else if (start_time.GetElapsedTime<seconds>() >= levelPtr->time) {
-    draw_sprite(buffer, youlose, 200, 200);
+    asw::draw::sprite(youwin, 200, 200);
+  } else if (start_time.getElapsedTime<std::chrono::seconds>() >=
+             levelPtr->time) {
+    asw::draw::sprite(youlose, 200, 200);
   } else {
-    screen_keys->draw(buffer);
+    screen_keys->draw();
   }
 
   // Timer
-  set_alpha_blender();
-  draw_trans_sprite(buffer, watch, SCREEN_W - 122, SCREEN_H - 70);
-  textprintf_right_ex(buffer, dosis_26, SCREEN_W - 30, SCREEN_H - 60,
-                      makecol(255, 255, 255), -1, "%4.1f",
-                      start_time.GetElapsedTime<milliseconds>() / 1000);
+  auto timeElapsed =
+      start_time.getElapsedTime<std::chrono::milliseconds>() / 1000.0;
+  asw::draw::sprite(watch, asw::display::getSize().x - 122,
+                    asw::display::getSize().y - 70);
+  asw::draw::textRight(dosis_26, string_format("%4.1f", timeElapsed),
+                       asw::display::getSize().x - 30,
+                       asw::display::getSize().y - 60,
+                       asw::util::makeColor(255, 255, 255));
 }

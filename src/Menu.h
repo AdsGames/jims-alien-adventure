@@ -3,7 +3,7 @@
 
 #include "State.h"
 
-#include <allegro.h>
+#include <asw/asw.h>
 #include <vector>
 
 #include "Button.h"
@@ -12,20 +12,25 @@
 class Menu : public State {
  public:
   Menu();
-  ~Menu();
 
   virtual void update(StateEngine* engine) override;
-  virtual void draw(BITMAP* buffer) override;
+  virtual void draw() override;
 
  private:
   // Menu/GUI
-  BITMAP *title, *sky, *city;
-  BITMAP *cursor, *cursor2;
-  BITMAP* little_xbox_buttons;
-  BITMAP* background[2];
+  asw::Texture title;
+  asw::Texture sky;
+  asw::Texture city;
+  asw::Texture cursor;
+  asw::Texture cursor2;
+  asw::Texture little_xbox_buttons;
+  asw::Texture background[2];
+
+  // Fonts
+  asw::Font font;
 
   // Sound
-  SAMPLE* NOTALLOWED;
+  asw::Sample NOTALLOWED;
 
   // Buttons
   Button start, story, options, exit;
@@ -40,7 +45,7 @@ class Menu : public State {
   // Goats
   std::vector<Goat> goats;
 
-  SAMPLE* music;
+  asw::Sample music;
 };
 
 #endif  // MENU_H

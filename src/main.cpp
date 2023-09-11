@@ -1,120 +1,91 @@
-#include <allegro.h>
+#include <asw/asw.h>
+#include <chrono>
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#include <emscripten/html5.h>
+#endif
+
+// For state engine
 #include "State.h"
+
+using namespace std::chrono_literals;
+using namespace std::chrono;
+constexpr nanoseconds timestep(16ms);
+
+// Functions
+void setup();
+void draw();
+void update();
+
+// FPS system
+int fps = 0;
+int frames_done = 0;
 
 // State engine
 StateEngine game_state;
 
-// Buffer
-BITMAP* buffer;
-
-// Close button
-volatile int close_button_pressed = FALSE;
-
-// FPS System
-volatile int ticks = 0;
-const int updates_per_second = 60;
-volatile int game_time = 0;
-int frames_done = 0;
-int fps = 0;
-int old_time = 0;
-
-void ticker() {
-  ticks++;
-}
-END_OF_FUNCTION(ticker)
-
-void game_time_ticker() {
-  game_time++;
-}
-END_OF_FUNCTION(ticker)
-
-void close_button_handler(void) {
-  close_button_pressed = TRUE;
-}
-END_OF_FUNCTION(close_button_handler)
-
 // Setup game
 void setup() {
   // Load allegro library
-  allegro_init();
-  install_timer();
-  install_keyboard();
-  install_mouse();
-  install_joystick(JOY_TYPE_AUTODETECT);
-  install_sound(DIGI_AUTODETECT, MIDI_AUTODETECT, ".");
-
-  // Setup for FPS system
-  LOCK_VARIABLE(ticks);
-  LOCK_FUNCTION(ticker);
-  install_int_ex(ticker, BPS_TO_TIMER(updates_per_second));
-
-  LOCK_VARIABLE(game_time);
-  LOCK_FUNCTION(game_time_ticker);
-  install_int_ex(game_time_ticker, BPS_TO_TIMER(10));
-
-  // Close button
-  LOCK_FUNCTION(close_button_handler);
-  set_close_button_callback(close_button_handler);
-
-  // Set up screen
-  set_color_depth(32);
-  set_gfx_mode(GFX_AUTODETECT_WINDOWED, 740, 540, 0, 0);
-
-  buffer = create_bitmap(SCREEN_W, SCREEN_H);
+  asw::core::init(740, 540);
 }
 
 // Update
 void update() {
+  // Update core
+  asw::core::update();
+
   // Do state logic
   game_state.update();
-
-  // Handle exit
-  if (game_state.getStateId() == StateEngine::STATE_EXIT)
-    close_button_pressed = true;
 }
 
 // Do state rendering
 void draw() {
-  game_state.draw(buffer);
-  stretch_sprite(screen, buffer, 0, 0, SCREEN_W, SCREEN_H);
+  SDL_RenderClear(asw::display::renderer);
+  game_state.draw();
+  SDL_RenderPresent(asw::display::renderer);
 }
 
-// Main function*/
-int main() {
+// Loop (emscripten compatibility)
+#ifdef __EMSCRIPTEN__
+void loop() {
+  update();
+  draw();
+}
+#endif
+
+// Main function
+auto main(int argc, char* argv[]) -> int {
   // Setup basic functionality
   setup();
 
   // Set the current state ID
   game_state.setNextState(StateEngine::STATE_INIT);
 
-  while (!key[KEY_ESC] && !close_button_pressed) {
-    while (ticks == 0) {
-      rest(1);
-    }
+#ifdef __EMSCRIPTEN__
+  emscripten_set_main_loop(loop, 0, 1);
+#else
 
-    while (ticks > 0) {
-      int old_ticks = ticks;
+  using clock = high_resolution_clock;
+  nanoseconds lag(0ns);
+  auto time_start = clock::now();
 
+  while (!asw::input::keyboard.down[SDL_SCANCODE_ESCAPE] && !asw::core::exit &&
+         game_state.getStateId() != StateEngine::STATE_EXIT) {
+    auto delta_time = clock::now() - time_start;
+    time_start = clock::now();
+    lag += duration_cast<nanoseconds>(delta_time);
+
+    while (lag >= timestep) {
+      lag -= timestep;
       update();
-
-      ticks--;
-
-      if (old_ticks <= ticks) {
-        break;
-      }
-    }
-
-    if (game_time - old_time >= 10) {
-      fps = frames_done;
-      frames_done = 0;
-      old_time = game_time;
     }
 
     draw();
     frames_done++;
   }
+#endif
 
   return 0;
 }
-END_OF_MAIN()
