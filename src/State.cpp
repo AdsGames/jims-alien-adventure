@@ -63,36 +63,36 @@ void StateEngine::changeState() {
   switch (nextState) {
     case STATE_GAME:
       state = new Game();
-      std::cout << ("Switched state to game.\n");
+      std::cout << "Switched state to game." << std::endl;
       break;
 
     case STATE_MENU:
       state = new Menu();
-      std::cout << ("Switched state to main menu.\n");
+      std::cout << "Switched state to main menu." << std::endl;
       break;
 
     case STATE_MAP:
       state = new Map();
-      std::cout << ("Switched state to map.\n");
+      std::cout << "Switched state to map." << std::endl;
       break;
 
     case STATE_INIT:
       state = new Init();
-      std::cout << ("Switched state to init.\n");
+      std::cout << "Switched state to init." << std::endl;
       break;
 
     case STATE_INTRO:
       state = new Intro();
-      std::cout << ("Switched state to intro.\n");
+      std::cout << "Switched state to intro." << std::endl;
       break;
 
     case STATE_STORY:
       state = new Story();
-      std::cout << ("Switched state to story.\n");
+      std::cout << "Switched state to story." << std::endl;
       break;
 
     default:
-      std::cout << ("Exiting program.");
+      std::cout << "Exiting program." << std::endl;
       break;
   }
 

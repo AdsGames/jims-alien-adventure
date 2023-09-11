@@ -14,7 +14,10 @@ Stair::Stair(float x) {
   y = location_y(x);
   type = 0;
 
-  if (images[0].get() == nullptr) {
+  if (images[IMG_STAIRS].get() == nullptr ||
+      images[IMG_TOP_RED].get() == nullptr ||
+      images[IMG_TOP_GREEN].get() == nullptr ||
+      images[IMG_BRICK].get() == nullptr) {
     std::string folder = LevelData::GetLevelData()->GetLevel(levelOn)->folder;
 
     images[IMG_STAIRS] = asw::assets::loadTexture("assets/images/levels/" +
