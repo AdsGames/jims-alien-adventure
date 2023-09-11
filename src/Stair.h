@@ -17,9 +17,10 @@ class Stair {
   void update(float distanceRemaining, float speed);
   void draw();
 
+  static bool last_stair_placed;
+
  private:
   float location_y(float last_x);
-  static bool last_stair_placed;
 
   float x, y;
   int type;

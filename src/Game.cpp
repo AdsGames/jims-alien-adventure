@@ -56,6 +56,8 @@ void Game::init() {
     stairs.push_back(Stair(i));
   }
 
+  Stair::last_stair_placed = false;
+
   // Start music
   asw::sound::play(music, 255, 128, 1);
 }
