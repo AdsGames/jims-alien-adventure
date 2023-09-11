@@ -6,88 +6,61 @@
 
 Menu::Menu() {
   // Load music
-  music = load_ogg_ex("music/JAA-Theme.ogg");
+  music = asw::assets::loadSample("assets/music/JAA-Theme.ogg");
 
   // Load sound
-  NOTALLOWED = load_sample_ex("sounds/goat.wav");
+  NOTALLOWED = asw::assets::loadSample("assets/sounds/goat.wav");
 
   // Load images
-  background[0] = load_png_ex("images/menu/menu.png");
-  background[1] = load_png_ex("images/menu/menu_2.png");
+  background[0] = asw::assets::loadTexture("assets/images/menu/menu.png");
+  background[1] = asw::assets::loadTexture("assets/images/menu/menu_2.png");
 
-  title = load_png_ex("images/menu/title.png");
-  sky = load_png_ex("images/levels/statue_of_liberty/sky.png");
-  city = load_png_ex("images/levels/statue_of_liberty/parallax.png");
-  cursor = load_png_ex("images/menu/cursor1.png");
-  cursor2 = load_png_ex("images/menu/cursor2.png");
+  title = asw::assets::loadTexture("assets/images/menu/title.png");
+  sky = asw::assets::loadTexture(
+      "assets/images/levels/statue_of_liberty/sky.png");
+  city = asw::assets::loadTexture(
+      "assets/images/levels/statue_of_liberty/parallax.png");
+  cursor = asw::assets::loadTexture("assets/images/menu/cursor1.png");
+  cursor2 = asw::assets::loadTexture("assets/images/menu/cursor2.png");
 
-  little_xbox_buttons = load_png_ex("images/menu/angle_buttons.png");
+  little_xbox_buttons =
+      asw::assets::loadTexture("assets/images/menu/angle_buttons.png");
 
   // Sets Font
-  font = load_font_ex("fonts/dosis.pcx");
-
-  // Allow transparency
-  set_alpha_blender();
+  font = asw::assets::loadFont("assets/fonts/dosis.ttf", 12);
 
   // Variable set
-  title_y = -(title->h + 20);
+  title_y = -(asw::util::getTextureSize(title).y + 20);
   city_x = 0;
   switchFlipped = false;
 
   // Buttons
   start = Button(30, 190);
-  start.SetImages("images/menu/button_play.png",
-                  "images/menu/button_pushed_play.png");
+  start.SetImages("assets/images/menu/button_play.png",
+                  "assets/images/menu/button_pushed_play.png");
 
   story = Button(195, 190);
-  story.SetImages("images/menu/button_story.png",
-                  "images/menu/button_pushed_story.png");
+  story.SetImages("assets/images/menu/button_story.png",
+                  "assets/images/menu/button_pushed_story.png");
 
   options = Button(30, 300);
-  options.SetImages("images/menu/button_options.png",
-                    "images/menu/button_pushed_options.png");
+  options.SetImages("assets/images/menu/button_options.png",
+                    "assets/images/menu/button_pushed_options.png");
 
   exit = Button(195, 300);
-  exit.SetImages("images/menu/button_exit.png",
-                 "images/menu/button_pushed_exit.png");
+  exit.SetImages("assets/images/menu/button_exit.png",
+                 "assets/images/menu/button_pushed_exit.png");
 
-  play_sample(music, 255, 128, 1000, 1);
-}
-
-Menu::~Menu() {
-  // Destory Bitmaps
-  destroy_bitmap(title);
-  destroy_bitmap(sky);
-  destroy_bitmap(city);
-  destroy_bitmap(cursor);
-  destroy_bitmap(cursor2);
-  destroy_bitmap(little_xbox_buttons);
-  destroy_bitmap(background[0]);
-  destroy_bitmap(background[1]);
-
-  // Clear away goats
-  goats.clear();
-
-  // Stop music
-  destroy_sample(music);
-  destroy_sample(NOTALLOWED);
-
-  // Clear keybuff
-  clear_keybuf();
-
-  // Fade out
-  highcolor_fade_out(32);
+  asw::sound::play(music, 255, 128, 1);
 }
 
 void Menu::update(StateEngine* engine) {
-  // Poll joystick
-  poll_joystick();
-
   // Drop title
   title_y = title_y < 20 ? title_y + (20 - title_y) / 80 : 100;
 
   // Move city
-  city_x = city_x < -city->w ? city_x + city->w : city_x - 2;
+  auto citySize = asw::util::getTextureSize(city);
+  city_x = city_x < -citySize.x ? city_x + citySize.x : city_x - 2;
 
   // Buttons
   if (start.Clicked())
@@ -101,13 +74,14 @@ void Menu::update(StateEngine* engine) {
 
   // Motherfing goats!
   if (random(0, 80) == 0 || options.Clicked()) {
-    goats.push_back(
-        Goat(SCREEN_W, random(0, SCREEN_H), float(random(5, 60)) / 100.0f));
+    goats.push_back(Goat(asw::display::getSize().x,
+                         random(0, asw::display::getSize().y),
+                         float(random(5, 60)) / 100.0f));
     std::sort(goats.begin(), goats.end());
 
     if (options.Clicked()) {
-      stop_sample(NOTALLOWED);
-      play_sample(NOTALLOWED, 255, 125, 1000, 0);
+      // stop_sample(NOTALLOWED); TODO
+      asw::sound::play(NOTALLOWED, 255, 125, 0);
     }
   }
 
@@ -119,64 +93,69 @@ void Menu::update(StateEngine* engine) {
   }
 
   // Flip switch
-  if (mouse_b & 1) {
+  if (asw::input::mouse.down[1]) {
     if ((!switchFlipped &&
-         collision(595, 607, mouse_x, mouse_x, 236, 248, mouse_y, mouse_y)) ||
+         collision(595, 607, asw::input::mouse.x, asw::input::mouse.x, 236, 248,
+                   asw::input::mouse.y, asw::input::mouse.y)) ||
         (switchFlipped &&
-         collision(579, 591, mouse_x, mouse_x, 235, 247, mouse_y, mouse_y))) {
+         collision(579, 591, asw::input::mouse.x, asw::input::mouse.x, 235, 247,
+                   asw::input::mouse.y, asw::input::mouse.y))) {
       switchFlipped = !switchFlipped;
     }
   }
 }
 
-void Menu::draw(BITMAP* buffer) {
+void Menu::draw() {
   // Draw background to screen
-  rectfill(buffer, 0, 0, SCREEN_W, SCREEN_H, makecol(255, 255, 255));
+  asw::draw::clearColor(asw::util::makeColor(255, 255, 255));
 
   // Sky
-  stretch_sprite(buffer, sky, 0, 0, SCREEN_W, SCREEN_H);
+  asw::draw::stretchSprite(sky, 0, 0, asw::display::getSize().x,
+                           asw::display::getSize().y);
 
   // City scroll
-  draw_sprite(buffer, city, city_x, SCREEN_H - city->h);
-  draw_sprite(buffer, city, city_x + city->w, SCREEN_H - city->h);
+  auto citySize = asw::util::getTextureSize(city);
+  asw::draw::sprite(city, city_x, asw::display::getSize().y - citySize.y);
+  asw::draw::sprite(city, city_x + citySize.x,
+                    asw::display::getSize().y - citySize.y);
 
   // Draw goats
   for (auto g = goats.begin(); g < goats.end(); ++g) {
-    g->draw(buffer);
+    g->draw();
   }
 
   // Stairs
-  draw_sprite(buffer, background[switchFlipped], 0, 0);
+  asw::draw::sprite(background[switchFlipped], 0, 0);
 
   // Title
-  draw_trans_sprite(buffer, title, 20, title_y);
+  asw::draw::sprite(title, 20, title_y);
 
   // Buttons
-  start.Draw(buffer);
-  story.Draw(buffer);
-  options.Draw(buffer);
-  exit.Draw(buffer);
+  start.Draw();
+  story.Draw();
+  options.Draw();
+  exit.Draw();
 
-  // Joystick helpers
-  if (num_joysticks > 0) {
-    masked_blit(little_xbox_buttons, buffer, 60, 0,
-                start.GetX() + 21 - 4 * start.Hover(),
-                start.GetY() + 114 - start.Hover(), 20, 20);
-    masked_blit(little_xbox_buttons, buffer, 40, 0,
-                story.GetX() + 25 - 4 * story.Hover(),
-                story.GetY() + 114 - story.Hover(), 20, 20);
-    masked_blit(little_xbox_buttons, buffer, 0, 0,
-                options.GetX() + 25 - 4 * options.Hover(),
-                options.GetY() + 114 - options.Hover(), 20, 20);
-    masked_blit(little_xbox_buttons, buffer, 20, 0,
-                exit.GetX() + 25 - 4 * exit.Hover(),
-                exit.GetY() + 114 - exit.Hover(), 20, 20);
-  }
+  // Joystick helpers TODO
+  // if (num_joysticks > 0) {
+  //   masked_blit(little_xbox_buttons, buffer, 60, 0,
+  //               start.GetX() + 21 - 4 * start.Hover(),
+  //               start.GetY() + 114 - start.Hover(), 20, 20);
+  //   masked_blit(little_xbox_buttons, buffer, 40, 0,
+  //               story.GetX() + 25 - 4 * story.Hover(),
+  //               story.GetY() + 114 - story.Hover(), 20, 20);
+  //   masked_blit(little_xbox_buttons, buffer, 0, 0,
+  //               options.GetX() + 25 - 4 * options.Hover(),
+  //               options.GetY() + 114 - options.Hover(), 20, 20);
+  //   masked_blit(little_xbox_buttons, buffer, 20, 0,
+  //               exit.GetX() + 25 - 4 * exit.Hover(),
+  //               exit.GetY() + 114 - exit.Hover(), 20, 20);
+  // }
 
   // Cursor
   if (start.Hover() || story.Hover() || options.Hover() || exit.Hover()) {
-    draw_sprite(buffer, cursor2, mouse_x, mouse_y);
+    asw::draw::sprite(cursor2, asw::input::mouse.x, asw::input::mouse.y);
   } else {
-    draw_sprite(buffer, cursor, mouse_x, mouse_y);
+    asw::draw::sprite(cursor, asw::input::mouse.x, asw::input::mouse.y);
   }
 }

@@ -10,7 +10,7 @@
 #ifndef STATE_H
 #define STATE_H
 
-#include <allegro.h>
+#include <asw/asw.h>
 
 // Class
 class State;
@@ -27,7 +27,7 @@ class StateEngine {
   void update();
 
   // Draw
-  void draw(BITMAP* buffer);
+  void draw();
 
   // Set next state
   void setNextState(int newState);
@@ -72,7 +72,7 @@ class State {
   virtual ~State(){};
 
   // Draw to screen
-  virtual void draw(BITMAP* buffer) = 0;
+  virtual void draw() = 0;
 
   // Update logic
   virtual void update(StateEngine* engine) = 0;

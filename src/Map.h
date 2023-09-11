@@ -3,7 +3,7 @@
 
 #include "State.h"
 
-#include <allegro.h>
+#include <asw/asw.h>
 #include <vector>
 
 #include "LevelData.h"
@@ -12,17 +12,16 @@
 class Map : public State {
  public:
   Map();
-  ~Map();
 
   virtual void update(StateEngine* engine) override;
-  virtual void draw(BITMAP* buffer) override;
+  virtual void draw() override;
 
  private:
   // Map/GUI
-  BITMAP* map_image;
-  BITMAP* cursor;
+  asw::Texture map_image;
+  asw::Texture cursor;
 
-  SAMPLE* music;
+  asw::Sample music;
 
   std::vector<MapPin*> pins;
 };

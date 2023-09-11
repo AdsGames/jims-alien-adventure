@@ -1,11 +1,10 @@
 #ifndef TOOLS_H
 #define TOOLS_H
 
-#include <allegro.h>
-
-// Key or joy button pressed
-extern bool key_down();
-extern bool button_down();
+#include <asw/asw.h>
+#include <memory>
+#include <stdexcept>
+#include <string>
 
 // Collision
 extern bool collision(int xMin1,
@@ -17,30 +16,22 @@ extern bool collision(int xMin1,
                       int yMin2,
                       int yMax2);
 
-// Mouse position including resolution difference
-extern int mouseX();
-extern int mouseY();
-
 // Random number generator
 extern int random(int low, int high);
 
-// Fade in and out
-extern void highcolor_fade_in(BITMAP* bmp_orig, int speed);
-extern void highcolor_fade_out(int speed);
-
-// Error reporting
-extern void abort_on_error(const char* message);
-
-// Load image
-extern BITMAP* load_png_ex(const char* path);
-
-// Load ogg
-extern SAMPLE* load_ogg_ex(const char* path);
-
-// Load sample
-extern SAMPLE* load_sample_ex(const char* path);
-
-// Load font
-extern FONT* load_font_ex(const char* path);
+// String format, until std::format is rolled out to emscripten
+template <typename... Args>
+std::string string_format(const std::string& format, Args... args) {
+  int size_s = std::snprintf(nullptr, 0, format.c_str(), args...) +
+               1;  // Extra space for '\0'
+  if (size_s <= 0) {
+    throw std::runtime_error("Error during formatting.");
+  }
+  auto size = static_cast<size_t>(size_s);
+  std::unique_ptr<char[]> buf(new char[size]);
+  std::snprintf(buf.get(), size, format.c_str(), args...);
+  return std::string(buf.get(),
+                     buf.get() + size - 1);  // We don't want the '\0' inside
+}
 
 #endif  // TOOLS_H

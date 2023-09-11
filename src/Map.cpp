@@ -5,14 +5,11 @@
 
 Map::Map() {
   // Load music
-  music = load_ogg_ex("music/the-experiment.ogg");
+  music = asw::assets::loadSample("assets/music/the-experiment.ogg");
 
   // Load images
-  map_image = load_png_ex("images/map/map.png");
-  cursor = load_png_ex("images/map/cursor.png");
-
-  // Allow transparency
-  set_alpha_blender();
+  map_image = asw::assets::loadTexture("assets/images/map/map.png");
+  cursor = asw::assets::loadTexture("assets/images/map/cursor.png");
 
   // Add pins
   for (int i = 0; i < LevelData::GetLevelData()->GetNumLevels(); i++) {
@@ -21,38 +18,13 @@ Map::Map() {
         new MapPin(l->pin_x, l->pin_y, l->folder, l->completed, l->id));
   }
 
-  // Cursor position
-  position_mouse(SCREEN_W / 2, SCREEN_H / 2);
-
   // Start music
-  play_sample(music, 255, 128, 1000, 1);
-}
-
-Map::~Map() {
-  // Destory Bitmaps
-  destroy_bitmap(map_image);
-  destroy_bitmap(cursor);
-
-  // Destroy pins
-  for (auto p : pins) {
-    delete p;
-  }
-
-  pins.clear();
-
-  // Destroy music
-  destroy_sample(music);
-
-  // Fade out
-  highcolor_fade_out(16);
+  asw::sound::play(music, 255, 128, 1);
 }
 
 void Map::update(StateEngine* engine) {
-  // Update joystick
-  poll_joystick();
-
   // Change level
-  if (mouse_b & 1 || (num_joysticks > 0 && joy[0].button[0].b)) {
+  if (asw::input::mouse.pressed[1]) {
     for (auto p : pins) {
       if (p->Hover()) {
         levelOn = p->GetID();
@@ -61,30 +33,26 @@ void Map::update(StateEngine* engine) {
     }
   }
 
-  // Move cursor
-  if (num_joysticks > 0) {
-    position_mouse(mouse_x + (joy[0].stick[0].axis[0].pos / 30),
-                   mouse_y + (joy[0].stick[0].axis[1].pos / 20));
-  }
-
   // Back to menu
-  if (key[KEY_M]) {
+  if (asw::input::keyboard.pressed[SDL_SCANCODE_M]) {
     setNextState(engine, StateEngine::STATE_MENU);
   }
 }
 
-void Map::draw(BITMAP* buffer) {
+void Map::draw() {
   // Draw background to screen
-  rectfill(buffer, 0, 0, SCREEN_W, SCREEN_H, makecol(255, 255, 255));
+  asw::draw::clearColor(asw::util::makeColor(255, 255, 255));
 
   // Map image
-  draw_sprite(buffer, map_image, 0, 0);
+  asw::draw::sprite(map_image, 0, 0);
 
   // Locations
   for (auto p : pins) {
-    p->Draw(buffer);
+    p->Draw();
   }
 
   // Cursor
-  draw_sprite(buffer, cursor, mouse_x - cursor->w / 2, mouse_y - cursor->h / 2);
+  auto cursorSize = asw::util::getTextureSize(cursor);
+  asw::draw::sprite(cursor, asw::input::mouse.x - cursorSize.x / 2,
+                    asw::input::mouse.y - cursorSize.y / 2);
 }
