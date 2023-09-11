@@ -3,7 +3,6 @@
 #include "tools.h"
 
 asw::Texture Goat::goat_image[2] = {nullptr};
-int Goat::goat_count = 0;
 
 Goat::Goat(float x, float y, float scale) {
   this->x = x;
@@ -15,13 +14,6 @@ Goat::Goat(float x, float y, float scale) {
     goat_image[0] = asw::assets::loadTexture("assets/images/goat_alien.png");
     goat_image[1] = asw::assets::loadTexture("assets/images/goat_alien_2.png");
   }
-}
-
-Goat::Goat(const Goat& g) {
-  this->x = g.x;
-  this->y = g.y;
-  this->scale = g.scale;
-  this->speed = g.speed;
 }
 
 // Update

@@ -6,7 +6,6 @@
 class Goat {
  public:
   Goat(float x, float y, float scale);
-  Goat(const Goat& g);
 
   // Functions
   void update();
@@ -27,9 +26,6 @@ class Goat {
 
   // Images
   static asw::Texture goat_image[2];
-  static int goat_count;
-
-  void load_sprites();
 };
 
 #endif  // GOAT_H

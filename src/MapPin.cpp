@@ -20,8 +20,8 @@ MapPin::MapPin(int x, int y, std::string& folder, bool completed, int id) {
   auto size = asw::util::getTextureSize(pin_images[0]);
 
   this->y -= size.y / 2;
-  this->image = asw::assets::loadTexture(
-      ("assets/images/levels/" + folder + "/icon.png").c_str());
+  this->image =
+      asw::assets::loadTexture("assets/images/levels/" + folder + "/icon.png");
 }
 
 // Draw image

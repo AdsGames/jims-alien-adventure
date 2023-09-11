@@ -38,7 +38,7 @@ KeyManager::KeyManager(int x, int y) {
 // Push key
 void KeyManager::pushKey() {
   // num_joysticks > 0 ? random(0, 3) : TODO
-  int value = random(SDL_SCANCODE_LEFT, SDL_SCANCODE_DOWN);
+  int value = random(SDL_SCANCODE_RIGHT, SDL_SCANCODE_UP);
   key_queue.push_back(value);
 }
 

@@ -17,10 +17,10 @@ void Game::init() {
 
   // Load images
   levelPtr = LevelData::GetLevelData()->GetLevel(levelOn);
-  background = asw::assets::loadTexture(
-      ("assets/images/levels/" + levelPtr->folder + "/sky.png").c_str());
-  parallax = asw::assets::loadTexture(
-      ("assets/images/levels/" + levelPtr->folder + "/parallax.png").c_str());
+  background = asw::assets::loadTexture("assets/images/levels/" +
+                                        levelPtr->folder + "/sky.png");
+  parallax = asw::assets::loadTexture("assets/images/levels/" +
+                                      levelPtr->folder + "/parallax.png");
 
   // Misc
   watch = asw::assets::loadTexture("assets/images/watch.png");
@@ -180,18 +180,9 @@ void Game::draw() {
   }
 
   // Stairs!
-  // SDL_SetRenderTarget(asw::display::renderer, stair_buffer.get());
-  // asw::draw::clearColor(asw::util::makeColor(0, 0, 0, 255));
-
   for (auto s = stairs.begin(); s < stairs.end(); s++) {
     s->draw();
   }
-
-  // SDL_SetRenderTarget(asw::display::renderer, nullptr);
-  // SDL_SetTextureBlendMode(stair_buffer.get(), SDL_BLENDMODE_BLEND);
-
-  // Draw buffer
-  // asw::draw::sprite(stair_buffer, 0, 0);
 
   // Character
   player->draw();
@@ -202,7 +193,7 @@ void Game::draw() {
   asw::draw::rectFill(24, 24, 592 * (distance_travelled / levelPtr->distance),
                       52, asw::util::makeColor(0, 255, 0));
   asw::draw::text(
-      font, std::format("{:4.0f}/{}", distance_travelled, levelPtr->distance),
+      font, string_format("%4.0f/%d", distance_travelled, levelPtr->distance),
       30, 32, asw::util::makeColor(0, 0, 0));
 
   // Win / Lose text
@@ -220,7 +211,7 @@ void Game::draw() {
       start_time.getElapsedTime<std::chrono::milliseconds>() / 1000.0;
   asw::draw::sprite(watch, asw::display::getSize().x - 122,
                     asw::display::getSize().y - 70);
-  asw::draw::textRight(dosis_26, std::format("{:4.1f}", timeElapsed),
+  asw::draw::textRight(dosis_26, string_format("%4.1f", timeElapsed),
                        asw::display::getSize().x - 30,
                        asw::display::getSize().y - 60,
                        asw::util::makeColor(255, 255, 255));

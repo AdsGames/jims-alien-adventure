@@ -9,7 +9,7 @@ LevelData* LevelData::instance = nullptr;
 
 LevelData::LevelData(const std::string path) {
   if (!Load(path)) {
-    asw::util::abortOnError(std::string("Could not open config file ") + path);
+    asw::util::abortOnError("Could not open config file " + path);
   }
 }
 

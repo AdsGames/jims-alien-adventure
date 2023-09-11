@@ -5,7 +5,6 @@
 #include "tools.h"
 
 asw::Texture Stair::images[4] = {nullptr};
-int Stair::stair_count = 0;
 bool Stair::last_stair_placed = false;
 
 // Constructor
@@ -18,22 +17,15 @@ Stair::Stair(float x) {
   if (images[0].get() == nullptr) {
     std::string folder = LevelData::GetLevelData()->GetLevel(levelOn)->folder;
 
-    images[IMG_STAIRS] = asw::assets::loadTexture(
-        ("assets/images/levels/" + folder + "/stairs.png").c_str());
+    images[IMG_STAIRS] = asw::assets::loadTexture("assets/images/levels/" +
+                                                  folder + "/stairs.png");
     images[IMG_TOP_RED] = asw::assets::loadTexture(
-        ("assets/images/levels/" + folder + "/stage_end_red.png").c_str());
+        "assets/images/levels/" + folder + "/stage_end_red.png");
     images[IMG_TOP_GREEN] = asw::assets::loadTexture(
-        ("assets/images/levels/" + folder + "/stage_end_green.png").c_str());
-    images[IMG_BRICK] = asw::assets::loadTexture(
-        ("assets/images/levels/" + folder + "/brick.png").c_str());
+        "assets/images/levels/" + folder + "/stage_end_green.png");
+    images[IMG_BRICK] = asw::assets::loadTexture("assets/images/levels/" +
+                                                 folder + "/brick.png");
   }
-}
-
-// Copy constructor
-Stair::Stair(const Stair& s) {
-  x = s.x;
-  y = s.y;
-  type = s.type;
 }
 
 // Update those stairs

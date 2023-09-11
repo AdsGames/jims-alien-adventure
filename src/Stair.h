@@ -12,7 +12,6 @@
 class Stair {
  public:
   explicit Stair(float x);
-  Stair(const Stair& s);
 
   // FUNctions
   void update(float distanceRemaining, float speed);
@@ -26,7 +25,6 @@ class Stair {
   int type;
 
   static asw::Texture images[4];
-  static int stair_count;
 };
 
 #endif  // STAIR_H
