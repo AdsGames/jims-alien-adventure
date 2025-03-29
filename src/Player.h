@@ -5,6 +5,8 @@
 
 class Player {
  public:
+  Player() = default;
+
   Player(float x, float y);
 
   void draw();
@@ -12,7 +14,7 @@ class Player {
 
  private:
   // Frame
-  int frame;
+  int frame{0};
 
   // Variables
   float x, y;

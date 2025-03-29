@@ -1,30 +1,21 @@
-#ifndef BUTTON_H
-#define BUTTON_H
+#pragma once
 
 #include <asw/asw.h>
+#include <array>
 
 class Button {
  public:
-  Button();
-  Button(int x, int y);
+  Button() = default;
+  Button(float x, float y);
 
-  bool Hover();
-  bool Clicked();
-  void SetImages(const std::string image1, const std::string image2);
+  bool hover();
+  bool clicked();
+  void setImages(const std::string& image1, const std::string& image2);
 
-  int GetX();
-  int GetY();
-
-  void Draw();
+  void draw();
 
  private:
-  int height;
-  int width;
+  asw::Quad<float> transform;
 
-  int x;
-  int y;
-
-  asw::Texture images[2];
+  std::array<asw::Texture, 2> images;
 };
-
-#endif

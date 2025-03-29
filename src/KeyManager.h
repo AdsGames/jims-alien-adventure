@@ -2,10 +2,13 @@
 #define KEYMANAGER_H
 
 #include <asw/asw.h>
+#include <array>
 #include <vector>
 
 class KeyManager {
  public:
+  KeyManager() = default;
+
   KeyManager(int x, int y);
 
   // Functions
@@ -21,8 +24,8 @@ class KeyManager {
   void popKey();
 
   // Images and sounds
-  asw::Texture keys[SDL_NUM_SCANCODES];
-  asw::Sample sounds[2];
+  std::array<asw::Texture, asw::input::ASW_NUM_KEYS> keys{nullptr};
+  std::array<asw::Sample, 2> sounds{nullptr};
 
   // Positioning
   int x;

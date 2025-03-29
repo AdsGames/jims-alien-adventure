@@ -2,53 +2,28 @@
 
 #include "tools.h"
 
-Button::Button() {
-  images[0] = nullptr;
-  images[1] = nullptr;
-
-  height = 10;
-  width = 10;
-
-  this->x = 0;
-  this->y = 0;
-}
-
-Button::Button(int x, int y) : Button() {
-  this->x = x;
-  this->y = y;
+Button::Button(float x, float y) : Button() {
+  transform.position.x = x;
+  transform.position.y = y;
 }
 
 // Load images from file
-void Button::SetImages(const std::string image1, const std::string image2) {
+void Button::setImages(const std::string& image1, const std::string& image2) {
   images[0] = asw::assets::loadTexture(image1);
   images[1] = asw::assets::loadTexture(image2);
-
-  // Size
-  auto size = asw::util::getTextureSize(images[0]);
-
-  height = size.y;
-  width = size.x;
+  transform.size = asw::util::getTextureSize(images[0]);
 }
 
-bool Button::Hover() {
-  return collision(asw::input::mouse.x, asw::input::mouse.x, x, x + width,
-                   asw::input::mouse.y, asw::input::mouse.y, y, y + height);
+bool Button::hover() {
+  return transform.contains(asw::input::mouse.x, asw::input::mouse.y);
 }
 
-bool Button::Clicked() {
-  return Hover() && (asw::input::mouse.pressed[1]);
+bool Button::clicked() {
+  return hover() && asw::input::wasButtonPressed(asw::input::MouseButton::LEFT);
 }
 
-int Button::GetX() {
-  return x;
-}
-
-int Button::GetY() {
-  return y;
-}
-
-void Button::Draw() {
-  if (images[Hover()]) {
-    asw::draw::sprite(images[Hover()], x, y);
+void Button::draw() {
+  if (images[hover()]) {
+    asw::draw::sprite(images[hover()], transform.position);
   }
 }

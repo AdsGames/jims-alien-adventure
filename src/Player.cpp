@@ -4,11 +4,7 @@
 
 #include "tools.h"
 
-Player::Player(float x, float y) {
-  this->x = x;
-  this->y = y;
-  this->frame = 0;
-
+Player::Player(float x, float y) : x(x), y(y) {
   for (int i = 0; i < 8; i++) {
     images[i] = asw::assets::loadTexture("assets/images/player/player_" +
                                          std::to_string(i + 1) + ".png");
@@ -16,7 +12,7 @@ Player::Player(float x, float y) {
 }
 
 void Player::draw() {
-  asw::draw::sprite(images[frame], x, y);
+  asw::draw::sprite(images[frame], asw::Vec2<float>(x, y));
 }
 
 void Player::update(int frame) {

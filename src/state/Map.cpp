@@ -1,11 +1,11 @@
-#include "Map.h"
+#include "./Map.h"
 
-#include "globals.h"
-#include "tools.h"
+#include "../globals.h"
+#include "../tools.h"
 
-Map::Map() {
+void Map::init() {
   // Load music
-  music = asw::assets::loadSample("assets/music/the-experiment.ogg");
+  music = asw::assets::loadMusic("assets/music/the-experiment.ogg");
 
   // Load images
   map_image = asw::assets::loadTexture("assets/images/map/map.png");
@@ -19,23 +19,25 @@ Map::Map() {
   }
 
   // Start music
-  asw::sound::play(music, 255, 128, 1);
+  asw::sound::playMusic(music, 255);
 }
 
-void Map::update(StateEngine* engine) {
+void Map::update(float deltaTime) {
+  Scene::update(deltaTime);
+
   // Change level
   if (asw::input::mouse.pressed[1]) {
     for (auto p : pins) {
-      if (p->Hover()) {
+      if (p->hover()) {
         levelOn = p->GetID();
-        setNextState(engine, StateEngine::STATE_GAME);
+        sceneManager.setNextScene(States::Game);
       }
     }
   }
 
   // Back to menu
-  if (asw::input::keyboard.pressed[SDL_SCANCODE_M]) {
-    setNextState(engine, StateEngine::STATE_MENU);
+  if (asw::input::wasKeyPressed(asw::input::Key::ESCAPE)) {
+    sceneManager.setNextScene(States::Menu);
   }
 }
 
@@ -44,7 +46,7 @@ void Map::draw() {
   asw::draw::clearColor(asw::util::makeColor(255, 255, 255));
 
   // Map image
-  asw::draw::sprite(map_image, 0, 0);
+  asw::draw::sprite(map_image, asw::Vec2<float>(0, 0));
 
   // Locations
   for (auto p : pins) {
@@ -53,6 +55,7 @@ void Map::draw() {
 
   // Cursor
   auto cursorSize = asw::util::getTextureSize(cursor);
-  asw::draw::sprite(cursor, asw::input::mouse.x - cursorSize.x / 2,
-                    asw::input::mouse.y - cursorSize.y / 2);
+  asw::draw::sprite(cursor,
+                    asw::Vec2<float>(asw::input::mouse.x - cursorSize.x / 2,
+                                     asw::input::mouse.y - cursorSize.y / 2));
 }

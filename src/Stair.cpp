@@ -73,8 +73,8 @@ void Stair::draw() {
 
   for (int i = x + stairSize.x - 30; i < asw::display::getSize().x;
        i += brickSize.x) {
-    asw::draw::sprite(images[IMG_BRICK], i, y + stairSize.y);
+    asw::draw::sprite(images[IMG_BRICK], asw::Vec2<float>(i, y + stairSize.y));
   }
 
-  asw::draw::sprite(images[type], x, y);
+  asw::draw::sprite(images[type], asw::Vec2<float>(x, y));
 }

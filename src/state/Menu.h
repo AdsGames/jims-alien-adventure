@@ -1,20 +1,21 @@
-#ifndef MENU_H
-#define MENU_H
-
-#include "State.h"
+#pragma once
 
 #include <asw/asw.h>
 #include <vector>
 
-#include "Button.h"
-#include "Goat.h"
+#include "../Button.h"
+#include "../Goat.h"
+#include "./States.h"
 
-class Menu : public State {
+class Menu : public asw::scene::Scene<States> {
  public:
-  Menu();
+  using asw::scene::Scene<States>::Scene;
 
-  virtual void update(StateEngine* engine) override;
-  virtual void draw() override;
+  void init() override;
+
+  void update(float deltaTime) override;
+
+  void draw() override;
 
  private:
   // Menu/GUI
@@ -45,7 +46,10 @@ class Menu : public State {
   // Goats
   std::vector<Goat> goats;
 
-  asw::Sample music;
-};
+  // Music
+  asw::Music music;
 
-#endif  // MENU_H
+  // Speed multipliers
+  static constexpr float city_speed_multiplier = 0.125F;
+  static constexpr float title_speed_multiplier = 0.25F;
+};

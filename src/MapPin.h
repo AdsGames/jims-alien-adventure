@@ -10,7 +10,7 @@ class MapPin {
   MapPin(int x, int y, std::string& folder, bool completed, int id);
 
   void Draw();
-  bool Hover();
+  bool hover();
   int GetID();
 
  private:
