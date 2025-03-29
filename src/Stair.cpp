@@ -2,7 +2,6 @@
 
 #include "LevelData.h"
 #include "globals.h"
-#include "tools.h"
 
 asw::Texture Stair::images[4] = {nullptr};
 bool Stair::last_stair_placed = false;
@@ -40,13 +39,13 @@ void Stair::update(float distanceRemaining, float speed) {
   x -= speed;
 
   // Go back to start
-  if (y > asw::display::getSize().y && !last_stair_placed) {
-    if (distanceRemaining < asw::display::getSize().x - 100) {
+  if (y > asw::display::getLogicalSize().y && !last_stair_placed) {
+    if (distanceRemaining < asw::display::getLogicalSize().x - 100) {
       type = 1;
       last_stair_placed = true;
     }
 
-    x += stairSize.x * int(asw::display::getSize().x / stairSize.x);
+    x += stairSize.x * int(asw::display::getLogicalSize().x / stairSize.x);
   }
 
   // Turn green
@@ -60,8 +59,8 @@ void Stair::update(float distanceRemaining, float speed) {
 
 // Line y position
 float Stair::location_y(float last_x) {
-  return asw::display::getSize().y -
-         ((last_x - asw::display::getSize().x / 4) / 30) * 37;
+  return asw::display::getLogicalSize().y -
+         ((last_x - asw::display::getLogicalSize().x / 4) / 30) * 37;
 }
 
 // Draw those stairs
@@ -71,10 +70,10 @@ void Stair::draw() {
   auto stairSize = asw::util::getTextureSize(images[IMG_STAIRS]);
   auto brickSize = asw::util::getTextureSize(images[IMG_BRICK]);
 
-  for (int i = x + stairSize.x - 30; i < asw::display::getSize().x;
+  for (int i = x + stairSize.x - 30; i < asw::display::getLogicalSize().x;
        i += brickSize.x) {
-    asw::draw::sprite(images[IMG_BRICK], i, y + stairSize.y);
+    asw::draw::sprite(images[IMG_BRICK], asw::Vec2<float>(i, y + stairSize.y));
   }
 
-  asw::draw::sprite(images[type], x, y);
+  asw::draw::sprite(images[type], asw::Vec2<float>(x, y));
 }

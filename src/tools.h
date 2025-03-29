@@ -16,9 +16,6 @@ extern bool collision(int xMin1,
                       int yMin2,
                       int yMax2);
 
-// Random number generator
-extern int random(int low, int high);
-
 // String format, until std::format is rolled out to emscripten
 template <typename... Args>
 std::string string_format(const std::string& format, Args... args) {

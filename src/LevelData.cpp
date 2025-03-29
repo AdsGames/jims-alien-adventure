@@ -3,17 +3,16 @@
 #include <asw/asw.h>
 #include <fstream>
 #include <nlohmann/json.hpp>
-#include "tools.h"
 
 LevelData* LevelData::instance = nullptr;
 
-LevelData::LevelData(const std::string path) {
+LevelData::LevelData(const std::string& path) {
   if (!Load(path)) {
     asw::util::abortOnError("Could not open config file " + path);
   }
 }
 
-bool LevelData::Load(const std::string path) {
+bool LevelData::Load(const std::string& path) {
   // Open file or abort if it does not exist
   std::ifstream file(path);
   if (!file.is_open()) {

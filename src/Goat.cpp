@@ -1,41 +1,39 @@
 #include "Goat.h"
 
-#include "tools.h"
+std::array<asw::Texture, 2> Goat::goat_image = {nullptr};
 
-asw::Texture Goat::goat_image[2] = {nullptr};
-
-Goat::Goat(float x, float y, float scale) {
-  this->x = x;
-  this->y = y;
-  this->scale = scale;
-  this->speed = scale * 3.0f;
-
+Goat::Goat(float x, float y, float scale)
+    : transform(x, y, 0, 0), speed(scale * goat_speed_multiplier) {
   if (goat_image[0].get() == nullptr || goat_image[1].get() == nullptr) {
     goat_image[0] = asw::assets::loadTexture("assets/images/goat_alien.png");
     goat_image[1] = asw::assets::loadTexture("assets/images/goat_alien_2.png");
   }
+
+  transform.size = asw::util::getTextureSize(goat_image[0]) * scale;
 }
 
 // Update
-void Goat::update() {
-  x -= speed;
+void Goat::update(float deltaTime) {
+  transform.position.x -= speed * deltaTime;
+
+  if (falling) {
+    transform.position.y += speed * goat_fall_speed_multiplier * deltaTime;
+  }
 }
 
 // Kill
 bool Goat::offScreen() {
-  auto size = asw::util::getTextureSize(goat_image[0]);
-  return (x + size.x - speed < 0 || x - speed > asw::display::getSize().x ||
-          y > asw::display::getSize().y || y + size.y < 0);
+  return !transform.contains(
+      asw::Quad<float>(0.0F, 0.0F, asw::display::getLogicalSize().x,
+                       asw::display::getLogicalSize().y));
 }
 
 // Fall!
-void Goat::fall(float speed) {
-  y += speed;
+void Goat::setFalling(bool falling) {
+  this->falling = falling;
 }
 
 // Draw
 void Goat::draw() {
-  auto size = asw::util::getTextureSize(goat_image[0]);
-  asw::draw::stretchSprite(goat_image[random(0, 1)], x, y, size.x * scale,
-                           size.y * scale);
+  asw::draw::stretchSprite(goat_image[asw::random::between(0, 1)], transform);
 }
