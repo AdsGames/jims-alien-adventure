@@ -35,5 +35,5 @@ class Goat {
 
   // Goat speed multiplier
   static constexpr float goat_speed_multiplier = 0.1875F;
-  static constexpr float goat_fall_speed_multiplier = 4.0F;
+  static constexpr float goat_fall_speed_multiplier = 16.0F;
 };
