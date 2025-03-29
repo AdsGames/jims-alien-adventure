@@ -1,7 +1,5 @@
 #include "KeyManager.h"
 
-#include "tools.h"
-
 // Init
 KeyManager::KeyManager(int x, int y) : x(x), y(y) {
   // Add keys

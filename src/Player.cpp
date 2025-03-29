@@ -2,8 +2,6 @@
 
 #include <string>
 
-#include "tools.h"
-
 Player::Player(float x, float y) : x(x), y(y) {
   for (int i = 0; i < 8; i++) {
     images[i] = asw::assets::loadTexture("assets/images/player/player_" +

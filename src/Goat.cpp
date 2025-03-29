@@ -1,7 +1,5 @@
 #include "Goat.h"
 
-#include "tools.h"
-
 std::array<asw::Texture, 2> Goat::goat_image = {nullptr};
 
 Goat::Goat(float x, float y, float scale)
@@ -25,8 +23,9 @@ void Goat::update(float deltaTime) {
 
 // Kill
 bool Goat::offScreen() {
-  return !transform.contains(asw::Quad<float>(
-      0.0F, 0.0F, asw::display::getSize().x, asw::display::getSize().y));
+  return !transform.contains(
+      asw::Quad<float>(0.0F, 0.0F, asw::display::getLogicalSize().x,
+                       asw::display::getLogicalSize().y));
 }
 
 // Fall!
@@ -36,6 +35,5 @@ void Goat::setFalling(bool falling) {
 
 // Draw
 void Goat::draw() {
-  auto size = asw::util::getTextureSize(goat_image[0]);
   asw::draw::stretchSprite(goat_image[asw::random::between(0, 1)], transform);
 }

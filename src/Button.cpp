@@ -1,7 +1,5 @@
 #include "Button.h"
 
-#include "tools.h"
-
 Button::Button(float x, float y) : Button() {
   transform.position.x = x;
   transform.position.y = y;

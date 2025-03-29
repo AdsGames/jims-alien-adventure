@@ -1,8 +1,8 @@
 #include "./Menu.h"
 
-#include "../tools.h"
-
 #include <algorithm>
+
+#include "../tools.h"
 
 void Menu::init() {
   // Load music
@@ -91,9 +91,10 @@ void Menu::update(float deltaTime) {
 
   // Motherfing goats!
   if (asw::random::between(0, 80) == 0 || options.clicked()) {
-    goats.emplace_back(asw::display::getSize().x,
-                       asw::random::between(0, asw::display::getSize().y),
-                       asw::random::between(5.0F, 60.0F) / 100.0f);
+    goats.emplace_back(
+        asw::display::getLogicalSize().x,
+        asw::random::between(0, asw::display::getLogicalSize().y),
+        asw::random::between(5.0F, 60.0F) / 100.0f);
     std::sort(goats.begin(), goats.end());
   }
 
@@ -115,21 +116,29 @@ void Menu::update(float deltaTime) {
       switchFlipped = !switchFlipped;
     }
   }
+
+  // Cursor
+  if (start.hover() || story.hover() || options.hover() || exit.hover()) {
+    asw::input::setCursor(asw::input::CursorId::POINTER);
+  } else {
+    asw::input::setCursor(asw::input::CursorId::DEFAULT);
+  }
 }
 
 void Menu::draw() {
   // Sky
-  asw::draw::stretchSprite(sky,
-                           asw::Quad<float>(0, 0, asw::display::getSize().x,
-                                            asw::display::getSize().y));
+  asw::draw::stretchSprite(
+      sky, asw::Quad<float>(0, 0, asw::display::getLogicalSize().x,
+                            asw::display::getLogicalSize().y));
 
   // City scroll
   auto citySize = asw::util::getTextureSize(city);
   asw::draw::sprite(
-      city, asw::Vec2<float>(city_x, asw::display::getSize().y - citySize.y));
-  asw::draw::sprite(city,
-                    asw::Vec2<float>(city_x + citySize.x,
-                                     asw::display::getSize().y - citySize.y));
+      city,
+      asw::Vec2<float>(city_x, asw::display::getLogicalSize().y - citySize.y));
+  asw::draw::sprite(
+      city, asw::Vec2<float>(city_x + citySize.x,
+                             asw::display::getLogicalSize().y - citySize.y));
 
   // Draw goats
   for (auto g = goats.begin(); g < goats.end(); ++g) {
@@ -147,13 +156,4 @@ void Menu::draw() {
   story.draw();
   options.draw();
   exit.draw();
-
-  // Cursor
-  if (start.hover() || story.hover() || options.hover() || exit.hover()) {
-    asw::draw::sprite(
-        cursor2, asw::Vec2<float>(asw::input::mouse.x, asw::input::mouse.y));
-  } else {
-    asw::draw::sprite(
-        cursor, asw::Vec2<float>(asw::input::mouse.x, asw::input::mouse.y));
-  }
 }

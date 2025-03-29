@@ -26,7 +26,7 @@ FetchContent_MakeAvailable(json)
 FetchContent_Declare(
   asw
   GIT_REPOSITORY https://github.com/adsgames/asw.git
-  GIT_TAG        v0.5.2
+  GIT_TAG        v0.5.4
   GIT_SHALLOW    TRUE
 )
 FetchContent_MakeAvailable(asw)

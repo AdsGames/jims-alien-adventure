@@ -1,7 +1,5 @@
 #include "./Intro.h"
 
-#include "../tools.h"
-
 void Intro::init() {
   // Buffer
   splash = asw::assets::loadTexture("assets/images/splash.png");
@@ -22,12 +20,12 @@ void Intro::update(float deltaTime) {
 
 void Intro::draw() {
   if (timer.getElapsedTime<std::chrono::milliseconds>() < 1700) {
-    asw::draw::stretchSprite(logo,
-                             asw::Quad<float>(0, 0, asw::display::getSize().x,
-                                              asw::display::getSize().y));
+    asw::draw::stretchSprite(
+        logo, asw::Quad<float>(0, 0, asw::display::getLogicalSize().x,
+                               asw::display::getLogicalSize().y));
   } else {
-    asw::draw::stretchSprite(splash,
-                             asw::Quad<float>(0, 0, asw::display::getSize().x,
-                                              asw::display::getSize().y));
+    asw::draw::stretchSprite(
+        splash, asw::Quad<float>(0, 0, asw::display::getLogicalSize().x,
+                                 asw::display::getLogicalSize().y));
   }
 }

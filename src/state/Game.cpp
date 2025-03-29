@@ -1,10 +1,10 @@
 #include "./Game.h"
 
-#include "../globals.h"
-#include "../tools.h"
-
 #include <algorithm>
 #include <cmath>
+
+#include "../globals.h"
+#include "../tools.h"
 
 void Game::init() {
   // Load music
@@ -26,10 +26,6 @@ void Game::init() {
   win = asw::assets::loadSample("assets/sounds/win.wav");
   lose = asw::assets::loadSample("assets/sounds/lose.wav");
 
-  // Stair buffer
-  stair_buffer = asw::assets::createTexture(asw::display::getSize().x,
-                                            asw::display::getSize().y);
-
   // Sets Fonts
   font = asw::assets::loadFont("assets/fonts/dosis.ttf", 28);
   dosis_26 = asw::assets::loadFont("assets/fonts/dosis.ttf", 26);
@@ -49,7 +45,8 @@ void Game::init() {
   Stair::last_stair_placed = false;
 
   // Stairs (offset is 30 px)
-  for (int i = 0; i < asw::display::getSize().x; i += 30) {
+  stairs.clear();
+  for (int i = 0; i < asw::display::getLogicalSize().x; i += 30) {
     stairs.emplace_back(i);
   }
 
@@ -154,9 +151,10 @@ void Game::update(float deltaTime) {
 
   // Spawn some motherfing goats!
   if (asw::random::between(0, 100) == 0) {
-    goats.emplace_back(asw::display::getSize().x,
-                       asw::random::between(0, asw::display::getSize().y),
-                       asw::random::between(5.0F, 60.0F) / 100.0F);
+    goats.emplace_back(
+        asw::display::getLogicalSize().x,
+        asw::random::between(0, asw::display::getLogicalSize().y),
+        asw::random::between(5.0F, 60.0F) / 100.0F);
     std::sort(goats.begin(), goats.end());
   }
 }
@@ -164,17 +162,17 @@ void Game::update(float deltaTime) {
 // Draw game state
 void Game::draw() {
   // Background
-  asw::draw::stretchSprite(background,
-                           asw::Quad<float>(0, 0, asw::display::getSize().x,
-                                            asw::display::getSize().y));
+  asw::draw::stretchSprite(
+      background, asw::Quad<float>(0, 0, asw::display::getLogicalSize().x,
+                                   asw::display::getLogicalSize().y));
 
   // Paralax
-  asw::draw::sprite(
-      parallax,
-      asw::Vec2<float>(0 + parallax_scroll, asw::display::getSize().y - 270));
+  asw::draw::sprite(parallax,
+                    asw::Vec2<float>(0 + parallax_scroll,
+                                     asw::display::getLogicalSize().y - 270));
   asw::draw::sprite(parallax,
                     asw::Vec2<float>(-1024 + parallax_scroll,
-                                     asw::display::getSize().y - 270));
+                                     asw::display::getLogicalSize().y - 270));
 
   // Draw goats
   for (auto g = goats.begin(); g < goats.end(); g++) {
@@ -216,12 +214,12 @@ void Game::draw() {
   // Timer
   auto timeElapsed =
       start_time.getElapsedTime<std::chrono::milliseconds>() / 1000.0;
-  asw::draw::sprite(watch, asw::Vec2<float>(asw::display::getSize().x,
-                                            asw::display::getSize().y) -
+  asw::draw::sprite(watch, asw::Vec2<float>(asw::display::getLogicalSize().x,
+                                            asw::display::getLogicalSize().y) -
                                asw::Vec2<float>(122, 70));
-  asw::draw::textRight(
-      dosis_26, string_format("%4.1f", timeElapsed),
-      asw::Vec2<float>(asw::display::getSize().x, asw::display::getSize().y) -
-          asw::Vec2<float>(30, 60),
-      asw::util::makeColor(255, 255, 255));
+  asw::draw::textRight(dosis_26, string_format("%4.1f", timeElapsed),
+                       asw::Vec2<float>(asw::display::getLogicalSize().x,
+                                        asw::display::getLogicalSize().y) -
+                           asw::Vec2<float>(30, 60),
+                       asw::util::makeColor(255, 255, 255));
 }

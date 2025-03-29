@@ -1,7 +1,6 @@
 #include "./Map.h"
 
 #include "../globals.h"
-#include "../tools.h"
 
 void Map::init() {
   // Load music
@@ -9,7 +8,6 @@ void Map::init() {
 
   // Load images
   map_image = asw::assets::loadTexture("assets/images/map/map.png");
-  cursor = asw::assets::loadTexture("assets/images/map/cursor.png");
 
   // Add pins
   for (int i = 0; i < LevelData::GetLevelData()->GetNumLevels(); i++) {
@@ -25,14 +23,24 @@ void Map::init() {
 void Map::update(float deltaTime) {
   Scene::update(deltaTime);
 
-  // Change level
-  if (asw::input::mouse.pressed[1]) {
-    for (auto p : pins) {
-      if (p->hover()) {
-        levelOn = p->GetID();
+  // Pin logic
+  auto is_hovering = false;
+  for (auto p : pins) {
+    if (p->hover()) {
+      is_hovering = true;
+
+      if (asw::input::wasButtonPressed(asw::input::MouseButton::LEFT)) {
+        levelOn = p->getId();
         sceneManager.setNextScene(States::Game);
       }
     }
+  }
+
+  // Set cursor
+  if (!is_hovering) {
+    asw::input::setCursor(asw::input::CursorId::CROSSHAIR);
+  } else {
+    asw::input::setCursor(asw::input::CursorId::POINTER);
   }
 
   // Back to menu
@@ -50,12 +58,6 @@ void Map::draw() {
 
   // Locations
   for (auto p : pins) {
-    p->Draw();
+    p->draw();
   }
-
-  // Cursor
-  auto cursorSize = asw::util::getTextureSize(cursor);
-  asw::draw::sprite(cursor,
-                    asw::Vec2<float>(asw::input::mouse.x - cursorSize.x / 2,
-                                     asw::input::mouse.y - cursorSize.y / 2));
 }

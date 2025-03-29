@@ -1,12 +1,10 @@
 #include "./Story.h"
 
-#include "../tools.h"
-
 // Constructor
 void Story::init() {
   story_splash = asw::assets::loadTexture("assets/images/story_splash.png");
   font = asw::assets::loadFont("assets/fonts/dosis.ttf", 24);
-  text_position = asw::Vec2<float>(25, asw::display::getSize().y - 50);
+  text_position = asw::Vec2<float>(25, asw::display::getLogicalSize().y - 50);
 }
 
 // Update

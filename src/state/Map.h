@@ -20,7 +20,6 @@ class Map : public asw::scene::Scene<States> {
  private:
   // Map/GUI
   asw::Texture map_image;
-  asw::Texture cursor;
 
   asw::Music music;
 

@@ -53,7 +53,6 @@ class Game : public asw::scene::Scene<States> {
   asw::Texture watch;
   asw::Texture youwin;
   asw::Texture youlose;
-  asw::Texture stair_buffer;
 
   float parallax_scroll;
   float distance_travelled;
