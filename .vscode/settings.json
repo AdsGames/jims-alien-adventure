@@ -87,5 +87,10 @@
     "stack": "cpp",
     "text_encoding": "cpp",
     "__node_handle": "cpp"
+  },
+  "sonarlint.pathToCompileCommands": "${workspaceFolder}/build/compile_commands.json",
+  "sonarlint.connectedMode.project": {
+    "connectionId": "adsgames",
+    "projectKey": "AdsGames_jims-alien-adventure"
   }
 }

@@ -22,8 +22,8 @@ void Goat::update(float deltaTime) {
 }
 
 // Kill
-bool Goat::offScreen() {
-  return !transform.contains(
+bool Goat::offScreen() const {
+  return !transform.collides(
       asw::Quad<float>(0.0F, 0.0F, asw::display::getLogicalSize().x,
                        asw::display::getLogicalSize().y));
 }
@@ -34,6 +34,6 @@ void Goat::setFalling(bool falling) {
 }
 
 // Draw
-void Goat::draw() {
+void Goat::draw() const {
   asw::draw::stretchSprite(goat_image[asw::random::between(0, 1)], transform);
 }

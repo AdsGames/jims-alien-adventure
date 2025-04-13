@@ -12,16 +12,16 @@ A button mashing game with the objective of preventing goat aliens from destroyi
 
 ## Setup
 
-### Build
+### CMake
 
 ```bash
-cmake .
-make
+cmake --preset debug
+cmake --build --preset debug
 ```
 
 ### Build Emscripten
 
 ```bash
-emcmake cmake .
-make
+emcmake cmake --preset debug
+cmake --build --preset debug
 ```

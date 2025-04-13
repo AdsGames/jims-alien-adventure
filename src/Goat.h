@@ -12,16 +12,16 @@ class Goat {
 
   void setFalling(bool falling);
 
-  bool offScreen();
+  bool offScreen() const;
 
-  void draw();
+  void draw() const;
 
   // Sorting operator
-  bool operator<(const Goat& g) const {
-    if (transform.size.x == g.transform.size.x) {
-      return transform.position.y < g.transform.position.y;
+  friend bool operator<(const Goat& a, const Goat& b) {
+    if (a.transform.size.x == b.transform.size.x) {
+      return a.transform.position.y < b.transform.position.y;
     }
-    return transform.size.x < g.transform.size.x;
+    return a.transform.size.x < b.transform.size.x;
   }
 
  private:
