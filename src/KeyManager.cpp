@@ -1,5 +1,12 @@
 #include "KeyManager.h"
 
+#include <array>
+#include <string>
+
+namespace {
+std::array<std::string, 4> action_ids = {"up", "down", "left", "right"};
+}
+
 // Init
 KeyManager::KeyManager(int x, int y) : x(x), y(y) {
   // Add keys
@@ -8,27 +15,23 @@ KeyManager::KeyManager(int x, int y) : x(x), y(y) {
   }
 
   // Load images
-  keys[SDL_SCANCODE_UP] =
-      asw::assets::loadTexture("assets/images/keys/key_up.png");
-  keys[SDL_SCANCODE_DOWN] =
-      asw::assets::loadTexture("assets/images/keys/key_down.png");
-  keys[SDL_SCANCODE_LEFT] =
-      asw::assets::loadTexture("assets/images/keys/key_left.png");
-  keys[SDL_SCANCODE_RIGHT] =
-      asw::assets::loadTexture("assets/images/keys/key_right.png");
-  keys[0] = asw::assets::loadTexture("assets/images/keys/joy_a.png");
-  keys[3] = asw::assets::loadTexture("assets/images/keys/joy_y.png");
-  keys[2] = asw::assets::loadTexture("assets/images/keys/joy_x.png");
-  keys[1] = asw::assets::loadTexture("assets/images/keys/joy_b.png");
+  keys[0] = asw::assets::load_texture("assets/images/keys/key_up.png");
+  keys[1] = asw::assets::load_texture("assets/images/keys/key_down.png");
+  keys[2] = asw::assets::load_texture("assets/images/keys/key_left.png");
+  keys[3] = asw::assets::load_texture("assets/images/keys/key_right.png");
 
-  sounds[0] = asw::assets::loadSample("assets/sounds/trip.wav");
-  sounds[1] = asw::assets::loadSample("assets/sounds/ping.wav");
+  buttons[0] = asw::assets::load_texture("assets/images/keys/joy_y.png");
+  buttons[1] = asw::assets::load_texture("assets/images/keys/joy_a.png");
+  buttons[2] = asw::assets::load_texture("assets/images/keys/joy_x.png");
+  buttons[3] = asw::assets::load_texture("assets/images/keys/joy_b.png");
+
+  sounds[0] = asw::assets::load_sample("assets/sounds/trip.wav");
+  sounds[1] = asw::assets::load_sample("assets/sounds/ping.wav");
 }
 
 // Push key
 void KeyManager::pushKey() {
-  // num_joysticks > 0 ? random(0, 3) : TODO
-  const int value = asw::random::between(SDL_SCANCODE_RIGHT, SDL_SCANCODE_UP);
+  const int value = asw::random::between(0, action_ids.size() - 1);
   key_queue.push_back(value);
 }
 
@@ -39,17 +42,23 @@ void KeyManager::popKey() {
 
 // Update
 int KeyManager::update() {
+  const bool is_any_action_pressed =
+      asw::input::is_action_pressed(action_ids[0]) ||
+      asw::input::is_action_pressed(action_ids[1]) ||
+      asw::input::is_action_pressed(action_ids[2]) ||
+      asw::input::is_action_pressed(action_ids[3]);
+
   // Got a correct letter
-  if (key_queue.size() > 0 && asw::input::keyboard.anyPressed) {
-    if (asw::input::keyboard.pressed[key_queue.at(0)]) {
+  if (!key_queue.empty() && is_any_action_pressed) {
+    if (asw::input::is_action_pressed(action_ids.at(key_queue.at(0)))) {
       asw::sound::play(sounds[1], 255, 125, 0);
       popKey();
       pushKey();
       return 1;
-    } else {
-      asw::sound::play(sounds[0], 255, 125, 0);
-      return -1;
     }
+
+    asw::sound::play(sounds[0], 255, 125, 0);
+    return -1;
   }
 
   return 0;
@@ -58,13 +67,18 @@ int KeyManager::update() {
 // Draw
 void KeyManager::draw() {
   // Background
-  asw::draw::rectFill(
-      asw::Quad<float>(x + 15, y + 75, 209 - 95, 7 + (key_queue.size() * 90)),
-      asw::util::makeColor(155, 155, 155));
+  asw::draw::rect_fill(
+      asw::Quadf(x + 15, y + 75, 209 - 95, 7 + (key_queue.size() * 90)),
+      asw::Color(155, 155, 155));
 
   // Draw keys
   for (unsigned int i = 0; i < key_queue.size(); i++) {
-    asw::draw::sprite(keys[key_queue.at(i)],
-                      asw::Vec2<float>(x + 20, -(i * 90) + y + 350));
+    const auto button_position = asw::Vec2f(x + 20, -(i * 90) + y + 350);
+
+    if (asw::input::get_controller_count() > 0) {
+      asw::draw::sprite(buttons[key_queue.at(i)], button_position);
+    } else {
+      asw::draw::sprite(keys[key_queue.at(i)], button_position);
+    }
   }
 }

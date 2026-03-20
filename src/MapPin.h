@@ -21,7 +21,7 @@ class MapPin {
   static std::array<asw::Texture, 2> pin_images;
   static int pin_count;
 
-  asw::Quad<float> transform;
+  asw::Quadf transform;
 
   int id;
   bool completed;

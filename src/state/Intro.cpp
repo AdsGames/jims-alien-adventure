@@ -2,30 +2,29 @@
 
 void Intro::init() {
   // Buffer
-  splash = asw::assets::loadTexture("assets/images/splash.png");
-  logo = asw::assets::loadTexture("assets/images/logo.png");
-
-  // Start timer
-  timer.start();
+  splash = asw::assets::load_texture("assets/images/splash.png");
+  logo = asw::assets::load_texture("assets/images/logo.png");
 }
 
-void Intro::update(float deltaTime) {
-  Scene::update(deltaTime);
+void Intro::update(float dt) {
+  Scene::update(dt);
 
-  if (timer.getElapsedTime<std::chrono::milliseconds>() >= 3400 ||
-      asw::input::keyboard.anyPressed || asw::input::mouse.anyPressed) {
-    sceneManager.setNextScene(States::Menu);
+  timer += dt;
+
+  if (timer >= 3.4F || asw::input::keyboard.any_pressed ||
+      asw::input::mouse.any_pressed) {
+    manager.set_next_scene(States::Menu);
   }
 }
 
 void Intro::draw() {
-  if (timer.getElapsedTime<std::chrono::milliseconds>() < 1700) {
-    asw::draw::stretchSprite(
-        logo, asw::Quad<float>(0, 0, asw::display::getLogicalSize().x,
-                               asw::display::getLogicalSize().y));
+  const auto logicalSize = asw::display::get_logical_size();
+
+  if (timer < 1.7F) {
+    asw::draw::stretch_sprite(logo,
+                              asw::Quadf(0, 0, logicalSize.x, logicalSize.y));
   } else {
-    asw::draw::stretchSprite(
-        splash, asw::Quad<float>(0, 0, asw::display::getLogicalSize().x,
-                                 asw::display::getLogicalSize().y));
+    asw::draw::stretch_sprite(splash,
+                              asw::Quadf(0, 0, logicalSize.x, logicalSize.y));
   }
 }

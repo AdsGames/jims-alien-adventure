@@ -13,7 +13,7 @@ class Menu : public asw::scene::Scene<States> {
 
   void init() override;
 
-  void update(float deltaTime) override;
+  void update(float dt) override;
 
   void draw() override;
 
@@ -50,6 +50,6 @@ class Menu : public asw::scene::Scene<States> {
   asw::Music music;
 
   // Speed multipliers
-  static constexpr float city_speed_multiplier = 0.125F;
-  static constexpr float title_speed_multiplier = 0.25F;
+  static constexpr float city_speed_multiplier = 125.0F;
+  static constexpr float title_speed_multiplier = 250.0F;
 };

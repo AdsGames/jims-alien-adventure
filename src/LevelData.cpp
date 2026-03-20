@@ -8,7 +8,7 @@ LevelData* LevelData::instance = nullptr;
 
 LevelData::LevelData(const std::string& path) {
   if (!Load(path)) {
-    asw::util::abortOnError("Could not open config file " + path);
+    asw::util::abort_on_error("Could not open config file " + path);
   }
 }
 
@@ -20,7 +20,7 @@ bool LevelData::Load(const std::string& path) {
   }
 
   // Create buffer
-  nlohmann::json doc = nlohmann::json::parse(file);
+  const nlohmann::json doc = nlohmann::json::parse(file);
 
   // Get levels
   int id = 0;

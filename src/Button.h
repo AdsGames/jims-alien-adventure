@@ -15,7 +15,7 @@ class Button {
   void draw();
 
  private:
-  asw::Quad<float> transform;
+  asw::Quadf transform;
 
   std::array<asw::Texture, 2> images;
 };
