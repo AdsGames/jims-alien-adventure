@@ -4,7 +4,7 @@
 #include <string>
 
 namespace {
-std::array<std::string, 4> action_ids = {"up", "down", "left", "right"};
+const std::array<std::string, 4> action_ids = {"up", "down", "left", "right"};
 }
 
 // Init
