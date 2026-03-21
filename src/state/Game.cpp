@@ -11,11 +11,19 @@ void Game::init() {
   music = asw::assets::load_music("assets/music/JAA-Ingame.ogg");
 
   // Load images
-  levelPtr = LevelData::GetLevelData()->GetLevel(levelOn);
+  level_data = LevelData("assets/levels.json");
+
+  auto level_opt = level_data.GetLevel(levelOn);
+  if (!level_opt.has_value()) {
+    asw::util::abort_on_error("Could not load level " +
+                              std::to_string(levelOn));
+  }
+  current_level = level_opt.value();
+
   background = asw::assets::load_texture("assets/images/levels/" +
-                                         levelPtr->folder + "/sky.png");
+                                         current_level.folder + "/sky.png");
   parallax = asw::assets::load_texture("assets/images/levels/" +
-                                       levelPtr->folder + "/parallax.png");
+                                       current_level.folder + "/parallax.png");
 
   // Misc
   watch = asw::assets::load_texture("assets/images/watch.png");
@@ -47,7 +55,7 @@ void Game::init() {
   // Stairs (offset is 30 px)
   stairs.clear();
   for (int i = 0; i < asw::display::get_logical_size().x; i += 30) {
-    stairs.emplace_back(i);
+    stairs.emplace_back(i, current_level.folder);
   }
 
   // Reset timers
@@ -73,7 +81,8 @@ void Game::update(float dt) {
   // Win
   if (distance_is_reached) {
     if (end_time == 0.0F) {
-      levelPtr->completed = true;
+      current_level.completed = true;
+      level_data.Save("assets/levels.json");
       asw::sound::play(win, 255, 125, 0);
     }
 
@@ -81,7 +90,7 @@ void Game::update(float dt) {
   }
 
   // Lose
-  else if (start_time >= levelPtr->time) {
+  else if (start_time >= current_level.time) {
     if (end_time == 0.0F) {
       asw::sound::play(lose, 255, 125, 0);
       scroll_speed = 0;
@@ -95,8 +104,8 @@ void Game::update(float dt) {
     start_time += dt;
 
     distance_travelled += distance_covered;
-    if (distance_travelled > levelPtr->distance) {
-      distance_travelled = levelPtr->distance;
+    if (distance_travelled > current_level.distance) {
+      distance_travelled = current_level.distance;
       distance_is_reached = true;
       scroll_speed = 0;
     }
@@ -129,7 +138,7 @@ void Game::update(float dt) {
 
   // Stairs!
   for (auto s = stairs.begin(); s < stairs.end(); s++) {
-    s->update(levelPtr->distance - distance_travelled, distance_covered);
+    s->update(current_level.distance - distance_travelled, distance_covered);
   }
 
   // Character
@@ -144,9 +153,9 @@ void Game::update(float dt) {
 
   // Spawn some motherfing goats!
   if (asw::random::between(0, 100) == 0) {
-    const auto logicalSize = asw::display::get_logical_size();
+    const auto logical_size = asw::display::get_logical_size();
 
-    goats.emplace_back(logicalSize.x, asw::random::between(0, logicalSize.y),
+    goats.emplace_back(logical_size.x, asw::random::between(0, logical_size.y),
                        asw::random::between(5.0F, 60.0F) / 100.0F);
     std::sort(goats.begin(), goats.end());
   }
@@ -154,26 +163,26 @@ void Game::update(float dt) {
 
 // Draw game state
 void Game::draw() {
-  const auto logicalSize = asw::display::get_logical_size();
+  const auto logical_size = asw::display::get_logical_size();
 
   // Background
   asw::draw::stretch_sprite(background,
-                            asw::Quadf(0, 0, logicalSize.x, logicalSize.y));
+                            asw::Quadf(0, 0, logical_size.x, logical_size.y));
 
-  // Paralax
+  // Parallax
   asw::draw::sprite(parallax,
-                    asw::Vec2f(0 + parallax_scroll, logicalSize.y - 270));
+                    asw::Vec2f(0 + parallax_scroll, logical_size.y - 270));
   asw::draw::sprite(parallax,
-                    asw::Vec2f(-1024 + parallax_scroll, logicalSize.y - 270));
+                    asw::Vec2f(-1024 + parallax_scroll, logical_size.y - 270));
 
   // Draw goats
-  for (auto g = goats.begin(); g < goats.end(); g++) {
-    g->draw();
+  for (const auto& g : goats) {
+    g.draw();
   }
 
   // Stairs!
-  for (auto s = stairs.begin(); s < stairs.end(); s++) {
-    s->draw();
+  for (const auto& s : stairs) {
+    s.draw();
   }
 
   // Character
@@ -183,17 +192,19 @@ void Game::draw() {
   asw::draw::rect_fill(asw::Quadf(20, 20, 600, 60), asw::Color(0, 0, 0));
   asw::draw::rect_fill(asw::Quadf(24, 24, 592, 52), asw::Color(255, 255, 255));
   asw::draw::rect_fill(
-      asw::Quadf(24, 24, 592 * (distance_travelled / levelPtr->distance), 52),
+      asw::Quadf(24, 24, 592 * (distance_travelled / current_level.distance),
+                 52),
       asw::Color(0, 255, 0));
 
   asw::draw::text(
-      font, string_format("%4.0f/%d", distance_travelled, levelPtr->distance),
+      font,
+      string_format("%4.0f/%d", distance_travelled, current_level.distance),
       asw::Vec2f(30, 32), asw::Color(0, 0, 0));
 
   // Win / Lose text
   if (distance_is_reached) {
     asw::draw::sprite(youwin, asw::Vec2f(200, 200));
-  } else if (start_time >= levelPtr->time) {
+  } else if (start_time >= current_level.time) {
     asw::draw::sprite(youlose, asw::Vec2f(200, 200));
   } else {
     screen_keys.draw();
@@ -201,8 +212,9 @@ void Game::draw() {
 
   // Timer
   asw::draw::sprite(
-      watch, asw::Vec2f(logicalSize.x, logicalSize.y) - asw::Vec2f(122, 70));
-  asw::draw::text(dosis_26, string_format("%4.1f", start_time),
-                  asw::Vec2f(logicalSize.x, logicalSize.y) - asw::Vec2f(30, 60),
-                  asw::Color(255, 255, 255), asw::TextJustify::Right);
+      watch, asw::Vec2f(logical_size.x, logical_size.y) - asw::Vec2f(122, 70));
+  asw::draw::text(
+      dosis_26, string_format("%4.1f", start_time),
+      asw::Vec2f(logical_size.x, logical_size.y) - asw::Vec2f(30, 60),
+      asw::Color(255, 255, 255), asw::TextJustify::Right);
 }

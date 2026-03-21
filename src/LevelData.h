@@ -1,6 +1,7 @@
 #ifndef LEVELDATA_H
 #define LEVELDATA_H
 
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -17,18 +18,17 @@ struct Level {
 
 class LevelData {
  public:
-  bool Load(const std::string& file);
-  Level* GetLevel(unsigned int id);
+  LevelData() = default;
+  explicit LevelData(const std::string& file);
+
+  void Load(const std::string& file);
+  void Save(const std::string& file);
+  std::optional<Level> GetLevel(unsigned int id);
 
   int GetNumLevels();
 
-  static LevelData* GetLevelData();
-
  private:
-  explicit LevelData(const std::string& file);
-
-  static LevelData* instance;
-  std::vector<Level*> levels;
+  std::vector<Level> levels;
 };
 
 #endif  // LEVELDATA_H

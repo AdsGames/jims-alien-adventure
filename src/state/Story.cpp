@@ -11,7 +11,9 @@ void Story::init() {
 void Story::update(float dt) {
   Scene::update(dt);
 
-  if (asw::input::keyboard.any_pressed) {
+  const auto& keyboard = asw::input::get_keyboard();
+
+  if (keyboard.any_pressed) {
     manager.set_next_scene(States::Menu);
   }
 

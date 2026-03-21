@@ -8,11 +8,12 @@ void Intro::init() {
 
 void Intro::update(float dt) {
   Scene::update(dt);
+  const auto& mouse = asw::input::get_mouse();
+  const auto& keyboard = asw::input::get_keyboard();
 
   timer += dt;
 
-  if (timer >= 3.4F || asw::input::keyboard.any_pressed ||
-      asw::input::mouse.any_pressed) {
+  if (timer >= 3.4F || keyboard.any_pressed || mouse.any_pressed) {
     manager.set_next_scene(States::Menu);
   }
 }

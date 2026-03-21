@@ -41,7 +41,8 @@ class Game : public asw::scene::Scene<States> {
   std::vector<Goat> goats;
 
   // Level pointer for quick lookups
-  Level* levelPtr;
+  LevelData level_data;
+  Level current_level;
 
   // Key Manager
   KeyManager screen_keys;

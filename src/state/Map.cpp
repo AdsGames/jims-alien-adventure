@@ -9,11 +9,16 @@ void Map::init() {
   // Load images
   map_image = asw::assets::load_texture("assets/images/map/map.png");
 
+  auto level_data = LevelData("assets/levels.json");
+
   // Add pins
-  for (int i = 0; i < LevelData::GetLevelData()->GetNumLevels(); i++) {
-    Level* l = LevelData::GetLevelData()->GetLevel(i);
-    pins.push_back(
-        new MapPin(l->pin_x, l->pin_y, l->folder, l->completed, l->id));
+  for (int i = 0; i < level_data.GetNumLevels(); i++) {
+    auto l = level_data.GetLevel(i);
+    if (!l.has_value()) {
+      continue;
+    }
+
+    pins.emplace_back(l->pin_x, l->pin_y, l->folder, l->completed, l->id);
   }
 
   // Start music
@@ -25,12 +30,12 @@ void Map::update(float dt) {
 
   // Pin logic
   auto is_hovering = false;
-  for (auto p : pins) {
-    if (p->hover()) {
+  for (const auto& p : pins) {
+    if (p.hover()) {
       is_hovering = true;
 
       if (asw::input::get_mouse_button_down(asw::input::MouseButton::Left)) {
-        levelOn = p->getId();
+        levelOn = p.getId();
         manager.set_next_scene(States::Game);
       }
     }
@@ -57,7 +62,7 @@ void Map::draw() {
   asw::draw::sprite(map_image, asw::Vec2f(0, 0));
 
   // Locations
-  for (auto p : pins) {
-    p->draw();
+  for (const auto& p : pins) {
+    p.draw();
   }
 }

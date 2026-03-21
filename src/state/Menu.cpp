@@ -56,6 +56,7 @@ void Menu::init() {
 
 void Menu::update(float dt) {
   Scene::update(dt);
+  const auto& mouse = asw::input::get_mouse();
 
   // Drop title
   if (title_y <= 20.0F) {
@@ -110,7 +111,7 @@ void Menu::update(float dt) {
     const asw::Quadf switchArea = switchFlipped ? asw::Quadf(579, 235, 12, 12)
                                                 : asw::Quadf(595, 236, 12, 12);
 
-    if (switchArea.contains(asw::input::mouse.position)) {
+    if (switchArea.contains(mouse.position)) {
       switchFlipped = !switchFlipped;
     }
   }

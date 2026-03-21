@@ -2,30 +2,32 @@
 #define STAIR_H
 
 #include <asw/asw.h>
+#include <array>
 #include <vector>
 
-#define IMG_STAIRS 0
-#define IMG_TOP_RED 1
-#define IMG_TOP_GREEN 2
-#define IMG_BRICK 3
+constexpr int IMG_STAIRS = 0;
+constexpr int IMG_TOP_RED = 1;
+constexpr int IMG_TOP_GREEN = 2;
+constexpr int IMG_BRICK = 3;
 
 class Stair {
  public:
-  explicit Stair(float x);
+  Stair(float x, const std::string& folder);
 
   // FUNctions
   void update(float distanceRemaining, float speed);
-  void draw();
+  void draw() const;
 
   static bool last_stair_placed;
 
  private:
   float location_y(float last_x);
 
-  float x, y;
+  float x;
+  float y;
   int type;
 
-  static asw::Texture images[4];
+  std::array<asw::Texture, 4> images;
 };
 
 #endif  // STAIR_H

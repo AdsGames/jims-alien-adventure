@@ -13,7 +13,8 @@ void Button::setImages(const std::string& image1, const std::string& image2) {
 }
 
 bool Button::hover() {
-  return transform.contains(asw::input::mouse.position);
+  const auto& mouse = asw::input::get_mouse();
+  return transform.contains(mouse.position);
 }
 
 bool Button::clicked() {

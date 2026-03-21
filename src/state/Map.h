@@ -23,5 +23,5 @@ class Map : public asw::scene::Scene<States> {
 
   asw::Music music;
 
-  std::vector<MapPin*> pins;
+  std::vector<MapPin> pins;
 };
