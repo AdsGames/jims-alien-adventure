@@ -1,7 +1,6 @@
 #pragma once
 
 #include <asw/asw.h>
-#include <asw/util/Timer.h>
 #include <vector>
 
 #include "../Goat.h"
@@ -18,7 +17,7 @@ class Game : public asw::scene::Scene<States> {
 
   void init() override;
 
-  void update(float deltaTime) override;
+  void update(float dt) override;
 
   void draw() override;
 
@@ -42,7 +41,8 @@ class Game : public asw::scene::Scene<States> {
   std::vector<Goat> goats;
 
   // Level pointer for quick lookups
-  Level* levelPtr;
+  LevelData level_data;
+  Level current_level;
 
   // Key Manager
   KeyManager screen_keys;
@@ -61,14 +61,14 @@ class Game : public asw::scene::Scene<States> {
   const float max_scroll_speed = 6.0F;
 
   // Timers
-  Timer start_time;
-  Timer end_time;
+  float start_time;
+  float end_time;
 
   // Constants
-  static constexpr float success_boost = 1.6F;
+  static constexpr float success_boost = 1.1F;
   static constexpr float failure_boost = 0.25F;
-  static constexpr float scroll_speed_multiplier = 0.00125F;
+  static constexpr float scroll_speed_multiplier = 1.8F;
   static constexpr float scroll_speed_minimum = 0.02F;
   static constexpr float parallax_speed_multiplier = 0.25F;
-  static constexpr float distance_multiplier = 0.0625F;
+  static constexpr float distance_multiplier = 62.5F;
 };

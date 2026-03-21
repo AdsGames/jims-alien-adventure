@@ -24,7 +24,8 @@ class KeyManager {
   void popKey();
 
   // Images and sounds
-  std::array<asw::Texture, asw::input::NUM_KEYS> keys{nullptr};
+  std::array<asw::Texture, 4> keys{nullptr};
+  std::array<asw::Texture, 4> buttons{nullptr};
   std::array<asw::Sample, 2> sounds{nullptr};
 
   // Positioning

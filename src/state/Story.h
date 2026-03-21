@@ -15,12 +15,12 @@ class Story : public asw::scene::Scene<States> {
   void draw() override;
 
  private:
-  // Frequncy in milliseconds
-  const float flash_frequency = 500.0F;
+  // Frequncy in seconds
+  const float flash_frequency = 0.5F;
   float flasher{0};
 
   asw::Texture story_splash;
   asw::Font font;
 
-  asw::Vec2<float> text_position;
+  asw::Vec2f text_position;
 };

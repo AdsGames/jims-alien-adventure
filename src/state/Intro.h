@@ -1,7 +1,6 @@
 #pragma once
 
 #include <asw/asw.h>
-#include <asw/util/Timer.h>
 
 #include "./States.h"
 
@@ -12,7 +11,7 @@ class Intro : public asw::scene::Scene<States> {
 
   void init() override;
 
-  void update(float deltaTime) override;
+  void update(float dt) override;
 
   void draw() override;
 
@@ -22,5 +21,5 @@ class Intro : public asw::scene::Scene<States> {
   asw::Texture logo;
 
   // Time
-  Timer timer;
+  float timer;
 };

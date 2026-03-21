@@ -8,7 +8,7 @@ class Goat {
   Goat(float x, float y, float scale);
 
   // Functions
-  void update(float deltaTime);
+  void update(float dt);
 
   void setFalling(bool falling);
 
@@ -26,7 +26,7 @@ class Goat {
 
  private:
   // Variables
-  asw::Quad<float> transform;
+  asw::Quadf transform;
   float speed;
   bool falling{false};
 
@@ -34,6 +34,6 @@ class Goat {
   static std::array<asw::Texture, 2> goat_image;
 
   // Goat speed multiplier
-  static constexpr float goat_speed_multiplier = 0.1875F;
+  static constexpr float goat_speed_multiplier = 187.5F;
   static constexpr float goat_fall_speed_multiplier = 16.0F;
 };

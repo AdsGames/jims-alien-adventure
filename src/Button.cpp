@@ -7,17 +7,19 @@ Button::Button(float x, float y) : Button() {
 
 // Load images from file
 void Button::setImages(const std::string& image1, const std::string& image2) {
-  images[0] = asw::assets::loadTexture(image1);
-  images[1] = asw::assets::loadTexture(image2);
-  transform.size = asw::util::getTextureSize(images[0]);
+  images[0] = asw::assets::load_texture(image1);
+  images[1] = asw::assets::load_texture(image2);
+  transform.size = asw::util::get_texture_size(images[0]);
 }
 
 bool Button::hover() {
-  return transform.contains(asw::input::mouse.x, asw::input::mouse.y);
+  const auto& mouse = asw::input::get_mouse();
+  return transform.contains(mouse.position);
 }
 
 bool Button::clicked() {
-  return hover() && asw::input::wasButtonPressed(asw::input::MouseButton::LEFT);
+  return hover() &&
+         asw::input::get_mouse_button_down(asw::input::MouseButton::Left);
 }
 
 void Button::draw() {

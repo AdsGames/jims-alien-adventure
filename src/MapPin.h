@@ -10,7 +10,7 @@ class MapPin {
  public:
   MapPin(int x, int y, std::string& folder, bool completed, int id);
 
-  void draw();
+  void draw() const;
 
   bool hover() const;
 
@@ -21,7 +21,7 @@ class MapPin {
   static std::array<asw::Texture, 2> pin_images;
   static int pin_count;
 
-  asw::Quad<float> transform;
+  asw::Quadf transform;
 
   int id;
   bool completed;

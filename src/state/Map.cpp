@@ -4,60 +4,65 @@
 
 void Map::init() {
   // Load music
-  music = asw::assets::loadMusic("assets/music/the-experiment.ogg");
+  music = asw::assets::load_music("assets/music/the-experiment.ogg");
 
   // Load images
-  map_image = asw::assets::loadTexture("assets/images/map/map.png");
+  map_image = asw::assets::load_texture("assets/images/map/map.png");
+
+  auto level_data = LevelData("assets/levels.json");
 
   // Add pins
-  for (int i = 0; i < LevelData::GetLevelData()->GetNumLevels(); i++) {
-    Level* l = LevelData::GetLevelData()->GetLevel(i);
-    pins.push_back(
-        new MapPin(l->pin_x, l->pin_y, l->folder, l->completed, l->id));
+  for (int i = 0; i < level_data.GetNumLevels(); i++) {
+    auto l = level_data.GetLevel(i);
+    if (!l.has_value()) {
+      continue;
+    }
+
+    pins.emplace_back(l->pin_x, l->pin_y, l->folder, l->completed, l->id);
   }
 
   // Start music
-  asw::sound::playMusic(music, 255);
+  asw::sound::play_music(music, 255);
 }
 
-void Map::update(float deltaTime) {
-  Scene::update(deltaTime);
+void Map::update(float dt) {
+  Scene::update(dt);
 
   // Pin logic
   auto is_hovering = false;
-  for (auto p : pins) {
-    if (p->hover()) {
+  for (const auto& p : pins) {
+    if (p.hover()) {
       is_hovering = true;
 
-      if (asw::input::wasButtonPressed(asw::input::MouseButton::LEFT)) {
-        levelOn = p->getId();
-        sceneManager.setNextScene(States::Game);
+      if (asw::input::get_mouse_button_down(asw::input::MouseButton::Left)) {
+        levelOn = p.getId();
+        manager.set_next_scene(States::Game);
       }
     }
   }
 
   // Set cursor
   if (!is_hovering) {
-    asw::input::setCursor(asw::input::CursorId::CROSSHAIR);
+    asw::input::set_cursor(asw::input::CursorId::Crosshair);
   } else {
-    asw::input::setCursor(asw::input::CursorId::POINTER);
+    asw::input::set_cursor(asw::input::CursorId::Pointer);
   }
 
   // Back to menu
-  if (asw::input::wasKeyPressed(asw::input::Key::ESCAPE)) {
-    sceneManager.setNextScene(States::Menu);
+  if (asw::input::get_key_down(asw::input::Key::Escape)) {
+    manager.set_next_scene(States::Menu);
   }
 }
 
 void Map::draw() {
   // Draw background to screen
-  asw::draw::clearColor(asw::util::makeColor(255, 255, 255));
+  asw::draw::clear_color(asw::Color(255, 255, 255));
 
   // Map image
-  asw::draw::sprite(map_image, asw::Vec2<float>(0, 0));
+  asw::draw::sprite(map_image, asw::Vec2f(0, 0));
 
   // Locations
-  for (auto p : pins) {
-    p->draw();
+  for (const auto& p : pins) {
+    p.draw();
   }
 }

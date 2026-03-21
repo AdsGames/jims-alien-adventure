@@ -10,5 +10,5 @@ class Init : public asw::scene::Scene<States> {
 
   void init() override;
 
-  void update(float deltaTime) override;
+  void update(float dt) override;
 };

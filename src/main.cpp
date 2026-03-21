@@ -12,18 +12,20 @@
 auto main() -> int {
   // Setup basic functionality
   asw::core::init(740, 540);
+  asw::core::print_info();
 
   // Set the current state ID
   asw::scene::SceneManager<States> app;
-  app.registerScene<Init>(States::Init, app);
-  app.registerScene<Intro>(States::Intro, app);
-  app.registerScene<Menu>(States::Menu, app);
-  app.registerScene<Story>(States::Story, app);
-  app.registerScene<Game>(States::Game, app);
-  app.registerScene<Map>(States::Map, app);
-  app.setNextScene(States::Init);
-
+  app.register_scene<Init>(States::Init, app);
+  app.register_scene<Intro>(States::Intro, app);
+  app.register_scene<Menu>(States::Menu, app);
+  app.register_scene<Story>(States::Story, app);
+  app.register_scene<Game>(States::Game, app);
+  app.register_scene<Map>(States::Map, app);
+  app.set_next_scene(States::Init);
   app.start();
+
+  asw::core::shutdown();
 
   return 0;
 }
