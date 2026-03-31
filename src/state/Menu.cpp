@@ -87,7 +87,7 @@ void Menu::update(float dt) {
   }
 
   if (options.clicked()) {
-    asw::sound::play(NOTALLOWED, 255, 125, 0);
+    asw::sound::play(NOTALLOWED);
   }
 
   // Motherfing goats!

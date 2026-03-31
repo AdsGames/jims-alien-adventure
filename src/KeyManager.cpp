@@ -51,13 +51,13 @@ int KeyManager::update() {
   // Got a correct letter
   if (!key_queue.empty() && is_any_action_pressed) {
     if (asw::input::is_action_pressed(action_ids.at(key_queue.at(0)))) {
-      asw::sound::play(sounds[1], 255, 125, 0);
+      asw::sound::play(sounds[1]);
       popKey();
       pushKey();
       return 1;
     }
 
-    asw::sound::play(sounds[0], 255, 125, 0);
+    asw::sound::play(sounds[0]);
     return -1;
   }
 
