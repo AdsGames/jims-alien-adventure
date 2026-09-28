@@ -36,11 +36,9 @@ void Menu::init() {
   switchFlipped = false;
 
   // Buttons
-  const auto screen_size = asw::display::get_logical_size();
   ui = std::make_unique<asw::ui::Root>();
-  ui->set_size(screen_size.x, screen_size.y);
-  ui->root.bg = asw::Color(0, 0, 0, 0);
-  ui->ctx.theme.btn_focus_ring = asw::Color(0, 0, 0, 0);
+  ui->ctx.navigation = controls::ui_navigation();
+  ui->ctx.theme.focus_ring.width = 0;
 
   addButton("play", asw::Vec2f(30, 190),
             [this]() { manager.set_next_scene(States::Map); });
@@ -62,12 +60,10 @@ void Menu::addButton(const std::string& name,
                      const asw::Vec2f& position,
                      std::function<void()> on_click) {
   auto& button = ui->root.add_child<asw::ui::Button>();
-  button.draw_background = false;
-  button.set_texture(
+  button.set_images(
       asw::assets::load_texture("assets/images/menu/button_" + name + ".png"),
-      true);
-  button.texture_hover = asw::assets::load_texture(
-      "assets/images/menu/button_pushed_" + name + ".png");
+      asw::assets::load_texture("assets/images/menu/button_pushed_" + name +
+                                ".png"));
   button.transform.position = position;
   button.on_click = std::move(on_click);
 }
@@ -100,7 +96,7 @@ void Menu::update(float dt) {
   }
 
   // Buttons
-  controls::update_ui(*ui);
+  const bool ui_used = ui->update();
 
   // Motherfing goats!
   if (asw::random::between(0, 80) == 0) {
@@ -115,7 +111,8 @@ void Menu::update(float dt) {
   }
 
   // Flip switch
-  if (asw::input::get_mouse_button_down(asw::input::MouseButton::Left)) {
+  if (!ui_used &&
+      asw::input::get_mouse_button_down(asw::input::MouseButton::Left)) {
     const asw::Quadf switchArea = switchFlipped ? asw::Quadf(579, 235, 12, 12)
                                                 : asw::Quadf(595, 236, 12, 12);
 
@@ -125,12 +122,7 @@ void Menu::update(float dt) {
   }
 
   // Cursor
-  const auto* hover = ui->ctx.hover;
-  if (hover == nullptr || hover == &ui->root) {
-    asw::input::set_cursor(asw::input::CursorId::Default);
-  } else {
-    asw::input::set_cursor(asw::input::CursorId::Pointer);
-  }
+  controls::update_cursor(*ui, asw::input::CursorId::Default);
 }
 
 void Menu::draw() {

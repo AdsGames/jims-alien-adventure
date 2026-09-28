@@ -1,5 +1,8 @@
 #include "./Map.h"
 
+#include <cstddef>
+#include <vector>
+
 #include "../Controls.h"
 #include "../MapPin.h"
 #include "../globals.h"
@@ -14,11 +17,12 @@ void Map::init() {
   auto level_data = LevelData("assets/levels.json");
 
   // Add pins
-  const auto screen_size = asw::display::get_logical_size();
   ui = std::make_unique<asw::ui::Root>();
-  ui->set_size(screen_size.x, screen_size.y);
-  ui->root.bg = asw::Color(0, 0, 0, 0);
-  ui->ctx.theme.btn_focus_ring = asw::Color(0, 0, 0, 0);
+  ui->ctx.navigation = controls::ui_navigation();
+  ui->ctx.theme.focus_ring.width = 0;
+  ui->on_back = [this]() { manager.set_next_scene(States::Menu); };
+
+  std::vector<MapPin*> pins;
 
   for (int i = 0; i < level_data.GetNumLevels(); i++) {
     auto l = level_data.GetLevel(i);
@@ -32,6 +36,19 @@ void Map::init() {
       levelOn = id;
       manager.set_next_scene(States::Game);
     };
+    pins.push_back(&pin);
+  }
+
+  // Directions step through pins in level order: right and down to the next,
+  // left and up to the previous, wrapping
+  const auto count = pins.size();
+  for (std::size_t i = 0; i < count; i++) {
+    auto* next = pins[(i + 1) % count];
+    auto* prev = pins[(i + count - 1) % count];
+    pins[i]->nav_right = next;
+    pins[i]->nav_down = next;
+    pins[i]->nav_left = prev;
+    pins[i]->nav_up = prev;
   }
 
   // Start music
@@ -41,21 +58,11 @@ void Map::init() {
 void Map::update(float dt) {
   Scene::update(dt);
 
-  // Controllers step through pins in level order
-  controls::update_ui(*ui, controls::Navigation::Cycle);
+  // Pins, back goes to the menu
+  ui->update();
 
   // Set cursor
-  const auto* hover = ui->ctx.hover;
-  if (hover == nullptr || hover == &ui->root) {
-    asw::input::set_cursor(asw::input::CursorId::Crosshair);
-  } else {
-    asw::input::set_cursor(asw::input::CursorId::Pointer);
-  }
-
-  // Back to menu
-  if (asw::input::get_action_down(controls::UI_BACK)) {
-    manager.set_next_scene(States::Menu);
-  }
+  controls::update_cursor(*ui, asw::input::CursorId::Crosshair);
 }
 
 void Map::draw() {

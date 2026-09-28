@@ -11,8 +11,7 @@ MapPin::MapPin(int x, int y, const std::string& folder, bool completed) {
         asw::assets::load_texture("assets/images/map/pin_grey.png", "pin_grey");
   }
 
-  draw_background = false;
-  set_texture(pin_images[completed], true);
+  set_images(pin_images[completed]);
   transform.position = asw::Vec2f(x, y - (transform.size.y / 2));
 
   image =
@@ -23,7 +22,7 @@ MapPin::MapPin(int x, int y, const std::string& folder, bool completed) {
 void MapPin::draw(asw::ui::Context& ctx) {
   Button::draw(ctx);
 
-  if (is_focused()) {
+  if (is_focused() && ctx.show_focus) {
     asw::draw::sprite(image, transform.get_center());
   } else if (is_hovered()) {
     asw::draw::sprite(image, asw::input::get_mouse().position);
