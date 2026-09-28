@@ -1,7 +1,7 @@
 #include "./Menu.h"
 
 #include <algorithm>
-#include <array>
+#include <utility>
 
 #include "../Controls.h"
 
@@ -34,26 +34,50 @@ void Menu::init() {
   title_y = -(asw::util::get_texture_size(title).y + 20);
   city_x = 0;
   switchFlipped = false;
-  focus = 0;
 
   // Buttons
-  start = Button(30, 190);
-  start.setImages("assets/images/menu/button_play.png",
-                  "assets/images/menu/button_pushed_play.png");
+  const auto screen_size = asw::display::get_logical_size();
+  ui = std::make_unique<asw::ui::Root>();
+  ui->set_size(screen_size.x, screen_size.y);
+  ui->root.bg = asw::Color(0, 0, 0, 0);
+  ui->ctx.theme.btn_focus_ring = asw::Color(0, 0, 0, 0);
 
-  story = Button(195, 190);
-  story.setImages("assets/images/menu/button_story.png",
-                  "assets/images/menu/button_pushed_story.png");
+  addButton("play", asw::Vec2f(30, 190),
+            [this]() { manager.set_next_scene(States::Map); });
 
-  options = Button(30, 300);
-  options.setImages("assets/images/menu/button_options.png",
-                    "assets/images/menu/button_pushed_options.png");
+  addButton("story", asw::Vec2f(195, 190),
+            [this]() { manager.set_next_scene(States::Story); });
 
-  exit = Button(195, 300);
-  exit.setImages("assets/images/menu/button_exit.png",
-                 "assets/images/menu/button_pushed_exit.png");
+  addButton("options", asw::Vec2f(30, 300), [this]() {
+    asw::sound::play(NOTALLOWED);
+    addGoat();
+  });
+
+  addButton("exit", asw::Vec2f(195, 300), []() { asw::core::exit(); });
 
   asw::sound::play_music(music);
+}
+
+void Menu::addButton(const std::string& name,
+                     const asw::Vec2f& position,
+                     std::function<void()> on_click) {
+  auto& button = ui->root.add_child<asw::ui::Button>();
+  button.draw_background = false;
+  button.set_texture(
+      asw::assets::load_texture("assets/images/menu/button_" + name + ".png"),
+      true);
+  button.texture_hover = asw::assets::load_texture(
+      "assets/images/menu/button_pushed_" + name + ".png");
+  button.transform.position = position;
+  button.on_click = std::move(on_click);
+}
+
+void Menu::addGoat() {
+  goats.emplace_back(
+      asw::display::get_logical_size().x,
+      asw::random::between(0, asw::display::get_logical_size().y),
+      asw::random::between(5.0F, 60.0F) / 100.0F);
+  std::sort(goats.begin(), goats.end());
 }
 
 void Menu::update(float dt) {
@@ -76,31 +100,11 @@ void Menu::update(float dt) {
   }
 
   // Buttons
-  updateFocus();
-
-  if (start.clicked()) {
-    manager.set_next_scene(States::Map);
-  }
-
-  if (story.clicked()) {
-    manager.set_next_scene(States::Story);
-  }
-
-  if (exit.clicked()) {
-    asw::core::exit();
-  }
-
-  if (options.clicked()) {
-    asw::sound::play(NOTALLOWED);
-  }
+  controls::update_ui(*ui);
 
   // Motherfing goats!
-  if (asw::random::between(0, 80) == 0 || options.clicked()) {
-    goats.emplace_back(
-        asw::display::get_logical_size().x,
-        asw::random::between(0, asw::display::get_logical_size().y),
-        asw::random::between(5.0F, 60.0F) / 100.0F);
-    std::sort(goats.begin(), goats.end());
+  if (asw::random::between(0, 80) == 0) {
+    addGoat();
   }
 
   // Update goats
@@ -121,35 +125,11 @@ void Menu::update(float dt) {
   }
 
   // Cursor
-  if (start.hover() || story.hover() || options.hover() || exit.hover()) {
-    asw::input::set_cursor(asw::input::CursorId::Pointer);
-  } else {
+  const auto* hover = ui->ctx.hover;
+  if (hover == nullptr || hover == &ui->root) {
     asw::input::set_cursor(asw::input::CursorId::Default);
-  }
-}
-
-void Menu::updateFocus() {
-  const bool controller = controls::using_controller();
-
-  // Controller players get a focused button instead of the mouse cursor
-  asw::input::set_cursor_visible(!controller);
-
-  if (controller) {
-    // Index is row * 2 + column
-    if (asw::input::get_action_down(controls::UI_LEFT) ||
-        asw::input::get_action_down(controls::UI_RIGHT)) {
-      focus ^= 1;
-    }
-
-    if (asw::input::get_action_down(controls::UI_UP) ||
-        asw::input::get_action_down(controls::UI_DOWN)) {
-      focus ^= 2;
-    }
-  }
-
-  const std::array<Button*, 4> buttons = {&start, &story, &options, &exit};
-  for (int i = 0; i < static_cast<int>(buttons.size()); i++) {
-    buttons[i]->setFocus(controller, i == focus);
+  } else {
+    asw::input::set_cursor(asw::input::CursorId::Pointer);
   }
 }
 
@@ -178,8 +158,5 @@ void Menu::draw() {
   asw::draw::sprite(title, asw::Vec2f(20, title_y));
 
   // Buttons
-  start.draw();
-  story.draw();
-  options.draw();
-  exit.draw();
+  ui->draw();
 }
