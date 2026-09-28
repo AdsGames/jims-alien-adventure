@@ -1,10 +1,9 @@
 #pragma once
 
 #include <asw/asw.h>
-#include <vector>
+#include <memory>
 
 #include "../LevelData.h"
-#include "../MapPin.h"
 #include "./States.h"
 
 class Map : public asw::scene::Scene<States> {
@@ -23,5 +22,6 @@ class Map : public asw::scene::Scene<States> {
 
   asw::Music music;
 
-  std::vector<MapPin> pins;
+  // Level pins
+  std::unique_ptr<asw::ui::Root> ui;
 };

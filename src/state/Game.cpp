@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cmath>
 
+#include "../Controls.h"
 #include "../globals.h"
 #include "../tools.h"
 
@@ -63,7 +64,7 @@ void Game::init() {
   end_time = 0.0F;
 
   // Start music
-  asw::sound::play_music(music, 255);
+  asw::sound::play_music(music);
 }
 
 // Update game state
@@ -73,8 +74,8 @@ void Game::update(float dt) {
   // Fix timestep
   auto distance_covered = scroll_speed * dt * distance_multiplier;
 
-  // Back to menu if M or win/lose
-  if (asw::input::get_key_down(asw::input::Key::Escape) || end_time >= 3.0F) {
+  // Back to menu on back or win/lose
+  if (asw::input::get_action_down(controls::UI_BACK) || end_time >= 3.0F) {
     manager.set_next_scene(States::Menu);
   }
 
@@ -83,7 +84,7 @@ void Game::update(float dt) {
     if (end_time == 0.0F) {
       current_level.completed = true;
       level_data.Save("assets/levels.json");
-      asw::sound::play(win, 255, 125, 0);
+      asw::sound::play(win);
     }
 
     end_time += dt;
@@ -92,7 +93,7 @@ void Game::update(float dt) {
   // Lose
   else if (start_time >= current_level.time) {
     if (end_time == 0.0F) {
-      asw::sound::play(lose, 255, 125, 0);
+      asw::sound::play(lose);
       scroll_speed = 0;
     }
 

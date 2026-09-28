@@ -1,8 +1,9 @@
 #include "./Menu.h"
 
 #include <algorithm>
+#include <utility>
 
-#include "../tools.h"
+#include "../Controls.h"
 
 void Menu::init() {
   // Load music
@@ -35,23 +36,44 @@ void Menu::init() {
   switchFlipped = false;
 
   // Buttons
-  start = Button(30, 190);
-  start.setImages("assets/images/menu/button_play.png",
-                  "assets/images/menu/button_pushed_play.png");
+  ui = std::make_unique<asw::ui::Root>();
+  ui->ctx.navigation = controls::ui_navigation();
+  ui->ctx.theme.focus_ring.width = 0;
 
-  story = Button(195, 190);
-  story.setImages("assets/images/menu/button_story.png",
-                  "assets/images/menu/button_pushed_story.png");
+  addButton("play", asw::Vec2f(30, 190),
+            [this]() { manager.set_next_scene(States::Map); });
 
-  options = Button(30, 300);
-  options.setImages("assets/images/menu/button_options.png",
-                    "assets/images/menu/button_pushed_options.png");
+  addButton("story", asw::Vec2f(195, 190),
+            [this]() { manager.set_next_scene(States::Story); });
 
-  exit = Button(195, 300);
-  exit.setImages("assets/images/menu/button_exit.png",
-                 "assets/images/menu/button_pushed_exit.png");
+  addButton("options", asw::Vec2f(30, 300), [this]() {
+    asw::sound::play(NOTALLOWED);
+    addGoat();
+  });
 
-  asw::sound::play_music(music, 255);
+  addButton("exit", asw::Vec2f(195, 300), []() { asw::core::exit(); });
+
+  asw::sound::play_music(music);
+}
+
+void Menu::addButton(const std::string& name,
+                     const asw::Vec2f& position,
+                     std::function<void()> on_click) {
+  auto& button = ui->root.add_child<asw::ui::Button>();
+  button.set_images(
+      asw::assets::load_texture("assets/images/menu/button_" + name + ".png"),
+      asw::assets::load_texture("assets/images/menu/button_pushed_" + name +
+                                ".png"));
+  button.transform.position = position;
+  button.on_click = std::move(on_click);
+}
+
+void Menu::addGoat() {
+  goats.emplace_back(
+      asw::display::get_logical_size().x,
+      asw::random::between(0, asw::display::get_logical_size().y),
+      asw::random::between(5.0F, 60.0F) / 100.0F);
+  std::sort(goats.begin(), goats.end());
 }
 
 void Menu::update(float dt) {
@@ -74,29 +96,11 @@ void Menu::update(float dt) {
   }
 
   // Buttons
-  if (start.clicked()) {
-    manager.set_next_scene(States::Map);
-  }
-
-  if (story.clicked()) {
-    manager.set_next_scene(States::Story);
-  }
-
-  if (exit.clicked()) {
-    asw::core::exit();
-  }
-
-  if (options.clicked()) {
-    asw::sound::play(NOTALLOWED, 255, 125, 0);
-  }
+  const bool ui_used = ui->update();
 
   // Motherfing goats!
-  if (asw::random::between(0, 80) == 0 || options.clicked()) {
-    goats.emplace_back(
-        asw::display::get_logical_size().x,
-        asw::random::between(0, asw::display::get_logical_size().y),
-        asw::random::between(5.0F, 60.0F) / 100.0F);
-    std::sort(goats.begin(), goats.end());
+  if (asw::random::between(0, 80) == 0) {
+    addGoat();
   }
 
   // Update goats
@@ -107,7 +111,8 @@ void Menu::update(float dt) {
   }
 
   // Flip switch
-  if (asw::input::get_mouse_button_down(asw::input::MouseButton::Left)) {
+  if (!ui_used &&
+      asw::input::get_mouse_button_down(asw::input::MouseButton::Left)) {
     const asw::Quadf switchArea = switchFlipped ? asw::Quadf(579, 235, 12, 12)
                                                 : asw::Quadf(595, 236, 12, 12);
 
@@ -117,11 +122,7 @@ void Menu::update(float dt) {
   }
 
   // Cursor
-  if (start.hover() || story.hover() || options.hover() || exit.hover()) {
-    asw::input::set_cursor(asw::input::CursorId::Pointer);
-  } else {
-    asw::input::set_cursor(asw::input::CursorId::Default);
-  }
+  controls::update_cursor(*ui, asw::input::CursorId::Default);
 }
 
 void Menu::draw() {
@@ -149,8 +150,5 @@ void Menu::draw() {
   asw::draw::sprite(title, asw::Vec2f(20, title_y));
 
   // Buttons
-  start.draw();
-  story.draw();
-  options.draw();
-  exit.draw();
+  ui->draw();
 }

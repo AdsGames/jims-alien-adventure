@@ -5,26 +5,16 @@
 #include <array>
 #include <string>
 
-// Location for map
-class MapPin {
+// Location for map, shows the level icon while hovered or focused
+class MapPin : public asw::ui::Button {
  public:
-  MapPin(int x, int y, std::string& folder, bool completed, int id);
+  MapPin(int x, int y, const std::string& folder, bool completed);
 
-  void draw() const;
-
-  bool hover() const;
-
-  int getId() const;
+  void draw(asw::ui::Context& ctx) override;
 
  private:
   asw::Texture image;
   static std::array<asw::Texture, 2> pin_images;
-  static int pin_count;
-
-  asw::Quadf transform;
-
-  int id;
-  bool completed;
 };
 
 #endif  // MAP_PIN_H

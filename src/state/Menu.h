@@ -1,9 +1,11 @@
 #pragma once
 
 #include <asw/asw.h>
+#include <functional>
+#include <memory>
+#include <string>
 #include <vector>
 
-#include "../Button.h"
 #include "../Goat.h"
 #include "./States.h"
 
@@ -18,6 +20,14 @@ class Menu : public asw::scene::Scene<States> {
   void draw() override;
 
  private:
+  // Add an image button to the ui
+  void addButton(const std::string& name,
+                 const asw::Vec2f& position,
+                 std::function<void()> on_click);
+
+  // Send a goat across the screen
+  void addGoat();
+
   // Menu/GUI
   asw::Texture title;
   asw::Texture sky;
@@ -33,8 +43,8 @@ class Menu : public asw::scene::Scene<States> {
   // Sound
   asw::Sample NOTALLOWED;
 
-  // Buttons
-  Button start, story, options, exit;
+  // Buttons, laid out in a 2x2 grid
+  std::unique_ptr<asw::ui::Root> ui;
 
   // Movement
   float title_y;

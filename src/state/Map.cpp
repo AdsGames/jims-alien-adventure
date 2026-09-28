@@ -1,5 +1,10 @@
 #include "./Map.h"
 
+#include <cstddef>
+#include <vector>
+
+#include "../Controls.h"
+#include "../MapPin.h"
 #include "../globals.h"
 
 void Map::init() {
@@ -12,46 +17,52 @@ void Map::init() {
   auto level_data = LevelData("assets/levels.json");
 
   // Add pins
+  ui = std::make_unique<asw::ui::Root>();
+  ui->ctx.navigation = controls::ui_navigation();
+  ui->ctx.theme.focus_ring.width = 0;
+  ui->on_back = [this]() { manager.set_next_scene(States::Menu); };
+
+  std::vector<MapPin*> pins;
+
   for (int i = 0; i < level_data.GetNumLevels(); i++) {
     auto l = level_data.GetLevel(i);
     if (!l.has_value()) {
       continue;
     }
 
-    pins.emplace_back(l->pin_x, l->pin_y, l->folder, l->completed, l->id);
+    auto& pin =
+        ui->root.add_child<MapPin>(l->pin_x, l->pin_y, l->folder, l->completed);
+    pin.on_click = [this, id = l->id]() {
+      levelOn = id;
+      manager.set_next_scene(States::Game);
+    };
+    pins.push_back(&pin);
+  }
+
+  // Directions step through pins in level order: right and down to the next,
+  // left and up to the previous, wrapping
+  const auto count = pins.size();
+  for (std::size_t i = 0; i < count; i++) {
+    auto* next = pins[(i + 1) % count];
+    auto* prev = pins[(i + count - 1) % count];
+    pins[i]->nav_right = next;
+    pins[i]->nav_down = next;
+    pins[i]->nav_left = prev;
+    pins[i]->nav_up = prev;
   }
 
   // Start music
-  asw::sound::play_music(music, 255);
+  asw::sound::play_music(music);
 }
 
 void Map::update(float dt) {
   Scene::update(dt);
 
-  // Pin logic
-  auto is_hovering = false;
-  for (const auto& p : pins) {
-    if (p.hover()) {
-      is_hovering = true;
-
-      if (asw::input::get_mouse_button_down(asw::input::MouseButton::Left)) {
-        levelOn = p.getId();
-        manager.set_next_scene(States::Game);
-      }
-    }
-  }
+  // Pins, back goes to the menu
+  ui->update();
 
   // Set cursor
-  if (!is_hovering) {
-    asw::input::set_cursor(asw::input::CursorId::Crosshair);
-  } else {
-    asw::input::set_cursor(asw::input::CursorId::Pointer);
-  }
-
-  // Back to menu
-  if (asw::input::get_key_down(asw::input::Key::Escape)) {
-    manager.set_next_scene(States::Menu);
-  }
+  controls::update_cursor(*ui, asw::input::CursorId::Crosshair);
 }
 
 void Map::draw() {
@@ -62,7 +73,5 @@ void Map::draw() {
   asw::draw::sprite(map_image, asw::Vec2f(0, 0));
 
   // Locations
-  for (const auto& p : pins) {
-    p.draw();
-  }
+  ui->draw();
 }

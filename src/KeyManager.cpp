@@ -3,8 +3,11 @@
 #include <array>
 #include <string>
 
+#include "Controls.h"
+
 namespace {
-const std::array<std::string, 4> action_ids = {"up", "down", "left", "right"};
+const std::array<std::string, 4> action_ids = {controls::UP, controls::DOWN,
+                                               controls::LEFT, controls::RIGHT};
 }
 
 // Init
@@ -43,21 +46,21 @@ void KeyManager::popKey() {
 // Update
 int KeyManager::update() {
   const bool is_any_action_pressed =
-      asw::input::is_action_pressed(action_ids[0]) ||
-      asw::input::is_action_pressed(action_ids[1]) ||
-      asw::input::is_action_pressed(action_ids[2]) ||
-      asw::input::is_action_pressed(action_ids[3]);
+      asw::input::get_action_down(action_ids[0]) ||
+      asw::input::get_action_down(action_ids[1]) ||
+      asw::input::get_action_down(action_ids[2]) ||
+      asw::input::get_action_down(action_ids[3]);
 
   // Got a correct letter
   if (!key_queue.empty() && is_any_action_pressed) {
-    if (asw::input::is_action_pressed(action_ids.at(key_queue.at(0)))) {
-      asw::sound::play(sounds[1], 255, 125, 0);
+    if (asw::input::get_action_down(action_ids.at(key_queue.at(0)))) {
+      asw::sound::play(sounds[1]);
       popKey();
       pushKey();
       return 1;
     }
 
-    asw::sound::play(sounds[0], 255, 125, 0);
+    asw::sound::play(sounds[0]);
     return -1;
   }
 
@@ -75,7 +78,7 @@ void KeyManager::draw() {
   for (unsigned int i = 0; i < key_queue.size(); i++) {
     const auto button_position = asw::Vec2f(x + 20, -(i * 90) + y + 350);
 
-    if (asw::input::get_controller_count() > 0) {
+    if (controls::using_controller()) {
       asw::draw::sprite(buttons[key_queue.at(i)], button_position);
     } else {
       asw::draw::sprite(keys[key_queue.at(i)], button_position);

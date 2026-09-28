@@ -1,5 +1,7 @@
 #include "./Intro.h"
 
+#include "../Controls.h"
+
 void Intro::init() {
   // Buffer
   splash = asw::assets::load_texture("assets/images/splash.png");
@@ -13,7 +15,8 @@ void Intro::update(float dt) {
 
   timer += dt;
 
-  if (timer >= 3.4F || keyboard.any_pressed || mouse.any_pressed) {
+  if (timer >= 3.4F || keyboard.any_pressed || mouse.any_pressed ||
+      controls::any_controller_skip()) {
     manager.set_next_scene(States::Menu);
   }
 }
