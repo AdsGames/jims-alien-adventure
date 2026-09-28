@@ -63,7 +63,7 @@ void Game::init() {
   end_time = 0.0F;
 
   // Start music
-  asw::sound::play_music(music, 255);
+  asw::sound::play_music(music);
 }
 
 // Update game state
@@ -83,7 +83,7 @@ void Game::update(float dt) {
     if (end_time == 0.0F) {
       current_level.completed = true;
       level_data.Save("assets/levels.json");
-      asw::sound::play(win, 255, 125, 0);
+      asw::sound::play(win);
     }
 
     end_time += dt;
@@ -92,7 +92,7 @@ void Game::update(float dt) {
   // Lose
   else if (start_time >= current_level.time) {
     if (end_time == 0.0F) {
-      asw::sound::play(lose, 255, 125, 0);
+      asw::sound::play(lose);
       scroll_speed = 0;
     }
 

@@ -22,7 +22,7 @@ void Map::init() {
   }
 
   // Start music
-  asw::sound::play_music(music, 255);
+  asw::sound::play_music(music);
 }
 
 void Map::update(float dt) {

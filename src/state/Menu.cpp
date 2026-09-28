@@ -51,7 +51,7 @@ void Menu::init() {
   exit.setImages("assets/images/menu/button_exit.png",
                  "assets/images/menu/button_pushed_exit.png");
 
-  asw::sound::play_music(music, 255);
+  asw::sound::play_music(music);
 }
 
 void Menu::update(float dt) {
@@ -87,7 +87,7 @@ void Menu::update(float dt) {
   }
 
   if (options.clicked()) {
-    asw::sound::play(NOTALLOWED, 255, 125, 0);
+    asw::sound::play(NOTALLOWED);
   }
 
   // Motherfing goats!
