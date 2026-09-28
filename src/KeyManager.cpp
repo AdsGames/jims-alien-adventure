@@ -43,14 +43,14 @@ void KeyManager::popKey() {
 // Update
 int KeyManager::update() {
   const bool is_any_action_pressed =
-      asw::input::is_action_pressed(action_ids[0]) ||
-      asw::input::is_action_pressed(action_ids[1]) ||
-      asw::input::is_action_pressed(action_ids[2]) ||
-      asw::input::is_action_pressed(action_ids[3]);
+      asw::input::get_action_down(action_ids[0]) ||
+      asw::input::get_action_down(action_ids[1]) ||
+      asw::input::get_action_down(action_ids[2]) ||
+      asw::input::get_action_down(action_ids[3]);
 
   // Got a correct letter
   if (!key_queue.empty() && is_any_action_pressed) {
-    if (asw::input::is_action_pressed(action_ids.at(key_queue.at(0)))) {
+    if (asw::input::get_action_down(action_ids.at(key_queue.at(0)))) {
       asw::sound::play(sounds[1], 255, 125, 0);
       popKey();
       pushKey();
