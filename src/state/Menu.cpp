@@ -2,8 +2,6 @@
 
 #include <algorithm>
 
-#include "../tools.h"
-
 void Menu::init() {
   // Load music
   music = asw::assets::load_music("assets/music/JAA-Theme.ogg");

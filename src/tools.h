@@ -1,20 +1,10 @@
 #ifndef TOOLS_H
 #define TOOLS_H
 
-#include <asw/asw.h>
+#include <cstdio>
 #include <memory>
 #include <stdexcept>
 #include <string>
-
-// Collision
-extern bool collision(int xMin1,
-                      int xMax1,
-                      int xMin2,
-                      int xMax2,
-                      int yMin1,
-                      int yMax1,
-                      int yMin2,
-                      int yMax2);
 
 // String format, until std::format is rolled out to emscripten
 template <typename... Args>
