@@ -1,5 +1,7 @@
 #include "./Story.h"
 
+#include "../Controls.h"
+
 // Constructor
 void Story::init() {
   story_splash = asw::assets::load_texture("assets/images/story_splash.png");
@@ -13,7 +15,7 @@ void Story::update(float dt) {
 
   const auto& keyboard = asw::input::get_keyboard();
 
-  if (keyboard.any_pressed) {
+  if (keyboard.any_pressed || controls::any_controller_skip()) {
     manager.set_next_scene(States::Menu);
   }
 

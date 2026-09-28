@@ -14,6 +14,12 @@ class MapPin {
 
   bool hover() const;
 
+  // In focus mode the pin highlights when focused, not by mouse
+  void setFocus(bool focus_mode, bool focused);
+
+  // Hovered by the mouse, or focused in focus mode
+  bool highlighted() const;
+
   int getId() const;
 
  private:
@@ -25,6 +31,9 @@ class MapPin {
 
   int id;
   bool completed;
+
+  bool focus_mode{false};
+  bool focused{false};
 };
 
 #endif  // MAP_PIN_H

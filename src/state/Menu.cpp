@@ -1,6 +1,9 @@
 #include "./Menu.h"
 
 #include <algorithm>
+#include <array>
+
+#include "../Controls.h"
 
 void Menu::init() {
   // Load music
@@ -31,6 +34,7 @@ void Menu::init() {
   title_y = -(asw::util::get_texture_size(title).y + 20);
   city_x = 0;
   switchFlipped = false;
+  focus = 0;
 
   // Buttons
   start = Button(30, 190);
@@ -72,6 +76,8 @@ void Menu::update(float dt) {
   }
 
   // Buttons
+  updateFocus();
+
   if (start.clicked()) {
     manager.set_next_scene(States::Map);
   }
@@ -119,6 +125,31 @@ void Menu::update(float dt) {
     asw::input::set_cursor(asw::input::CursorId::Pointer);
   } else {
     asw::input::set_cursor(asw::input::CursorId::Default);
+  }
+}
+
+void Menu::updateFocus() {
+  const bool controller = controls::using_controller();
+
+  // Controller players get a focused button instead of the mouse cursor
+  asw::input::set_cursor_visible(!controller);
+
+  if (controller) {
+    // Index is row * 2 + column
+    if (asw::input::get_action_down(controls::UI_LEFT) ||
+        asw::input::get_action_down(controls::UI_RIGHT)) {
+      focus ^= 1;
+    }
+
+    if (asw::input::get_action_down(controls::UI_UP) ||
+        asw::input::get_action_down(controls::UI_DOWN)) {
+      focus ^= 2;
+    }
+  }
+
+  const std::array<Button*, 4> buttons = {&start, &story, &options, &exit};
+  for (int i = 0; i < static_cast<int>(buttons.size()); i++) {
+    buttons[i]->setFocus(controller, i == focus);
   }
 }
 

@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cmath>
 
+#include "../Controls.h"
 #include "../globals.h"
 #include "../tools.h"
 
@@ -73,8 +74,8 @@ void Game::update(float dt) {
   // Fix timestep
   auto distance_covered = scroll_speed * dt * distance_multiplier;
 
-  // Back to menu if M or win/lose
-  if (asw::input::get_key_down(asw::input::Key::Escape) || end_time >= 3.0F) {
+  // Back to menu on back or win/lose
+  if (asw::input::get_action_down(controls::UI_BACK) || end_time >= 3.0F) {
     manager.set_next_scene(States::Menu);
   }
 

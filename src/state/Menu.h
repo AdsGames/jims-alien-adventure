@@ -18,6 +18,9 @@ class Menu : public asw::scene::Scene<States> {
   void draw() override;
 
  private:
+  // Move the focused button with a controller
+  void updateFocus();
+
   // Menu/GUI
   asw::Texture title;
   asw::Texture sky;
@@ -35,6 +38,9 @@ class Menu : public asw::scene::Scene<States> {
 
   // Buttons
   Button start, story, options, exit;
+
+  // Focused button for controllers, laid out in a 2x2 grid
+  int focus{0};
 
   // Movement
   float title_y;

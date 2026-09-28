@@ -24,4 +24,7 @@ class Map : public asw::scene::Scene<States> {
   asw::Music music;
 
   std::vector<MapPin> pins;
+
+  // Focused pin for controllers
+  int focus{0};
 };

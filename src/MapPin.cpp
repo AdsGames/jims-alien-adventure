@@ -28,6 +28,15 @@ bool MapPin::hover() const {
   return transform.contains(mouse.position);
 }
 
+void MapPin::setFocus(bool focus_mode, bool focused) {
+  this->focus_mode = focus_mode;
+  this->focused = focused;
+}
+
+bool MapPin::highlighted() const {
+  return focus_mode ? focused : hover();
+}
+
 // Get id
 int MapPin::getId() const {
   return id;
@@ -35,13 +44,13 @@ int MapPin::getId() const {
 
 // Draw image
 void MapPin::draw() const {
-  const auto& mouse = asw::input::get_mouse();
-
   // Pin
   asw::draw::sprite(pin_images[completed], transform.position);
 
-  // Image
-  if (hover()) {
-    asw::draw::sprite(image, mouse.position);
+  // Image, beside the cursor or the focused pin
+  if (highlighted()) {
+    const auto position =
+        focus_mode ? transform.get_center() : asw::input::get_mouse().position;
+    asw::draw::sprite(image, position);
   }
 }

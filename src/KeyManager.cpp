@@ -3,8 +3,11 @@
 #include <array>
 #include <string>
 
+#include "Controls.h"
+
 namespace {
-const std::array<std::string, 4> action_ids = {"up", "down", "left", "right"};
+const std::array<std::string, 4> action_ids = {controls::UP, controls::DOWN,
+                                               controls::LEFT, controls::RIGHT};
 }
 
 // Init
@@ -75,7 +78,7 @@ void KeyManager::draw() {
   for (unsigned int i = 0; i < key_queue.size(); i++) {
     const auto button_position = asw::Vec2f(x + 20, -(i * 90) + y + 350);
 
-    if (asw::input::get_controller_count() > 0) {
+    if (controls::using_controller()) {
       asw::draw::sprite(buttons[key_queue.at(i)], button_position);
     } else {
       asw::draw::sprite(keys[key_queue.at(i)], button_position);
