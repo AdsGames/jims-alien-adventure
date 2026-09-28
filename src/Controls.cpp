@@ -87,7 +87,7 @@ void controls::update_cursor(const asw::ui::Root& ui,
   asw::input::set_cursor_visible(!using_controller());
 
   const bool over_widget =
-      std::ranges::any_of(ui.root.children,
+      std::ranges::any_of(ui.root.children(),
                           [](const auto& child) { return child->is_hovered(); });
   asw::input::set_cursor(over_widget ? asw::input::CursorId::Pointer : idle);
 }
